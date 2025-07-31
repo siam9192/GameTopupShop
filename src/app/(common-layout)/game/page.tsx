@@ -68,10 +68,15 @@ function page() {
 
   return (
     <div className="w-full">
-      <Typography variant="h4" fontSize={{
-        xs:24,
-        lg:28
-      }} color="text.primary" fontWeight={600}>
+      <Typography
+        variant="h4"
+        fontSize={{
+          xs: 24,
+          lg: 28,
+        }}
+        color="text.primary"
+        fontWeight={600}
+      >
         Game: Free fire
       </Typography>
       <Image
@@ -100,7 +105,6 @@ function page() {
                 lg: 3,
                 xl: 4,
               }}
-             
             >
               {Array.from({ length: 10 }).map((_, index) => (
                 <Grid
@@ -114,7 +118,6 @@ function page() {
                   border={'2px  solid var(--secondary-color)'}
                   padding={'10px'}
                   borderRadius={2}
-              
                 >
                   <Typography variant="body1" color="text.secondary">
                     💎25 diamond
@@ -129,7 +132,7 @@ function page() {
           <div></div>
         </Stack>
         <div className="mt-5">
-          <Typography  color="text.primary" fontWeight={600} variant="h5">
+          <Typography color="text.primary" fontWeight={600} variant="h5">
             Fill The Info files:
           </Typography>
           <Grid container marginTop={3} columns={2} spacing={2}>
@@ -159,16 +162,21 @@ function page() {
           </Stack>
         </div>
 
-       <div  className='mt-5 text-center'>
-         <Button variant='outlined' size="large" fullWidth  sx={{
-          width:{
-            sx:"100%",
-            md:"50%"
-          },
-         }} >
-          Purchase now
-        </Button>
-       </div>
+        <div className="mt-5 text-center">
+          <Button
+            variant="outlined"
+            size="large"
+            fullWidth
+            sx={{
+              width: {
+                sx: '100%',
+                md: '50%',
+              },
+            }}
+          >
+            Purchase now
+          </Button>
+        </div>
       </div>
 
       <div className="mt-20 space-y-5">

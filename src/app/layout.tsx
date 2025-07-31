@@ -14,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" >
-      <body className="dark:bg-background">
+    <html lang="en" data-theme="dark">
+      <body>
         <CustomThemeProvider>{children}</CustomThemeProvider>
       </body>
     </html>

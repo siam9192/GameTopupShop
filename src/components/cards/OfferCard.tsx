@@ -2,9 +2,7 @@ import { Card, CardContent, Chip, Stack, Typography, useTheme } from '@mui/mater
 import React from 'react';
 function OfferCard() {
   return (
-    <div
-      className='shadow_1 rounded-md'
-    >
+    <div className="shadow_1 rounded-md">
       <CardContent>
         <Stack direction={'row'} gap={2}>
           <div className="">
@@ -16,7 +14,9 @@ function OfferCard() {
           </div>
           <div className="flex flex-col py-2">
             <div className="space-y-2 grow">
-              <Typography fontSize={24} color='text.primary'>20% discount on 600 diamond topup</Typography>
+              <Typography fontSize={24} color="text.primary">
+                20% discount on 600 diamond topup
+              </Typography>
 
               <Typography fontSize={16} color="text.secondary">
                 delectus. Reiciendis pariatur, ipsam saepe in culpa asperiores sed nihil!

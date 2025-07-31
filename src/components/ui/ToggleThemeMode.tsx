@@ -10,7 +10,7 @@ function ToggleThemeMode() {
   const { setMode } = useCustomThemeProviderContext();
   const themeMode = theme.palette.mode;
 
-   useEffect(() => {
+  useEffect(() => {
     document.documentElement.setAttribute('data-theme', themeMode);
   }, [themeMode]);
 

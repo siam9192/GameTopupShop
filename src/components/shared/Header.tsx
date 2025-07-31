@@ -57,7 +57,6 @@ function Header() {
             src="https://jubaly.com/wp-content/uploads/2022/01/Untitled-13-TB-for-Website-Use.png"
             alt=""
           />
-          
         </Stack>
         <Stack
           direction={'row'}
@@ -69,11 +68,14 @@ function Header() {
             lg: 3,
           }}
         >
-            <IconButton color="secondary"  sx={{
-               display:{
-                md:'none',
-               }
-            }}>
+          <IconButton
+            color="secondary"
+            sx={{
+              display: {
+                md: 'none',
+              },
+            }}
+          >
             <FiSearch size={28} />
           </IconButton>
 
@@ -90,14 +92,12 @@ function Header() {
             alignItems={'center'}
             gap={2}
             display={{
-              xs:'none',
-              md:'flex'
+              xs: 'none',
+              md: 'flex',
             }}
             className="border-2 border-secondary rounded-full p-2 text-txt-primary hidden "
           >
-            <span className="font-semibold text-lg  font-secondary">
-              MRS.Jasmine
-            </span>
+            <span className="font-semibold text-lg  font-secondary">MRS.Jasmine</span>
             <FaRegUserCircle size={28} />
           </Stack>
         </Stack>

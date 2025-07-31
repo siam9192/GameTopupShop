@@ -90,22 +90,16 @@ function Sidebar() {
         <Stack direction={'column'} spacing={4} fontFamily={'Open Sans'} color={'primary'}>
           <List>
             {routes1.map(route => (
-               <Link href={route.path}  key={route.title}>
-                  <ListItem
-               
-                className="p-2  text-white hover:text-secondary hover:scale-105 duration-75 hover:cursor-pointer"
-              >
-                <ListItemIcon>
-                  <route.icon color="white" size={28} />
-                </ListItemIcon>
-                <ListItemText disableTypography className=" font-primary  font-semibold text-lg">
-                  {route.title}
-                </ListItemText>
-             
-              </ListItem>
+              <Link href={route.path} key={route.title}>
+                <ListItem className="p-2  text-white hover:text-secondary hover:scale-105 duration-75 hover:cursor-pointer">
+                  <ListItemIcon>
+                    <route.icon color="white" size={28} />
+                  </ListItemIcon>
+                  <ListItemText disableTypography className=" font-primary  font-semibold text-lg">
+                    {route.title}
+                  </ListItemText>
+                </ListItem>
               </Link>
-
-            
             ))}
           </List>
         </Stack>
