@@ -37,11 +37,11 @@ const sidebarRoutesGroup1: RouteItem[] = [
   },
 
   {
-    label: 'Orders',
+    label: 'My Orders',
     path: '/dashboard',
     icon: TbRecharging,
     children: [
-      { label: 'All Orders', path: '/users' },
+      { label: 'Orders', path: '/users' },
       { label: 'Order History', path: '/users/add' },
     ],
   },

@@ -30,7 +30,7 @@ export default function HomeBanner() {
   }, [nextSlider, currentSlider]);
 
   return (
-    <div className="relative h-72 w-[70%] mx-auto min-w-80 overflow-hidden md:h-[470px] lg:h-[540px]">
+    <div className="relative mt-5  w-[80%] md:w-[70%] mx-auto min-w-80 overflow-hidden sm:h-96 md:h-[540px]">
       {/* dots */}
       <div className="absolute bottom-4 z-50 flex w-full items-center justify-center gap-1 rounded-full">
         {carouselImages.map((img, idx) => (

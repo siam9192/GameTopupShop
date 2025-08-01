@@ -5,27 +5,22 @@ import { IoBagCheck } from 'react-icons/io5';
 import { PiCurrencyDollarSimpleBold } from 'react-icons/pi';
 import { TbRecharging } from 'react-icons/tb';
 
-function AllOverviewData() {
+function WalletOverviewData() {
   const data = [
     {
-      name: 'Wallet Balance',
+      name: 'Available Balance',
       icon: HiOutlineWallet,
       value: 7523,
     },
     {
-      name: 'Orders in Process',
+      name: 'Total Spend',
       icon: TbRecharging,
-      value: 2,
+      value: 233,
     },
     {
-      name: 'Orders Completed',
+      name: 'Last 30 days Spend',
       icon: IoBagCheck,
-      value: 2,
-    },
-    {
-      name: 'Orders Amount',
-      icon: PiCurrencyDollarSimpleBold,
-      value: 24467,
+      value: 2398,
     },
   ];
 
@@ -37,8 +32,8 @@ function AllOverviewData() {
         columns={{
           xs: 1,
           sm: 1,
-          md: 2,
-          lg: 4,
+          md: 3,
+          lg: 3,
         }}
       >
         {data.map((_, index) => (
@@ -81,4 +76,4 @@ function AllOverviewData() {
   );
 }
 
-export default AllOverviewData;
+export default WalletOverviewData;

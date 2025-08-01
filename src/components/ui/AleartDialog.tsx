@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,10 +8,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 interface IProps {
-    children:React.ReactNode
+  children: React.ReactNode;
 }
 
-export default function AlertDialog({children}:IProps) {
+export default function AlertDialog({ children }: IProps) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -24,10 +24,8 @@ export default function AlertDialog({children}:IProps) {
 
   return (
     <React.Fragment>
-      <div className='size-fit' onClick={handleClickOpen}>
-       {
-        children
-       }
+      <div className="size-fit" onClick={handleClickOpen}>
+        {children}
       </div>
       <Dialog
         open={open}
@@ -35,13 +33,11 @@ export default function AlertDialog({children}:IProps) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+            Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

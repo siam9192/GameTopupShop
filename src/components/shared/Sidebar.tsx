@@ -5,7 +5,6 @@ import { IoGameControllerOutline, IoSettingsOutline } from 'react-icons/io5';
 import { FaHeadset } from 'react-icons/fa6';
 import {
   Avatar,
-  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -13,7 +12,6 @@ import {
   Stack,
 } from '@mui/material';
 import { BiSolidOffer } from 'react-icons/bi';
-import { RiMenuUnfold4Line } from 'react-icons/ri';
 import useCommonLayoutContext from '@/context/useCommonLayoutContext';
 import Link from 'next/link';
 
@@ -47,7 +45,7 @@ function Sidebar() {
       path: '',
     },
   ];
-  const { sidebarCollapse, setSidebarCollapse } = useCommonLayoutContext();
+  const { sidebarCollapse} = useCommonLayoutContext();
 
   const collapse = sidebarCollapse;
 
@@ -61,24 +59,7 @@ function Sidebar() {
         </h1>
       ) : null}
 
-      <IconButton
-        onClick={() => setSidebarCollapse(p => !p)}
-        sx={{
-          display: {
-            sm: 'none',
-            lg: 'block',
-          },
-        }}
-        style={{
-          color: collapse ? 'var(--secondary-color)' : 'white',
-          position: 'absolute',
-          top: 2,
-          right: 2,
-        }}
-      >
-        <RiMenuUnfold4Line size={28} />
-      </IconButton>
-
+  
       {collapse === false ? (
         <img
           className="w-[60%] hidden"

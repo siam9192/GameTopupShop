@@ -1,8 +1,8 @@
-import { Avatar, Button, Chip, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { Button, Chip, Stack, Typography, Divider, Paper } from '@mui/material';
 import AlertDialog from '../ui/AleartDialog';
 
-function RecentOrderCard() {
+function RecentAddBalanceSubmissionCard() {
   return (
     <div className=" p-2 md:p-3 relative">
       <Stack
@@ -13,9 +13,10 @@ function RecentOrderCard() {
         spacing={2}
       >
         <Stack spacing={0.5}>
-          <Typography fontWeight={500} fontSize={20} color="text.primary">
-            Free fire
+          <Typography variant="h5" fontSize={20} fontWeight={500} color="secondary">
+            Amount: $23
           </Typography>
+
           <Stack
             marginTop={2}
             direction={'row'}
@@ -33,7 +34,7 @@ function RecentOrderCard() {
               }}
               color="text.secondary"
             >
-              Recharge: 25 Diamond
+              Method: Bkash
             </Typography>
             <Typography
               fontSize={{
@@ -43,7 +44,7 @@ function RecentOrderCard() {
               fontWeight={500}
               color="text.secondary"
             >
-              Quantity: $23
+              Trx ID: 38786kjschbkjcbc
             </Typography>
             <Typography
               fontSize={{
@@ -62,20 +63,17 @@ function RecentOrderCard() {
                 color="success"
               >
                 {' '}
-                Success
+                Fulfilled
               </Typography>
             </Typography>
           </Stack>
         </Stack>
       </Stack>
 
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} gap={1}>
-        <Typography variant="h5" fontSize={25} fontWeight={500} color="secondary">
-          $23
-        </Typography>
+      <Stack marginTop={1} direction={'row'} alignItems={'center'} justifyContent={'end'} gap={1}>
         <AlertDialog>
-          <Button variant="outlined" className="w-fit " color="warning">
-            Cancel
+          <Button variant="outlined" className="w-fit " color="info">
+            Details
           </Button>
         </AlertDialog>
       </Stack>
@@ -85,4 +83,4 @@ function RecentOrderCard() {
   );
 }
 
-export default RecentOrderCard;
+export default RecentAddBalanceSubmissionCard;

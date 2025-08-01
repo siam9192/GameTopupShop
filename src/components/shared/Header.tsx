@@ -6,16 +6,33 @@ import { FiSearch } from 'react-icons/fi';
 import { VscBell } from 'react-icons/vsc';
 import { LuMessageSquareText } from 'react-icons/lu';
 import { FaRegUserCircle } from 'react-icons/fa';
-import { RiMenuUnfoldLine } from 'react-icons/ri';
+import { RiMenuUnfold4Line, RiMenuUnfoldLine } from 'react-icons/ri';
 import useCommonLayoutContext from '@/context/useCommonLayoutContext';
 import ToggleThemeMode from '../ui/ToggleThemeMode';
 
 function Header() {
   const { setSidebarCollapse } = useCommonLayoutContext();
+  const { sidebarCollapse} = useCommonLayoutContext();
 
   return (
-    <header className=" py-2 lg:py-5 w-full">
+    <header className=" py-3 lg:py-5 w-full ">
       <Stack direction={'row'} justifyContent={'space-between'}>
+    <Stack direction={'row'} spacing={1}>
+              <IconButton
+        onClick={() => setSidebarCollapse(p => !p)}
+        sx={{
+          display: {
+            sm: 'none',
+            lg: 'block',
+          },
+        }}
+        style={{
+          color: sidebarCollapse ? 'var(--secondary-color)' : 'text.primary',
+        }}
+      >
+        <RiMenuUnfold4Line size={28} />
+      </IconButton>
+
         <Stack
           sx={{
             display: {
@@ -39,6 +56,7 @@ function Header() {
             placeholder="Search games.."
           />
         </Stack>
+    </Stack>
 
         <Stack
           direction={'row'}

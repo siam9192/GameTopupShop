@@ -133,7 +133,7 @@ function page() {
         </Stack>
         <div className="mt-5">
           <Typography color="text.primary" fontWeight={600} variant="h5">
-            Fill The Info files:
+            Fill The Form:
           </Typography>
           <Grid container marginTop={3} columns={2} spacing={2}>
             {data.map((_, index) => (

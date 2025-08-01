@@ -35,7 +35,7 @@ function layout({
             >
               <CustomerDashboardSidebar />
             </div>
-            <div className=" grow lg:min-w-[1000px] max-w-[1900px]  ">
+            <div className=" flex-1 lg:min-w-[1000px] max-w-[1900px]  ">
               <CustomerDashboardHeader />
               <div className="p-5">{children}</div>
             </div>

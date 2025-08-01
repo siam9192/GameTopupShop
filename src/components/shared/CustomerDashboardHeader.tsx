@@ -1,9 +1,7 @@
 import React from 'react';
 import { Avatar, Badge, IconButton, Stack, Typography, useTheme } from '@mui/material';
-import { FiSearch } from 'react-icons/fi';
 import { VscBell } from 'react-icons/vsc';
 import { LuMessageSquareText } from 'react-icons/lu';
-import { FaRegUserCircle } from 'react-icons/fa';
 import { RiMenuUnfoldLine } from 'react-icons/ri';
 import ToggleThemeMode from '../ui/ToggleThemeMode';
 
@@ -38,7 +36,17 @@ function CustomerDashboardHeader() {
               }}
             />
             <div>
-              <Typography color="secondary" variant="h5" fontFamily={'jost'} fontWeight={600}>
+              <Typography
+                color="secondary"
+                fontSize={{
+                  xs: 20,
+                  md: 24,
+                  lg: 28,
+                }}
+                variant="h5"
+                fontFamily={'jost'}
+                fontWeight={600}
+              >
                 Welcome,
               </Typography>
               <Typography color="text.primary" variant="h5" fontFamily={'jost'} fontWeight={600}>
@@ -57,8 +65,6 @@ function CustomerDashboardHeader() {
             lg: 3,
           }}
         >
-       
-
           <Badge badgeContent={4} color="secondary" className="text-txt-primary">
             <LuMessageSquareText size={28} />
           </Badge>
