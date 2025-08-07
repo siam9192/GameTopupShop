@@ -9,10 +9,14 @@ function layout({ children }: { children: React.ReactNode }) {
         Manage Account
       </Typography>
 
-      <Stack marginTop={5} direction={{
-        xs:'column',
-        xl:'row'
-      }} gap={2}>
+      <Stack
+        marginTop={5}
+        direction={{
+          xs: 'column',
+          xl: 'row',
+        }}
+        gap={2}
+      >
         <Box>
           <ManageAccountSidebar />
         </Box>

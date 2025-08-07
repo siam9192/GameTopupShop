@@ -1,14 +1,6 @@
 'use client';
 import OrderCard from '@/components/cards/OrderCard';
-import {
-  Box,
-  Divider,
-  MenuItem,
-  Pagination,
-  Select,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Divider, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material';
 import React from 'react';
 
 function page() {

@@ -26,7 +26,7 @@ function layout({
     <>
       <div className="max-w-[2500px] mx-auto ">
         <CommonLayoutContext.Provider value={value}>
-          <Stack direction={'row'} >
+          <Stack direction={'row'}>
             <div
               className={`h-screen  max-h-[1700px] lg:block hidden  sticky top-0 p-2  ${sidebarCollapse === false ? 'w-[300px]' : 'w-[100px] '}  duration-200 ease-in overflow-hidden`}
             >
@@ -34,9 +34,7 @@ function layout({
             </div>
             <div className=" grow lg:min-w-[1000px] max-w-[1600px] lg:px-2  ">
               <Header />
-              <div className='p-2'>
-                {children}
-              </div>
+              <div className="p-2">{children}</div>
             </div>
           </Stack>
         </CommonLayoutContext.Provider>

@@ -12,51 +12,51 @@ import ToggleThemeMode from '../ui/ToggleThemeMode';
 
 function Header() {
   const { setSidebarCollapse } = useCommonLayoutContext();
-  const { sidebarCollapse} = useCommonLayoutContext();
+  const { sidebarCollapse } = useCommonLayoutContext();
 
   return (
     <header className=" py-3 lg:py-5 w-full ">
       <Stack direction={'row'} justifyContent={'space-between'}>
-    <Stack direction={'row'} spacing={1}>
-              <IconButton
-        onClick={() => setSidebarCollapse(p => !p)}
-        sx={{
-          display: {
-            sm: 'none',
-            lg: 'block',
-          },
-        }}
-        style={{
-          color: sidebarCollapse ? 'var(--secondary-color)' : 'text.primary',
-        }}
-      >
-        <RiMenuUnfold4Line size={28} />
-      </IconButton>
+        <Stack direction={'row'} spacing={1}>
+          <IconButton
+            onClick={() => setSidebarCollapse(p => !p)}
+            sx={{
+              display: {
+                sm: 'none',
+                lg: 'block',
+              },
+            }}
+            style={{
+              color: sidebarCollapse ? 'var(--secondary-color)' : 'text.primary',
+            }}
+          >
+            <RiMenuUnfold4Line size={28} />
+          </IconButton>
 
-        <Stack
-          sx={{
-            display: {
-              xs: 'none', // default for mobile
-              sm: 'none', // optional, but keeps it hidden on small
-              md: 'flex', // visible from medium and up
-            },
-          }}
-          direction={'row'}
-          width={400}
-          alignItems={'center'}
-          gap={1}
-          className="bg-secondary/10 px-2 py-3 rounded-lg "
-        >
-          <span className="text-2xl font-medium text-txt-primary">
-            <FiSearch />
-          </span>
-          <input
-            type="text"
-            className="grow bg-transparent border-none outline-none font-secondary  font-medium text-gray-950 dark:text-gray-100 placeholder:text-primary"
-            placeholder="Search games.."
-          />
+          <Stack
+            sx={{
+              display: {
+                xs: 'none', // default for mobile
+                sm: 'none', // optional, but keeps it hidden on small
+                md: 'flex', // visible from medium and up
+              },
+            }}
+            direction={'row'}
+            width={400}
+            alignItems={'center'}
+            gap={1}
+            className="bg-secondary/10 px-2 py-3 rounded-lg "
+          >
+            <span className="text-2xl font-medium text-txt-primary">
+              <FiSearch />
+            </span>
+            <input
+              type="text"
+              className="grow bg-transparent border-none outline-none font-secondary  font-medium text-gray-950 dark:text-gray-100 placeholder:text-primary"
+              placeholder="Search games.."
+            />
+          </Stack>
         </Stack>
-    </Stack>
 
         <Stack
           direction={'row'}

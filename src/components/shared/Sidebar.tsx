@@ -3,14 +3,7 @@ import React from 'react';
 import { HiOutlineHome } from 'react-icons/hi2';
 import { IoGameControllerOutline, IoSettingsOutline } from 'react-icons/io5';
 import { FaHeadset } from 'react-icons/fa6';
-import {
-  Avatar,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-} from '@mui/material';
+import { Avatar, List, ListItem, ListItemIcon, ListItemText, Stack } from '@mui/material';
 import { BiSolidOffer } from 'react-icons/bi';
 import useCommonLayoutContext from '@/context/useCommonLayoutContext';
 import Link from 'next/link';
@@ -23,7 +16,7 @@ function Sidebar() {
       path: '/',
     },
     {
-      title: 'Games',
+      title: 'Shop',
       icon: IoGameControllerOutline,
       path: '/games',
     },
@@ -45,7 +38,7 @@ function Sidebar() {
       path: '',
     },
   ];
-  const { sidebarCollapse} = useCommonLayoutContext();
+  const { sidebarCollapse } = useCommonLayoutContext();
 
   const collapse = sidebarCollapse;
 
@@ -59,7 +52,6 @@ function Sidebar() {
         </h1>
       ) : null}
 
-  
       {collapse === false ? (
         <img
           className="w-[60%] hidden"

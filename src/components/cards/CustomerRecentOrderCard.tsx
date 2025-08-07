@@ -1,8 +1,8 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import React from 'react';
 import AlertDialog from '../ui/AleartDialog';
 
-function RecentOrderCard() {
+function CustomerRecentOrderCard() {
   return (
     <div className=" p-2 md:p-3 relative">
       <Stack
@@ -12,13 +12,6 @@ function RecentOrderCard() {
         }}
         spacing={2}
       >
-        <Box>
-          <img
-            src="https://play-lh.googleusercontent.com/Odw8BGugaJLdbaSbCeZWbTE3Qz1wTiQ0Tsn9nzpoQdnkzWb-gaI58zzTmYDvGpdYKg"
-            alt=""
-            className=" size-20 rounded-lg"
-          />
-        </Box>
         <Stack spacing={0.5}>
           <Typography fontWeight={500} fontSize={20} color="text.primary">
             Free fire
@@ -40,7 +33,7 @@ function RecentOrderCard() {
               }}
               color="text.secondary"
             >
-              Package: 25 Diamond
+              Recharge: 25 Diamond
             </Typography>
             <Typography
               fontSize={{
@@ -50,7 +43,7 @@ function RecentOrderCard() {
               fontWeight={500}
               color="text.secondary"
             >
-              Quantity: 2
+              Quantity: $23
             </Typography>
             <Typography
               fontSize={{
@@ -73,61 +66,18 @@ function RecentOrderCard() {
               </Typography>
             </Typography>
           </Stack>
-          <Stack
-            marginTop={2}
-            direction={'row'}
-            alignItems={'center'}
-            spacing={{
-              xs: 1,
-              md: 2,
-            }}
-          >
-            <Typography
-              fontWeight={500}
-              fontSize={{
-                xs: 14,
-                lg: 16,
-              }}
-              color="text.secondary"
-            >
-              Customer : Md.Rafi Ahmed
-            </Typography>
-            <Typography
-              fontSize={{
-                xs: 14,
-                lg: 16,
-              }}
-              fontWeight={500}
-              color="text.secondary"
-            >
-              Customer ID: #87783678393896
-            </Typography>
-          </Stack>
         </Stack>
       </Stack>
 
-      <Stack
-        marginTop={1}
-        direction={'row'}
-        alignItems={'center'}
-        justifyContent={'space-between'}
-        gap={1}
-      >
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} gap={1}>
         <Typography variant="h5" fontSize={25} fontWeight={500} color="secondary">
           $23
         </Typography>
-        <Stack direction={'row'} spacing={2}>
-          <AlertDialog>
-            <Button variant="outlined" className="w-fit " color="secondary">
-              Details
-            </Button>
-          </AlertDialog>
-          <AlertDialog>
-            <Button variant="outlined" className="w-fit " color="warning">
-              Cancel
-            </Button>
-          </AlertDialog>
-        </Stack>
+        <AlertDialog>
+          <Button variant="outlined" className="w-fit " color="warning">
+            Cancel
+          </Button>
+        </AlertDialog>
       </Stack>
 
       <p className="text-primary font-medium absolute right-1 top-0 ">2Hrs</p>
@@ -135,4 +85,4 @@ function RecentOrderCard() {
   );
 }
 
-export default RecentOrderCard;
+export default CustomerRecentOrderCard;

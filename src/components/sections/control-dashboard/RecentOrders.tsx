@@ -1,4 +1,4 @@
-import CustomerRecentOrderCard from '@/components/cards/CustomerRecentOrderCard';
+import RecentOrderCard from '@/components/cards/RecentOrderCard';
 import { Badge, Divider, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { TbRecharging } from 'react-icons/tb';
@@ -23,7 +23,7 @@ function RecentOrders() {
 
       <Stack marginTop={2} spacing={2}>
         {Array.from({ length: 6 }).map((_, index) => (
-          <CustomerRecentOrderCard key={index} />
+          <RecentOrderCard key={index} />
         ))}
       </Stack>
     </Stack>

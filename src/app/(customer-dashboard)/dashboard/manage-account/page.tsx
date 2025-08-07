@@ -1,9 +1,18 @@
-import { Box, Button, FormControl, FormHelperText, Input, InputLabel, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  Stack,
+  Typography,
+} from '@mui/material';
 import React from 'react';
 
 function page() {
   return (
-   <Box width={{ xs: '100%', lg: '80%' }} height={'100%'} >
+    <Box width={{ xs: '100%', lg: '80%' }} height={'100%'}>
       <Typography fontSize={20} fontWeight={600} color="text.primary" mb={2}>
         My Personal Information
       </Typography>
@@ -23,9 +32,7 @@ function page() {
           <FormControl fullWidth variant="standard">
             <InputLabel htmlFor="contactEmail">Contact Email</InputLabel>
             <Input id="contactEmail" aria-describedby="contactEmail-text" />
-            <FormHelperText id="contactEmail-text">
-              We’ll contact you on our update
-            </FormHelperText>
+            <FormHelperText id="contactEmail-text">We’ll contact you on our update</FormHelperText>
           </FormControl>
 
           <FormControl fullWidth variant="standard">
@@ -34,8 +41,12 @@ function page() {
           </FormControl>
 
           <Stack direction="row" justifyContent="flex-end" spacing={2} mt={2}>
-            <Button variant="outlined" color="warning">Cancel</Button>
-            <Button variant="contained" type="submit">Save Changes</Button>
+            <Button variant="outlined" color="warning">
+              Cancel
+            </Button>
+            <Button variant="contained" type="submit">
+              Save Changes
+            </Button>
           </Stack>
         </Stack>
       </form>
