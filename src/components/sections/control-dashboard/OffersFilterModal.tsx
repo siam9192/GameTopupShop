@@ -11,8 +11,9 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';
+import OffersFilterBox from './OffersFilterBox';
 
-function TopUpsFilterBoxModal() {
+function OffersFilterBoxModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -75,31 +76,6 @@ function TopUpsFilterBoxModal() {
               </Stack>
             </Box>
 
-            {/* Category Section */}
-            <Box minWidth={250}>
-              <Typography
-                component="p"
-                variant="h6"
-                fontSize={20}
-                fontFamily="jost"
-                fontWeight={600}
-                color="text.primary"
-                mb={1}
-              >
-                Category
-              </Typography>
-              <FormControl fullWidth>
-                <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-
             {/* Status Section */}
             <Box minWidth={250}>
               <Typography
@@ -138,4 +114,4 @@ function TopUpsFilterBoxModal() {
   );
 }
 
-export default TopUpsFilterBoxModal;
+export default OffersFilterBoxModal;

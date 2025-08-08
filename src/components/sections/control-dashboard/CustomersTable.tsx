@@ -266,9 +266,11 @@ function CustomersTable() {
         Customers
       </Typography>
 
-      <TableContainer  sx={{
-        overflowX:'scroll'
-      }}>
+      <TableContainer
+        sx={{
+          overflowX: 'scroll',
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>

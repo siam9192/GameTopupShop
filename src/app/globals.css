@@ -5,6 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #000000;
+  --paper: #f5f5f5;
   --primary-color: #ff4f0f;
   --secondary-color: #03a6a1;
   --text-color-primary: #000000;
@@ -20,6 +21,7 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary-color);
   --color-secondary: var(--secondary-color);
+  --color-paper: var(--paper);
   --color-txt-primary: var(--text-color-primary);
   --color-txt-secondary: var(--text-color-secondary);
   --font-primary: var(--primary-font);
@@ -52,6 +54,7 @@ body {
   --text-color-secondary: #bbbbbb;
   --background: #0a0a0a;
   --foreground: #ededed;
+  --paper: #1c1c1c;
   --shadow-color-1: rgba(255, 255, 255, 0.08);
   --shadow-color-2: rgba(255, 255, 255, 0.04);
 }

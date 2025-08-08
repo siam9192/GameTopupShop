@@ -18,9 +18,9 @@ function page() {
         Top ups
       </Typography>
       <TopUpsFilterBox />
-     <div className='flex justify-end'>
-       <TopUpsFilterBoxModal/>
-     </div>
+      <div className="flex justify-end">
+        <TopUpsFilterBoxModal />
+      </div>
       <TopUpsTable />
     </div>
   );

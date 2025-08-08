@@ -2,7 +2,7 @@ import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/mate
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';
 
-function TopUpsFilterBox() {
+function OffersFilterBox() {
   return (
     <div className="p-5 glass  lg:block hidden">
       <Stack direction="row" gap={2} flexWrap="wrap">
@@ -42,31 +42,6 @@ function TopUpsFilterBox() {
           </Stack>
         </Box>
 
-        {/* Category Section */}
-        <Box minWidth={250}>
-          <Typography
-            component="p"
-            variant="h6"
-            fontSize={20}
-            fontFamily="jost"
-            fontWeight={600}
-            color="text.primary"
-            mb={1}
-          >
-            Category
-          </Typography>
-          <FormControl fullWidth>
-            <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
         {/* Status Section */}
         <Box minWidth={250}>
           <Typography
@@ -103,4 +78,4 @@ function TopUpsFilterBox() {
   );
 }
 
-export default TopUpsFilterBox;
+export default OffersFilterBox;

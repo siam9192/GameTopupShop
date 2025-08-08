@@ -10,10 +10,11 @@ const rows: TRows[] = [
     id: 1,
     image: 'https://via.placeholder.com/60x60?text=G1',
     name: 'Free Fire Diamonds',
-    packages: 5,
+    price: 5,
     orders: 120,
     revenue: 54000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-01-15',
     updatedAt: '2023-06-20',
   },
@@ -21,10 +22,11 @@ const rows: TRows[] = [
     id: 2,
     image: 'https://via.placeholder.com/60x60?text=G2',
     name: 'PUBG UC',
-    packages: 4,
+    price: 4,
     orders: 95,
     revenue: 45000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-02-10',
     updatedAt: '2023-06-25',
   },
@@ -32,10 +34,11 @@ const rows: TRows[] = [
     id: 3,
     image: 'https://via.placeholder.com/60x60?text=G3',
     name: 'Mobile Legends Diamonds',
-    packages: 6,
+    price: 6,
     orders: 110,
     revenue: 50500,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-01-28',
     updatedAt: '2023-05-30',
   },
@@ -43,10 +46,11 @@ const rows: TRows[] = [
     id: 4,
     image: 'https://via.placeholder.com/60x60?text=G4',
     name: 'Roblox Robux',
-    packages: 3,
+    price: 3,
     orders: 85,
     revenue: 30000,
     status: 'inactive',
+    endAt: '2023-01-15',
     createdAt: '2023-03-12',
     updatedAt: '2023-07-01',
   },
@@ -54,10 +58,11 @@ const rows: TRows[] = [
     id: 5,
     image: 'https://via.placeholder.com/60x60?text=G5',
     name: 'Valorant Points',
-    packages: 4,
+    price: 4,
     orders: 100,
     revenue: 48000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-04-05',
     updatedAt: '2023-06-10',
   },
@@ -65,10 +70,11 @@ const rows: TRows[] = [
     id: 6,
     image: 'https://via.placeholder.com/60x60?text=G6',
     name: 'COD CP (Call of Duty)',
-    packages: 2,
+    price: 2,
     orders: 60,
     revenue: 27000,
     status: 'draft',
+    endAt: '2023-01-15',
     createdAt: '2023-02-20',
     updatedAt: '2023-06-15',
   },
@@ -76,10 +82,11 @@ const rows: TRows[] = [
     id: 7,
     image: 'https://via.placeholder.com/60x60?text=G7',
     name: 'Genshin Impact Crystals',
-    packages: 3,
+    price: 3,
     orders: 45,
     revenue: 20000,
     status: 'inactive',
+    endAt: '2023-01-15',
     createdAt: '2023-05-02',
     updatedAt: '2023-07-10',
   },
@@ -87,10 +94,11 @@ const rows: TRows[] = [
     id: 8,
     image: 'https://via.placeholder.com/60x60?text=G8',
     name: 'Fortnite V-Bucks',
-    packages: 5,
+    price: 5,
     orders: 70,
     revenue: 33000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-01-10',
     updatedAt: '2023-07-01',
   },
@@ -98,10 +106,11 @@ const rows: TRows[] = [
     id: 9,
     image: 'https://via.placeholder.com/60x60?text=G9',
     name: 'League of Legends RP',
-    packages: 6,
+    price: 6,
     orders: 98,
     revenue: 47000,
     status: 'inactive',
+    endAt: '2023-01-15',
     createdAt: '2023-03-25',
     updatedAt: '2023-06-05',
   },
@@ -109,10 +118,11 @@ const rows: TRows[] = [
     id: 10,
     image: 'https://via.placeholder.com/60x60?text=G10',
     name: 'Apex Legends Coins',
-    packages: 4,
+    price: 4,
     orders: 63,
     revenue: 31500,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-04-18',
     updatedAt: '2023-07-05',
   },
@@ -120,10 +130,11 @@ const rows: TRows[] = [
     id: 11,
     image: 'https://via.placeholder.com/60x60?text=G11',
     name: 'Clash of Clans Gems',
-    packages: 5,
+    price: 5,
     orders: 77,
     revenue: 37000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-02-08',
     updatedAt: '2023-06-30',
   },
@@ -131,10 +142,11 @@ const rows: TRows[] = [
     id: 12,
     image: 'https://via.placeholder.com/60x60?text=G12',
     name: 'Stumble Guys Gems',
-    packages: 3,
+    price: 3,
     orders: 52,
     revenue: 21000,
     status: 'draft',
+    endAt: '2023-01-15',
     createdAt: '2023-03-14',
     updatedAt: '2023-06-18',
   },
@@ -142,10 +154,11 @@ const rows: TRows[] = [
     id: 13,
     image: 'https://via.placeholder.com/60x60?text=G13',
     name: 'BGMI UC',
-    packages: 4,
+    price: 4,
     orders: 90,
     revenue: 46000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-01-05',
     updatedAt: '2023-07-03',
   },
@@ -153,10 +166,11 @@ const rows: TRows[] = [
     id: 14,
     image: 'https://via.placeholder.com/60x60?text=G14',
     name: 'Clash Royale Gems',
-    packages: 2,
+    price: 2,
     orders: 38,
     revenue: 18000,
     status: 'inactive',
+    endAt: '2023-01-15',
     createdAt: '2023-05-20',
     updatedAt: '2023-07-15',
   },
@@ -164,10 +178,11 @@ const rows: TRows[] = [
     id: 15,
     image: 'https://via.placeholder.com/60x60?text=G15',
     name: 'Temple Run Coins',
-    packages: 1,
+    price: 1,
     orders: 25,
     revenue: 9500,
     status: 'draft',
+    endAt: '2023-01-15',
     createdAt: '2023-06-01',
     updatedAt: '2023-07-10',
   },
@@ -175,10 +190,11 @@ const rows: TRows[] = [
     id: 16,
     image: 'https://via.placeholder.com/60x60?text=G16',
     name: 'Subway Surfers Keys',
-    packages: 2,
+    price: 2,
     orders: 42,
     revenue: 15000,
     status: 'inactive',
+    endAt: '2023-01-15',
     createdAt: '2023-02-14',
     updatedAt: '2023-06-22',
   },
@@ -186,10 +202,11 @@ const rows: TRows[] = [
     id: 17,
     image: 'https://via.placeholder.com/60x60?text=G17',
     name: 'Lords Mobile Packs',
-    packages: 4,
+    price: 4,
     orders: 66,
     revenue: 31000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-03-08',
     updatedAt: '2023-06-25',
   },
@@ -197,10 +214,11 @@ const rows: TRows[] = [
     id: 18,
     image: 'https://via.placeholder.com/60x60?text=G18',
     name: 'Brawl Stars Gems',
-    packages: 3,
+    price: 3,
     orders: 47,
     revenue: 20000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-04-10',
     updatedAt: '2023-07-08',
   },
@@ -208,10 +226,11 @@ const rows: TRows[] = [
     id: 19,
     image: 'https://via.placeholder.com/60x60?text=G19',
     name: 'Zelda Points',
-    packages: 2,
+    price: 2,
     orders: 29,
     revenue: 12500,
     status: 'inactive',
+    endAt: '2023-01-15',
     createdAt: '2023-05-01',
     updatedAt: '2023-07-12',
   },
@@ -219,10 +238,11 @@ const rows: TRows[] = [
     id: 20,
     image: 'https://via.placeholder.com/60x60?text=G20',
     name: 'Steam Wallet Codes',
-    packages: 5,
+    price: 5,
     orders: 150,
     revenue: 75000,
     status: 'active',
+    endAt: '2023-01-15',
     createdAt: '2023-01-01',
     updatedAt: '2023-07-20',
   },
@@ -231,10 +251,11 @@ type TRows = {
   id: number;
   image: string;
   name: string;
-  packages: number;
+  price: number;
   orders: number;
   revenue: number;
   status: 'active' | 'inactive' | 'draft';
+  endAt: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -249,7 +270,7 @@ const heads = [
     sortable: true,
   },
   {
-    name: 'Packages',
+    name: 'price',
     sortable: true,
   },
   {
@@ -263,6 +284,10 @@ const heads = [
   {
     name: 'Status',
     sortable: false,
+  },
+  {
+    name: 'End At',
+    sortable: true,
   },
 
   {
@@ -280,10 +305,10 @@ const heads = [
   },
 ];
 
-function TopUpsTable() {
+function OffersTable() {
   const [sort, setSort] = useState<{ name: string; by: 'asc' | 'desc' } | null>(null);
   return (
-    <div className="mt-10 p-3 lg:p-5 glass overflow-x-auto dark:bg-paper">
+    <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto dark:bg-paper">
       <Typography
         component="h1"
         variant="h5"
@@ -292,7 +317,7 @@ function TopUpsTable() {
         color="text.primary"
         mb={1}
       >
-        Top ups
+        Offers Table
       </Typography>
 
       <div className=" overflow-x-auto">
@@ -330,18 +355,19 @@ function TopUpsTable() {
                   <TableCell style={{ minWidth: '300px' }}>
                     <Stack direction={'row'} alignItems={'center'} gap={1}>
                       <img
-                        src="https://play-lh.googleusercontent.com/Odw8BGugaJLdbaSbCeZWbTE3Qz1wTiQ0Tsn9nzpoQdnkzWb-gaI58zzTmYDvGpdYKg"
+                        src="https://cdn-www.bluestacks.com/bs-images/FreeFire_Guide_DiamondsGuide_EN2.jpg"
                         alt={'image'}
-                        className=" size-14 md:size-16 rounded-lg"
+                        className=" size-14 md:size-16 rounded-lg object-cover"
                       />
                       <Typography>{row.name}</Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.packages}</TableCell>
+                  <TableCell>{row.price}</TableCell>
 
                   <TableCell>{row.orders}</TableCell>
                   <TableCell>{row.revenue}</TableCell>
                   <TableCell>{row.status.toUpperCase()}</TableCell>
+                  <TableCell>{new Date().toDateString()}</TableCell>
                   <TableCell>{new Date().toDateString()}</TableCell>
                   <TableCell>{new Date().toDateString()}</TableCell>
 
@@ -361,18 +387,18 @@ function TopUpsTable() {
               ))}
             </TableBody>
           </Table>
-          <Pagination
-            style={{ marginTop: '15px' }}
-            count={10}
-            size="large"
-            color="primary"
-            variant="outlined"
-            shape="rounded"
-          />
         </TableContainer>
       </div>
+      <Pagination
+        style={{ marginTop: '15px' }}
+        count={10}
+        size="large"
+        color="primary"
+        variant="outlined"
+        shape="rounded"
+      />
     </div>
   );
 }
 
-export default TopUpsTable;
+export default OffersTable;
