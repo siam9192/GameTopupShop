@@ -1,5 +1,7 @@
 import NewCustoomerChart from '@/components/sections/control-dashboard/NewCustomerChart';
+import PopularOffers from '@/components/sections/control-dashboard/PopularOffers';
 import PopularProducts from '@/components/sections/control-dashboard/PopularProducts';
+import PopularTopUps from '@/components/sections/control-dashboard/PopularTopUps';
 import ProductsOverviewData from '@/components/sections/control-dashboard/ProductsOverviewData';
 import RecentOrders from '@/components/sections/control-dashboard/RecentOrders';
 import RevenueChart from '@/components/sections/control-dashboard/RevenueChart';
@@ -24,10 +26,10 @@ function page() {
         spacing={2}
       >
         <Grid size={1}>
-          <PopularProducts />
+          <PopularTopUps />
         </Grid>
         <Grid size={1}>
-          <UnreadNotifications />
+          <PopularOffers />
         </Grid>
       </Grid>
     </div>

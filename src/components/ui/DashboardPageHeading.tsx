@@ -5,10 +5,11 @@ function DashboardPageHeading({ title }: { title: string }) {
   return (
     <Typography
       component={'h1'}
-      variant="h5"
+      variant="h4"
       fontFamily={'jost'}
       fontWeight={600}
       color="text.primary"
+      mb={2}
     >
       {title}
     </Typography>

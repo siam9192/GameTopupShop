@@ -5,260 +5,261 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { MdOutlineEdit } from 'react-icons/md';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
+type TRows = {
+  id: number;
+  image: string;
+  product: string;
+  category: string;
+  quantity: number;
+  total: number;
+  paymentStatus: 'Paid' | 'Pending' | 'Failed';
+  customer: string;
+  status: 'active' | 'inactive' | 'draft';
+  createdAt: string;
+};
+
 const rows: TRows[] = [
   {
     id: 1,
     image: 'https://via.placeholder.com/60x60?text=G1',
-    name: 'Free Fire Diamonds',
-    price: 5,
-    orders: 120,
-    revenue: 54000,
+    product: 'Free Fire Diamonds',
+    category: 'Gaming',
+    quantity: 120,
+    total: 54000,
+    paymentStatus: 'Paid',
+    customer: 'John Doe',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-01-15',
-    updatedAt: '2023-06-20',
   },
   {
     id: 2,
     image: 'https://via.placeholder.com/60x60?text=G2',
-    name: 'PUBG UC',
-    price: 4,
-    orders: 95,
-    revenue: 45000,
+    product: 'PUBG UC',
+    category: 'Gaming',
+    quantity: 95,
+    total: 45000,
+    paymentStatus: 'Pending',
+    customer: 'Jane Smith',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-02-10',
-    updatedAt: '2023-06-25',
   },
   {
     id: 3,
     image: 'https://via.placeholder.com/60x60?text=G3',
-    name: 'Mobile Legends Diamonds',
-    price: 6,
-    orders: 110,
-    revenue: 50500,
+    product: 'Mobile Legends Diamonds',
+    category: 'Gaming',
+    quantity: 110,
+    total: 50500,
+    paymentStatus: 'Paid',
+    customer: 'Alex Johnson',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-01-28',
-    updatedAt: '2023-05-30',
   },
   {
     id: 4,
     image: 'https://via.placeholder.com/60x60?text=G4',
-    name: 'Roblox Robux',
-    price: 3,
-    orders: 85,
-    revenue: 30000,
+    product: 'Roblox Robux',
+    category: 'Gaming',
+    quantity: 85,
+    total: 30000,
+    paymentStatus: 'Failed',
+    customer: 'Chris Evans',
     status: 'inactive',
-    endAt: '2023-01-15',
     createdAt: '2023-03-12',
-    updatedAt: '2023-07-01',
   },
   {
     id: 5,
     image: 'https://via.placeholder.com/60x60?text=G5',
-    name: 'Valorant Points',
-    price: 4,
-    orders: 100,
-    revenue: 48000,
+    product: 'Valorant Points',
+    category: 'Gaming',
+    quantity: 100,
+    total: 48000,
+    paymentStatus: 'Paid',
+    customer: 'Emma Watson',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-04-05',
-    updatedAt: '2023-06-10',
   },
   {
     id: 6,
     image: 'https://via.placeholder.com/60x60?text=G6',
-    name: 'COD CP (Call of Duty)',
-    price: 2,
-    orders: 60,
-    revenue: 27000,
+    product: 'COD CP (Call of Duty)',
+    category: 'Gaming',
+    quantity: 60,
+    total: 27000,
+    paymentStatus: 'Pending',
+    customer: 'Robert Downey',
     status: 'draft',
-    endAt: '2023-01-15',
     createdAt: '2023-02-20',
-    updatedAt: '2023-06-15',
   },
   {
     id: 7,
     image: 'https://via.placeholder.com/60x60?text=G7',
-    name: 'Genshin Impact Crystals',
-    price: 3,
-    orders: 45,
-    revenue: 20000,
+    product: 'Genshin Impact Crystals',
+    category: 'Gaming',
+    quantity: 45,
+    total: 20000,
+    paymentStatus: 'Failed',
+    customer: 'Scarlett King',
     status: 'inactive',
-    endAt: '2023-01-15',
     createdAt: '2023-05-02',
-    updatedAt: '2023-07-10',
   },
   {
     id: 8,
     image: 'https://via.placeholder.com/60x60?text=G8',
-    name: 'Fortnite V-Bucks',
-    price: 5,
-    orders: 70,
-    revenue: 33000,
+    product: 'Fortnite V-Bucks',
+    category: 'Gaming',
+    quantity: 70,
+    total: 33000,
+    paymentStatus: 'Paid',
+    customer: 'Tom Holland',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-01-10',
-    updatedAt: '2023-07-01',
   },
   {
     id: 9,
     image: 'https://via.placeholder.com/60x60?text=G9',
-    name: 'League of Legends RP',
-    price: 6,
-    orders: 98,
-    revenue: 47000,
+    product: 'League of Legends RP',
+    category: 'Gaming',
+    quantity: 98,
+    total: 47000,
+    paymentStatus: 'Pending',
+    customer: 'Zendaya Maree',
     status: 'inactive',
-    endAt: '2023-01-15',
     createdAt: '2023-03-25',
-    updatedAt: '2023-06-05',
   },
   {
     id: 10,
     image: 'https://via.placeholder.com/60x60?text=G10',
-    name: 'Apex Legends Coins',
-    price: 4,
-    orders: 63,
-    revenue: 31500,
+    product: 'Apex Legends Coins',
+    category: 'Gaming',
+    quantity: 63,
+    total: 31500,
+    paymentStatus: 'Paid',
+    customer: 'Chris Pratt',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-04-18',
-    updatedAt: '2023-07-05',
   },
   {
     id: 11,
     image: 'https://via.placeholder.com/60x60?text=G11',
-    name: 'Clash of Clans Gems',
-    price: 5,
-    orders: 77,
-    revenue: 37000,
+    product: 'Clash of Clans Gems',
+    category: 'Gaming',
+    quantity: 77,
+    total: 37000,
+    paymentStatus: 'Failed',
+    customer: 'Mark Ruffalo',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-02-08',
-    updatedAt: '2023-06-30',
   },
   {
     id: 12,
     image: 'https://via.placeholder.com/60x60?text=G12',
-    name: 'Stumble Guys Gems',
-    price: 3,
-    orders: 52,
-    revenue: 21000,
+    product: 'Stumble Guys Gems',
+    category: 'Gaming',
+    quantity: 52,
+    total: 21000,
+    paymentStatus: 'Paid',
+    customer: 'Natalie Port',
     status: 'draft',
-    endAt: '2023-01-15',
     createdAt: '2023-03-14',
-    updatedAt: '2023-06-18',
   },
   {
     id: 13,
     image: 'https://via.placeholder.com/60x60?text=G13',
-    name: 'BGMI UC',
-    price: 4,
-    orders: 90,
-    revenue: 46000,
+    product: 'BGMI UC',
+    category: 'Gaming',
+    quantity: 90,
+    total: 46000,
+    paymentStatus: 'Pending',
+    customer: 'Ethan Hunt',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-01-05',
-    updatedAt: '2023-07-03',
   },
   {
     id: 14,
     image: 'https://via.placeholder.com/60x60?text=G14',
-    name: 'Clash Royale Gems',
-    price: 2,
-    orders: 38,
-    revenue: 18000,
+    product: 'Clash Royale Gems',
+    category: 'Gaming',
+    quantity: 38,
+    total: 18000,
+    paymentStatus: 'Paid',
+    customer: 'Emma Stone',
     status: 'inactive',
-    endAt: '2023-01-15',
     createdAt: '2023-05-20',
-    updatedAt: '2023-07-15',
   },
   {
     id: 15,
     image: 'https://via.placeholder.com/60x60?text=G15',
-    name: 'Temple Run Coins',
-    price: 1,
-    orders: 25,
-    revenue: 9500,
+    product: 'Temple Run Coins',
+    category: 'Gaming',
+    quantity: 25,
+    total: 9500,
+    paymentStatus: 'Failed',
+    customer: 'Ryan Gosling',
     status: 'draft',
-    endAt: '2023-01-15',
     createdAt: '2023-06-01',
-    updatedAt: '2023-07-10',
   },
   {
     id: 16,
     image: 'https://via.placeholder.com/60x60?text=G16',
-    name: 'Subway Surfers Keys',
-    price: 2,
-    orders: 42,
-    revenue: 15000,
+    product: 'Subway Surfers Keys',
+    category: 'Gaming',
+    quantity: 42,
+    total: 15000,
+    paymentStatus: 'Pending',
+    customer: 'Gal Gadot',
     status: 'inactive',
-    endAt: '2023-01-15',
     createdAt: '2023-02-14',
-    updatedAt: '2023-06-22',
   },
   {
     id: 17,
     image: 'https://via.placeholder.com/60x60?text=G17',
-    name: 'Lords Mobile Packs',
-    price: 4,
-    orders: 66,
-    revenue: 31000,
+    product: 'Lords Mobile Packs',
+    category: 'Gaming',
+    quantity: 66,
+    total: 31000,
+    paymentStatus: 'Paid',
+    customer: 'Chris Hemsworth',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-03-08',
-    updatedAt: '2023-06-25',
   },
   {
     id: 18,
     image: 'https://via.placeholder.com/60x60?text=G18',
-    name: 'Brawl Stars Gems',
-    price: 3,
-    orders: 47,
-    revenue: 20000,
+    product: 'Brawl Stars Gems',
+    category: 'Gaming',
+    quantity: 47,
+    total: 20000,
+    paymentStatus: 'Failed',
+    customer: 'Henry Cavill',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-04-10',
-    updatedAt: '2023-07-08',
   },
   {
     id: 19,
     image: 'https://via.placeholder.com/60x60?text=G19',
-    name: 'Zelda Points',
-    price: 2,
-    orders: 29,
-    revenue: 12500,
+    product: 'Zelda Points',
+    category: 'Gaming',
+    quantity: 29,
+    total: 12500,
+    paymentStatus: 'Paid',
+    customer: 'Brie Larson',
     status: 'inactive',
-    endAt: '2023-01-15',
     createdAt: '2023-05-01',
-    updatedAt: '2023-07-12',
   },
   {
     id: 20,
     image: 'https://via.placeholder.com/60x60?text=G20',
-    name: 'Steam Wallet Codes',
-    price: 5,
-    orders: 150,
-    revenue: 75000,
+    product: 'Steam Wallet Codes',
+    category: 'Gaming',
+    quantity: 150,
+    total: 75000,
+    paymentStatus: 'Pending',
+    customer: 'Keanu Reeves',
     status: 'active',
-    endAt: '2023-01-15',
     createdAt: '2023-01-01',
-    updatedAt: '2023-07-20',
   },
 ];
-type TRows = {
-  id: number;
-  image: string;
-  name: string;
-  price: number;
-  orders: number;
-  revenue: number;
-  status: 'active' | 'inactive' | 'draft';
-  endAt: string;
-  createdAt: string;
-  updatedAt: string;
-};
 
 const heads = [
   {
@@ -266,28 +267,32 @@ const heads = [
     sortable: false,
   },
   {
-    name: 'Name',
+    name: 'Product',
     sortable: true,
   },
   {
-    name: 'price',
+    name: 'Category',
     sortable: true,
   },
   {
-    name: 'Orders',
+    name: 'Quantity',
     sortable: true,
   },
   {
-    name: 'Revenue',
+    name: 'Total',
+    sortable: true,
+  },
+  {
+    name: 'Payment Status',
+    sortable: true,
+  },
+  {
+    name: 'Customer',
     sortable: true,
   },
   {
     name: 'Status',
     sortable: false,
-  },
-  {
-    name: 'End At',
-    sortable: true,
   },
 
   {
@@ -296,16 +301,12 @@ const heads = [
   },
 
   {
-    name: 'Last Updated At',
-    sortable: true,
-  },
-  {
     name: 'Actions',
     sortable: false,
   },
 ];
 
-function OffersTable() {
+function OrdersTable() {
   const [sort, setSort] = useState<{ name: string; by: 'asc' | 'desc' } | null>(null);
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
@@ -317,7 +318,7 @@ function OffersTable() {
         color="text.primary"
         mb={1}
       >
-        Offers Table
+        Orders Table
       </Typography>
 
       <div className=" overflow-x-auto">
@@ -359,16 +360,17 @@ function OffersTable() {
                         alt={'image'}
                         className=" size-14 md:size-16 rounded-lg object-cover"
                       />
-                      <Typography>{row.name}</Typography>
+                      <Typography>{row.product}</Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.price}</TableCell>
+                  <TableCell>{row.category}</TableCell>
 
-                  <TableCell>{row.orders}</TableCell>
-                  <TableCell>{row.revenue}</TableCell>
-                  <TableCell>{row.status.toUpperCase()}</TableCell>
-                  <TableCell>{new Date().toDateString()}</TableCell>
-                  <TableCell>{new Date().toDateString()}</TableCell>
+                  <TableCell>{row.quantity}</TableCell>
+                  <TableCell>{row.total}</TableCell>
+                  <TableCell>{row.paymentStatus}</TableCell>
+                  <TableCell>{row.customer}</TableCell>
+                  <TableCell>{row.status}</TableCell>
+
                   <TableCell>{new Date().toDateString()}</TableCell>
 
                   <TableCell>
@@ -401,4 +403,4 @@ function OffersTable() {
   );
 }
 
-export default OffersTable;
+export default OrdersTable;

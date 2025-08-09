@@ -1,19 +1,10 @@
 'use client';
-import React from 'react';
-import { Pagination, Tooltip, Typography } from '@mui/material';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Avatar,
-} from '@mui/material';
-import { LiaUserEditSolid } from 'react-icons/lia';
+import React, { useState } from 'react';
+import { Avatar, Pagination, Stack, Tooltip, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
-
+import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
+import { LiaUserEditSolid } from 'react-icons/lia';
 const rows = [
   {
     id: 1,
@@ -220,106 +211,130 @@ const rows = [
 const heads = [
   {
     name: 'ID',
-    sortAble: true,
+    sortable: true,
   },
   {
     name: 'Name',
-    sortAble: true,
+    sortable: true,
   },
   {
     name: 'Orders',
-    sortAble: true,
+    sortable: true,
   },
   {
     name: 'Email',
-    sortAble: true,
+    sortable: true,
   },
   {
     name: 'Phone',
-    sortAble: true,
+    sortable: false,
   },
   {
     name: 'Favourites Game',
-    sortAble: true,
+    sortable: true,
+  },
+  {
+    name: 'Status',
+    sortable: true,
   },
   {
     name: 'Join Date',
-    sortAble: true,
+    sortable: true,
   },
   {
     name: 'Actions',
-    sortAble: false,
+    sortable: false,
   },
 ];
-
-function CustomersTable() {
+function OffersTable() {
+  const [sort, setSort] = useState<{ name: string; by: 'asc' | 'desc' } | null>(null);
   return (
-    <div className="mt-10 p-3 lg:p-5 glass">
+    <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
       <Typography
         component="h1"
         variant="h5"
         fontFamily="jost"
         fontWeight={600}
         color="text.primary"
-        mb={2}
+        mb={1}
       >
-        Customers
+        Customers Table
       </Typography>
 
-      <TableContainer
-        sx={{
-          overflowX: 'scroll',
-        }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              {heads.map(head => (
-                <TableCell key={head.name}>{head.name.toUpperCase()}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.id}>
-                <TableCell>#{row.id}</TableCell>
-                <TableCell>
-                  <Avatar alt={row.name} src={row.avatar} />
-                </TableCell>
-                <TableCell>{row.orders}</TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.phone}</TableCell>
-                <TableCell>{row.favouriteGame}</TableCell>
-                <TableCell>{new Date().toDateString()}</TableCell>
-
-                <TableCell>
-                  <Tooltip title="View Full Details">
-                    <button className="text-2xl hover:text-primary mr-2 hover:cursor-pointer">
-                      <HiOutlineViewfinderCircle />
-                    </button>
-                  </Tooltip>
-
-                  <Tooltip title="Edit Customer">
-                    <button className="text-2xl hover:text-secondary mr-2 hover:cursor-pointer">
-                      <LiaUserEditSolid />
-                    </button>
-                  </Tooltip>
-                </TableCell>
+      <div className=" overflow-x-auto">
+        <TableContainer sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {heads.map(head => (
+                  <TableCell key={head.name}>
+                    {head.sortable ? (
+                      <Stack direction={'row'} gap={0.5}>
+                        <span>{head.name.toUpperCase()}</span>
+                        <button
+                          onClick={() => setSort(p => ({ name: head.name, by: p?.by || 'asc' }))}
+                          className={` text-xl ${sort?.name === head.name ? 'text-primary' : 'text-txt-primary'}`}
+                        >
+                          {sort?.name === head.name && sort?.by === 'asc' ? (
+                            <IoMdArrowUp />
+                          ) : (
+                            <IoMdArrowDown />
+                          )}
+                        </button>
+                      </Stack>
+                    ) : (
+                      head.name.toUpperCase()
+                    )}
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <Pagination
-          style={{ marginTop: '15px' }}
-          count={10}
-          size="large"
-          color="primary"
-          variant="outlined"
-          shape="rounded"
-        />
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow key={row.id}>
+                  <TableCell>#{row.id}</TableCell>
+                  <TableCell style={{ minWidth: '250px' }}>
+                    <Stack direction={'row'} alignItems={'center'} spacing={2}>
+                      <Avatar alt={row.name} src={row.avatar} />
+                      <Typography>{row.name}</Typography>
+                    </Stack>
+                  </TableCell>
+                  <TableCell>{row.orders}</TableCell>
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.phone}</TableCell>
+                  <TableCell>{row.favouriteGame}</TableCell>
+                  <TableCell>Active</TableCell>
+                  <TableCell>{new Date().toDateString()}</TableCell>
+
+                  <TableCell>
+                    <Tooltip title="View Full Details">
+                      <button className="text-2xl hover:text-primary mr-2 hover:cursor-pointer">
+                        <HiOutlineViewfinderCircle />
+                      </button>
+                    </Tooltip>
+
+                    <Tooltip title="Edit Customer">
+                      <button className="text-2xl hover:text-secondary mr-2 hover:cursor-pointer">
+                        <LiaUserEditSolid />
+                      </button>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+      <Pagination
+        style={{ marginTop: '15px' }}
+        count={10}
+        size="large"
+        color="primary"
+        variant="outlined"
+        shape="rounded"
+      />
     </div>
   );
 }
 
-export default CustomersTable;
+export default OffersTable;
