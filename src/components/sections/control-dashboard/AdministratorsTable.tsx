@@ -218,7 +218,7 @@ const heads = [
     sortable: true,
   },
   {
-    name: 'Orders',
+    name: 'Level',
     sortable: true,
   },
   {
@@ -228,10 +228,6 @@ const heads = [
   {
     name: 'Phone',
     sortable: false,
-  },
-  {
-    name: 'Favourites Game',
-    sortable: true,
   },
   {
     name: 'Status',
@@ -246,7 +242,7 @@ const heads = [
     sortable: false,
   },
 ];
-function CustomersTable() {
+function AdministratorsTable() {
   const [sort, setSort] = useState<{ name: string; by: 'asc' | 'desc' } | null>(null);
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
@@ -258,7 +254,7 @@ function CustomersTable() {
         color="text.primary"
         mb={1}
       >
-        Customers Table
+        Administrators Table
       </Typography>
 
       <div className=" overflow-x-auto">
@@ -299,13 +295,11 @@ function CustomersTable() {
                       <Typography>{row.name}</Typography>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.orders}</TableCell>
+                  <TableCell>Admin</TableCell>
                   <TableCell>{row.email}</TableCell>
                   <TableCell>{row.phone}</TableCell>
-                  <TableCell>{row.favouriteGame}</TableCell>
                   <TableCell>Active</TableCell>
                   <TableCell>{new Date().toDateString()}</TableCell>
-
                   <TableCell>
                     <Tooltip title="View Full Details">
                       <button className="text-2xl hover:text-primary mr-2 hover:cursor-pointer">
@@ -337,4 +331,4 @@ function CustomersTable() {
   );
 }
 
-export default CustomersTable;
+export default AdministratorsTable;

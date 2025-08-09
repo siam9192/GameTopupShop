@@ -1,7 +1,6 @@
 'use client';
 import {
   List,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   Collapse,
@@ -20,6 +19,7 @@ import { HiOutlineWallet } from 'react-icons/hi2';
 import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
 import { MdManageAccounts } from 'react-icons/md';
 import { IconType } from 'react-icons';
+import { SiTaichigraphics } from 'react-icons/si';
 
 interface RouteItem {
   label: string;
@@ -49,7 +49,7 @@ const sidebarRoutesGroup1: RouteItem[] = [
     path: '/dashboard',
     icon: TbRecharging,
     children: [
-      { label: 'Topups', path: '/users' },
+      { label: 'Top ups', path: '/users' },
       { label: 'Offers', path: '/users/add' },
     ],
   },
@@ -76,14 +76,20 @@ const sidebarRoutesGroup1: RouteItem[] = [
     path: '/dashboard',
     icon: TbRecharging,
   },
-  {
-    label: 'Apearences',
-    path: '/dashboard',
-    icon: TbRecharging,
-  },
+
+
 ];
 
 const sidebarRoutesGroup2: RouteItem[] = [
+   {
+  label: 'Appearances',
+  path: '/dashboard/appearances',
+  icon: SiTaichigraphics,
+ children: [
+      { label: 'Banner Slides', path: '/banner' },
+      { label: 'Branding', path: '/users/add' },
+    ],
+},
   {
     label: 'Setting',
     path: '/dashboard',

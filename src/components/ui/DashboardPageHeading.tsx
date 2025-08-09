@@ -6,6 +6,10 @@ function DashboardPageHeading({ title }: { title: string }) {
     <Typography
       component={'h1'}
       variant="h4"
+      fontSize={{
+        xs:25,
+        md:30
+      }}
       fontFamily={'jost'}
       fontWeight={600}
       color="text.primary"

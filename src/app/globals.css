@@ -58,3 +58,12 @@ body {
   --shadow-color-1: rgba(255, 255, 255, 0.08);
   --shadow-color-2: rgba(255, 255, 255, 0.04);
 }
+
+
+button:hover {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
