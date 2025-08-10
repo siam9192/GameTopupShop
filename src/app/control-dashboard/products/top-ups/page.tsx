@@ -8,7 +8,7 @@ import React from 'react';
 function page() {
   return (
     <div>
-     <DashboardPageHeading title="Top ups" />
+      <DashboardPageHeading title="Top ups" />
       <TopUpsFilterBox />
       <div className="flex justify-end">
         <TopUpsFilterBoxModal />

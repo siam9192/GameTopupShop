@@ -12,7 +12,7 @@ import {
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';
 
-function AdministratorsFilterBoxModal() {
+function WalletAddBalanceSubmissionsFilterBoxModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -74,30 +74,7 @@ function AdministratorsFilterBoxModal() {
                 />
               </Stack>
             </Box>
-            {/* Status Section */}
-            <Box minWidth={250}>
-              <Typography
-                component="p"
-                variant="h6"
-                fontSize={20}
-                fontFamily="jost"
-                fontWeight={600}
-                color="text.primary"
-                mb={1}
-              >
-                Status
-              </Typography>
-              <FormControl fullWidth>
-                <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+
             {/* Status Section */}
             <Box minWidth={250}>
               <Typography
@@ -136,4 +113,4 @@ function AdministratorsFilterBoxModal() {
   );
 }
 
-export default AdministratorsFilterBoxModal;
+export default WalletAddBalanceSubmissionsFilterBoxModal;

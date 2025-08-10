@@ -17,9 +17,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import { BiHomeAlt } from 'react-icons/bi';
 import { HiOutlineWallet } from 'react-icons/hi2';
 import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
-import { MdManageAccounts } from 'react-icons/md';
+import { MdManageAccounts, MdOutlinePayment } from 'react-icons/md';
 import { IconType } from 'react-icons';
 import { SiTaichigraphics } from 'react-icons/si';
+import { FaTruckFast } from 'react-icons/fa6';
+import { FaUsers } from 'react-icons/fa';
 
 interface RouteItem {
   label: string;
@@ -38,11 +40,7 @@ const sidebarRoutesGroup1: RouteItem[] = [
   {
     label: 'Orders',
     path: '/dashboard',
-    icon: TbRecharging,
-    children: [
-      { label: 'Orders', path: '/users' },
-      { label: 'Order History', path: '/users/add' },
-    ],
+    icon: FaTruckFast,
   },
   {
     label: 'Products',
@@ -57,39 +55,43 @@ const sidebarRoutesGroup1: RouteItem[] = [
   {
     label: 'Wallet',
     icon: HiOutlineWallet,
+    path: '/dashboard/wallet',
     children: [
-      { label: 'Wallet Submissions', path: '/users' },
-      { label: 'All Wallets', path: '/users/add' },
+      { label: 'Customers Wallet', path: '/dashboard/wallet/transactions' },
+      { label: 'Submissions', path: '/dashboard/wallet/transactions' },
+      { label: 'Config Payment Methods', path: '/dashboard/wallet/payment-methods' },
     ],
   },
   {
     label: 'Users',
-    path: '/dashboard',
-    icon: TbRecharging,
+    icon: FaUsers,
+    path: '/dashboard/users',
     children: [
-      { label: 'Customers', path: '/users' },
-      { label: 'Administrators', path: '/users/add' },
+      { label: 'Customers', path: '/dashboard/users/customers' },
+      { label: 'Administrators', path: '/dashboard/users/administrators' },
     ],
   },
   {
     label: 'Transactions',
-    path: '/dashboard',
-    icon: TbRecharging,
+    icon: MdOutlinePayment,
+    path: '/dashboard/transactions',
+    children: [
+      { label: 'All Payments', path: '/dashboard/payments/all' },
+      { label: 'Payment Methods', path: '/dashboard/payments/methods' },
+    ],
   },
-
-
 ];
 
 const sidebarRoutesGroup2: RouteItem[] = [
-   {
-  label: 'Appearances',
-  path: '/dashboard/appearances',
-  icon: SiTaichigraphics,
- children: [
+  {
+    label: 'Appearances',
+    path: '/dashboard/appearances',
+    icon: SiTaichigraphics,
+    children: [
       { label: 'Banner Slides', path: '/banner' },
       { label: 'Branding', path: '/users/add' },
     ],
-},
+  },
   {
     label: 'Setting',
     path: '/dashboard',
@@ -97,7 +99,7 @@ const sidebarRoutesGroup2: RouteItem[] = [
   },
 
   {
-    label: 'Manage Accounts',
+    label: 'Manage Account',
     path: '/dashboard',
     icon: MdManageAccounts,
   },

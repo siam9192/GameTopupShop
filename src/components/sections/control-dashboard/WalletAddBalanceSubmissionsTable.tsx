@@ -215,31 +215,28 @@ const heads = [
     sortable: true,
   },
   {
-    name: 'Name',
+    name: 'Submitted By',
     sortable: true,
   },
   {
-    name: 'Orders',
+    name: 'Amount',
     sortable: true,
   },
   {
-    name: 'Email',
+    name: 'Method',
     sortable: true,
   },
   {
-    name: 'Phone',
+    name: 'Transaction ID',
     sortable: false,
   },
-  {
-    name: 'Favourites Game',
-    sortable: true,
-  },
+
   {
     name: 'Status',
     sortable: true,
   },
   {
-    name: 'Join Date',
+    name: 'Submit Date',
     sortable: true,
   },
   {
@@ -247,11 +244,11 @@ const heads = [
     sortable: false,
   },
 ];
-function CustomersTable() {
+function WalletAddBalanceSubmissions() {
   const [sort, setSort] = useState<{ name: string; by: 'asc' | 'desc' } | null>(null);
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
-      <DashboardSectionHeading title="Customers Table" />
+      <DashboardSectionHeading title="Add Balance Submissions Table" />
 
       <div className=" overflow-x-auto">
         <TableContainer sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
@@ -294,8 +291,8 @@ function CustomersTable() {
                   <TableCell>{row.orders}</TableCell>
                   <TableCell>{row.email}</TableCell>
                   <TableCell>{row.phone}</TableCell>
-                  <TableCell>{row.favouriteGame}</TableCell>
-                  <TableCell>Active</TableCell>
+
+                  <TableCell>Pending</TableCell>
                   <TableCell>{new Date().toDateString()}</TableCell>
 
                   <TableCell>
@@ -329,4 +326,4 @@ function CustomersTable() {
   );
 }
 
-export default CustomersTable;
+export default WalletAddBalanceSubmissions;

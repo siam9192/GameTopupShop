@@ -7,8 +7,8 @@ function DashboardPageHeading({ title }: { title: string }) {
       component={'h1'}
       variant="h4"
       fontSize={{
-        xs:25,
-        md:30
+        xs: 25,
+        md: 30,
       }}
       fontFamily={'jost'}
       fontWeight={600}

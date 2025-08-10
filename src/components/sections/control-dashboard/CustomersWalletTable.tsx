@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Avatar, Pagination, Stack, Tooltip, Typography } from '@mui/material';
+import { Avatar, Box, Pagination, Stack, Tooltip, Typography } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
@@ -211,35 +211,15 @@ const rows = [
 
 const heads = [
   {
-    name: 'ID',
+    name: 'Customer',
     sortable: true,
   },
   {
-    name: 'Name',
+    name: 'Current Balance',
     sortable: true,
   },
   {
-    name: 'Orders',
-    sortable: true,
-  },
-  {
-    name: 'Email',
-    sortable: true,
-  },
-  {
-    name: 'Phone',
-    sortable: false,
-  },
-  {
-    name: 'Favourites Game',
-    sortable: true,
-  },
-  {
-    name: 'Status',
-    sortable: true,
-  },
-  {
-    name: 'Join Date',
+    name: 'Total Spend',
     sortable: true,
   },
   {
@@ -247,11 +227,11 @@ const heads = [
     sortable: false,
   },
 ];
-function CustomersTable() {
+function CustomersWalletTable() {
   const [sort, setSort] = useState<{ name: string; by: 'asc' | 'desc' } | null>(null);
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
-      <DashboardSectionHeading title="Customers Table" />
+      <DashboardSectionHeading title="Customers Wallet Table" />
 
       <div className=" overflow-x-auto">
         <TableContainer sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
@@ -284,19 +264,18 @@ function CustomersTable() {
             <TableBody>
               {rows.map(row => (
                 <TableRow key={row.id}>
-                  <TableCell>#{row.id}</TableCell>
                   <TableCell style={{ minWidth: '250px' }}>
                     <Stack direction={'row'} alignItems={'center'} spacing={2}>
                       <Avatar alt={row.name} src={row.avatar} />
-                      <Typography>{row.name}</Typography>
+                      <Box>
+                        <Typography>{row.name}</Typography>
+                        <Typography color="primary">#47657835</Typography>
+                      </Box>
                     </Stack>
                   </TableCell>
                   <TableCell>{row.orders}</TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{row.favouriteGame}</TableCell>
-                  <TableCell>Active</TableCell>
-                  <TableCell>{new Date().toDateString()}</TableCell>
+
+                  <TableCell>48779</TableCell>
 
                   <TableCell>
                     <Tooltip title="View Full Details">
@@ -329,4 +308,4 @@ function CustomersTable() {
   );
 }
 
-export default CustomersTable;
+export default CustomersWalletTable;

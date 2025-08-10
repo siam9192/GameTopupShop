@@ -1,16 +1,18 @@
+import PaymentsOverviewData from '@/components/sections/control-dashboard/TransactionsOverViewData';
 import RecentAdministratorsActivity from '@/components/sections/control-dashboard/RecentAdministratorsActivity';
 import RecentUsers from '@/components/sections/control-dashboard/RecentUsers';
-import UsersOverviewData from '@/components/sections/control-dashboard/UsersOverviewData';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
 import { Grid } from '@mui/material';
 import React from 'react';
+import TransactionsOverviewData from '@/components/sections/control-dashboard/TransactionsOverViewData';
+import TransactionsMethodsUsageChart from '@/components/sections/control-dashboard/TransactionMethodsUsageChart';
+
 
 function page() {
   return (
     <div>
-      <DashboardPageHeading title="Products" />
-      <UsersOverviewData />
-
+      <DashboardPageHeading title="Transactions" />
+<TransactionsOverviewData/>
       <Grid
         marginTop={5}
         container
@@ -21,10 +23,10 @@ function page() {
         spacing={2}
       >
         <Grid size={1}>
-          <RecentAdministratorsActivity />
+       <TransactionsMethodsUsageChart/>
         </Grid>
         <Grid size={1}>
-          <RecentUsers />
+          <TransactionsMethodsUsageChart/>
         </Grid>
       </Grid>
     </div>

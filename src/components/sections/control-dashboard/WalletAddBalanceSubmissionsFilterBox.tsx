@@ -2,7 +2,7 @@ import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/mate
 import React from 'react';
 import { FiSearch } from 'react-icons/fi';
 
-function AdministratorsFilterBox() {
+function WalletAddBalanceSubmissionsFilterBox() {
   return (
     <div className="p-5 glass  lg:block hidden">
       <Stack direction="row" gap={2} flexWrap="wrap">
@@ -41,8 +41,7 @@ function AdministratorsFilterBox() {
             />
           </Stack>
         </Box>
-
-        {/* Level section */}
+        {/* Method */}
         <Box minWidth={250}>
           <Typography
             component="p"
@@ -53,7 +52,7 @@ function AdministratorsFilterBox() {
             color="text.primary"
             mb={1}
           >
-            Level
+            Method
           </Typography>
           <FormControl fullWidth>
             <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
@@ -66,6 +65,7 @@ function AdministratorsFilterBox() {
             </Select>
           </FormControl>
         </Box>
+
         {/* Status Section */}
         <Box minWidth={250}>
           <Typography
@@ -102,4 +102,4 @@ function AdministratorsFilterBox() {
   );
 }
 
-export default AdministratorsFilterBox;
+export default WalletAddBalanceSubmissionsFilterBox;
