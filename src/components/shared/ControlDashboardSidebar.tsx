@@ -17,7 +17,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { BiHomeAlt } from 'react-icons/bi';
 import { HiOutlineWallet } from 'react-icons/hi2';
 import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
-import { MdManageAccounts, MdOutlinePayment } from 'react-icons/md';
+import { MdAppSettingsAlt, MdManageAccounts, MdOutlinePayment } from 'react-icons/md';
 import { IconType } from 'react-icons';
 import { SiTaichigraphics } from 'react-icons/si';
 import { FaTruckFast } from 'react-icons/fa6';
@@ -49,6 +49,8 @@ const sidebarRoutesGroup1: RouteItem[] = [
     children: [
       { label: 'Top ups', path: '/users' },
       { label: 'Offers', path: '/users/add' },
+      { label: 'Add Top Up', path: '/users' },
+      { label: 'Add Offer', path: '/users/add' },
     ],
   },
 
@@ -80,9 +82,6 @@ const sidebarRoutesGroup1: RouteItem[] = [
       { label: 'Payment Methods', path: '/dashboard/payments/methods' },
     ],
   },
-];
-
-const sidebarRoutesGroup2: RouteItem[] = [
   {
     label: 'Appearances',
     path: '/dashboard/appearances',
@@ -91,6 +90,14 @@ const sidebarRoutesGroup2: RouteItem[] = [
       { label: 'Banner Slides', path: '/banner' },
       { label: 'Branding', path: '/users/add' },
     ],
+  },
+];
+
+const sidebarRoutesGroup2: RouteItem[] = [
+  {
+    label: 'App Setting',
+    path: '/dashboard',
+    icon: MdAppSettingsAlt,
   },
   {
     label: 'Setting',

@@ -1,5 +1,6 @@
 'use client';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
+import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
 import styled from '@emotion/styled';
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
@@ -20,18 +21,6 @@ const style = {
   p: 4,
   borderRadius: '10px',
 };
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
 
 type TFormValue = {
   imageFile: File | null;

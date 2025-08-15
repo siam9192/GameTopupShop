@@ -1,35 +1,37 @@
 import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { HiOutlineCreditCard, HiOutlineCurrencyDollar, HiOutlineExclamationCircle, HiOutlineArrowTrendingDown } from "react-icons/hi2";
-import { MdPending, MdErrorOutline } from "react-icons/md";
-import { FaMoneyBillWave, FaRegCheckCircle } from "react-icons/fa";
+import {
+  HiOutlineCreditCard,
+  HiOutlineCurrencyDollar,
+  HiOutlineExclamationCircle,
+  HiOutlineArrowTrendingDown,
+} from 'react-icons/hi2';
+import { MdPending, MdErrorOutline } from 'react-icons/md';
+import { FaMoneyBillWave, FaRegCheckCircle } from 'react-icons/fa';
 
 function TransactionsOverviewData() {
- 
-
-const data = [
-  {
-    name: 'Transactions',
-    icon: HiOutlineCreditCard,
-    value: 7_523,
-  },
-  {
-    name: 'Total Revenue',
-    icon: FaMoneyBillWave,
-    value: 245_000,
-  },
-  {
-    name: 'Pending Transactions',
-    icon: MdPending,
-    value: 24_467,
-  },
-  {
-    name: 'Failed Transactions',
-    icon: MdErrorOutline,
-    value: 12,
-  },
-];
-
+  const data = [
+    {
+      name: 'Transactions',
+      icon: HiOutlineCreditCard,
+      value: 7_523,
+    },
+    {
+      name: 'Total Revenue',
+      icon: FaMoneyBillWave,
+      value: 245_000,
+    },
+    {
+      name: 'Pending Transactions',
+      icon: MdPending,
+      value: 24_467,
+    },
+    {
+      name: 'Failed Transactions',
+      icon: MdErrorOutline,
+      value: 12,
+    },
+  ];
 
   return (
     <div>

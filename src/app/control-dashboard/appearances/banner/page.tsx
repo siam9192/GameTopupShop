@@ -1,9 +1,8 @@
 import AddNewBannerModal from '@/components/sections/control-dashboard/AddNewBannerModal';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { CiEdit } from 'react-icons/ci';
-import { RiImageAddFill } from 'react-icons/ri';
 import { RxCross2 } from 'react-icons/rx';
 
 function page() {

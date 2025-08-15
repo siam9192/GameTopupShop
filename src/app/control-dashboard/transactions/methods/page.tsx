@@ -6,7 +6,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ManualPayment from '@/components/sections/CustomerDashboard/ManualPayment';
 import DirectPayment from '@/components/sections/CustomerDashboard/DirectPayment';
-import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
+import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
+import ManageLivePayment from '@/components/sections/control-dashboard/ManageLivePayment';
+import ManageManualPayment from '@/components/sections/control-dashboard/ManageManualPayment';
 
 function CustomTabPanel(props: any) {
   const { children, value, index, ...other } = props;
@@ -45,22 +47,22 @@ function page() {
 
   return (
     <div>
-      <DashboardPageHeading title="Add Balance" />
-
+      <DashboardSectionHeading title="Manage Payment Methods" />
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Manual Payment" {...a11yProps(0)} />
-            <Tab label="Direct Payment" {...a11yProps(1)} />
-            <Tab label="Payment Policies" {...a11yProps(2)} />
+            <Tab label="Live Payment" {...a11yProps(0)} />
+            <Tab label="Manual Payment" {...a11yProps(1)} />
           </Tabs>
         </Box>
+
         <CustomTabPanel value={value} index={0}>
-          <ManualPayment />
+          <ManageLivePayment />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <DirectPayment />
+          <ManageManualPayment />
         </CustomTabPanel>
+
         <CustomTabPanel value={value} index={2}>
           Item Three
         </CustomTabPanel>
