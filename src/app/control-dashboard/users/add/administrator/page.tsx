@@ -3,7 +3,19 @@ import CustomJoditEditor from '@/components/editor/CustomJoditEditor';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
 import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
 import { simplifyRatio } from '@/utils/helper';
-import { Box, Button, FormHelperText, Grid, Stack, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import { IoIosCloudUpload } from 'react-icons/io';
@@ -86,33 +98,11 @@ function page() {
   };
   return (
     <div>
-      <DashboardPageHeading title="Add Offer" />
+      <DashboardPageHeading title="Add Administrator" />
       <form
         action=""
-        className=" p-3 md:p-5 lg:p-10 space-y-3 dark:bg-paper  rounded-lg lg:w-10/12 glass"
+        className=" p-3 md:p-5 lg:p-10 space-y-3 dark:bg-paper  glass  rounded-lg lg:w-10/12 "
       >
-        <Box>
-          {form.imageFile ? (
-            <img src={URL.createObjectURL(form.imageFile)} alt="" className="w-[400px] h-[225px]" />
-          ) : null}
-          {/* Upload button */}
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            sx={{
-              mt: 1,
-            }}
-            startIcon={<IoIosCloudUpload />}
-          >
-            Upload Image file
-            <VisuallyHiddenInput type="file" accept="image/*" onChange={handleImageFileChange} />
-          </Button>
-          <FormHelperText>Required image ratio is 16:9 example size (1200x720) px</FormHelperText>
-          <p className="text-red-500">{errors.imageFile}</p>
-        </Box>
-
         <Grid
           marginTop={2}
           container
@@ -137,9 +127,41 @@ function page() {
           </Grid>
           <Grid size={1}>
             <Box>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-helper-label">Level</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={''}
+                  label="Level"
+                  fullWidth
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Admin</MenuItem>
+                  <MenuItem value={20}>Moderator</MenuItem>
+                  <MenuItem value={30}>Supporter</MenuItem>
+                </Select>
+              </FormControl>
+              <p className="text-red-500">{errors.link}</p>
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid
+          marginTop={2}
+          container
+          columns={{
+            xs: 1,
+            md: 2,
+          }}
+          spacing={2}
+        >
+          <Grid size={1}>
+            <Box>
               <TextField
-                label="Price"
-                name="price"
+                label="Email Address"
+                name="email"
                 value={form.link}
                 onChange={handleChange}
                 error={!!errors.link}
@@ -148,59 +170,31 @@ function page() {
               <p className="text-red-500">{errors.link}</p>
             </Box>
           </Grid>
-        </Grid>
-
-        <Box>
-          <Typography color="text.primary" fontSize={22}>
-            Set Date & Time:
-          </Typography>
-          <Grid
-            marginTop={2}
-            container
-            columns={{
-              xs: 1,
-              md: 2,
-            }}
-            spacing={2}
-          >
-            <Grid size={1}>
-              <TextField
-                label="Start From"
-                name="startForm"
-                type="datetime-local"
-                onChange={handleChange}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true, // prevents label overlap with date value
-                }}
-              />
-            </Grid>
-            <Grid size={1}>
-              <TextField
-                label="End At"
-                name="endAt"
-                type="datetime-local"
-                onChange={handleChange}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true, // prevents label overlap with date value
-                }}
-              />
-            </Grid>
+          <Grid size={1}>
+            <Box>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-helper-label">Expire In</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={''}
+                  label="Level"
+                  fullWidth
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>24 Hours</MenuItem>
+                  <MenuItem value={20}>3 Days</MenuItem>
+                  <MenuItem value={30}>7 Days</MenuItem>
+                  <MenuItem value={30}>15 Days</MenuItem>
+                  <MenuItem value={30}>1 Month</MenuItem>
+                </Select>
+              </FormControl>
+              <p className="text-red-500">{errors.link}</p>
+            </Box>
           </Grid>
-          <Stack marginTop={1} direction={'row'} justifyContent={'end'}>
-            <Button variant="outlined" color="secondary">
-              Add Package
-            </Button>
-          </Stack>
-        </Box>
-
-        <Box>
-          <Typography mb={1} color="text.primary" fontSize={22}>
-            Description :
-          </Typography>
-          <CustomJoditEditor />
-        </Box>
+        </Grid>
         <Stack direction={'row'} justifyContent={'end'} marginTop={2}>
           <Button color="warning">Reset</Button>
           <Button variant="contained" color="primary">

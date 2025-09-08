@@ -9,6 +9,7 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { RiMenuUnfold4Line, RiMenuUnfoldLine } from 'react-icons/ri';
 import useCommonLayoutContext from '@/context/useCommonLayoutContext';
 import ToggleThemeMode from '../ui/ToggleThemeMode';
+import SearchInput from '../ui/SearchInput';
 
 function Header() {
   const { setSidebarCollapse } = useCommonLayoutContext();
@@ -20,12 +21,6 @@ function Header() {
         <Stack direction={'row'} spacing={1}>
           <IconButton
             onClick={() => setSidebarCollapse(p => !p)}
-            sx={{
-              display: {
-                sm: 'none',
-                lg: 'block',
-              },
-            }}
             style={{
               color: sidebarCollapse ? 'var(--secondary-color)' : 'text.primary',
             }}
@@ -33,49 +28,9 @@ function Header() {
             <RiMenuUnfold4Line size={28} />
           </IconButton>
 
-          <Stack
-            sx={{
-              display: {
-                xs: 'none', // default for mobile
-                sm: 'none', // optional, but keeps it hidden on small
-                md: 'flex', // visible from medium and up
-              },
-            }}
-            direction={'row'}
-            width={400}
-            alignItems={'center'}
-            gap={1}
-            className="bg-secondary/10 px-2 py-3 rounded-lg "
-          >
-            <span className="text-2xl font-medium text-txt-primary">
-              <FiSearch />
-            </span>
-            <input
-              type="text"
-              className="grow bg-transparent border-none outline-none font-secondary  font-medium text-gray-950 dark:text-gray-100 placeholder:text-primary"
-              placeholder="Search games.."
-            />
-          </Stack>
+          <SearchInput />
         </Stack>
 
-        <Stack
-          direction={'row'}
-          gap={1}
-          sx={{
-            display: {
-              lg: 'none',
-            },
-          }}
-        >
-          <IconButton onClick={() => setSidebarCollapse(p => !p)} style={{ color: 'text.primary' }}>
-            <RiMenuUnfoldLine size={28} />
-          </IconButton>
-          <img
-            className="w-32 "
-            src="https://jubaly.com/wp-content/uploads/2022/01/Untitled-13-TB-for-Website-Use.png"
-            alt=""
-          />
-        </Stack>
         <Stack
           direction={'row'}
           alignItems={'center'}

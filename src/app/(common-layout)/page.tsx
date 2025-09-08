@@ -1,5 +1,6 @@
 import FeaturedGames from '@/components/sections/FeaturedGames';
 import HomeBanner from '@/components/sections/HomeBanner';
+import LatestOrders from '@/components/sections/LatestOrders';
 import OfferComesEnd from '@/components/sections/OfferComesEnd';
 import TopGames from '@/components/sections/TopGames';
 import { Box, Typography } from '@mui/material';
@@ -28,6 +29,7 @@ function page() {
       <FeaturedGames />
       <OfferComesEnd />
       <TopGames />
+      <LatestOrders />
     </div>
   );
 }

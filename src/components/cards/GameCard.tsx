@@ -3,7 +3,7 @@ import React from 'react';
 
 function GameCard() {
   return (
-    <div className="p-2  duration-75 hover:cursor-pointer">
+    <div className="p-3  duration-75 hover:cursor-pointer dark:bg-black bg-white rounded-lg shadow_1">
       <div>
         <img
           src="https://play-lh.googleusercontent.com/Odw8BGugaJLdbaSbCeZWbTE3Qz1wTiQ0Tsn9nzpoQdnkzWb-gaI58zzTmYDvGpdYKg"
