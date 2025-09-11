@@ -76,7 +76,7 @@ function page() {
         color="text.primary"
         fontWeight={600}
       >
-      Free fire 1000 Diamonds + Weekly Membership
+        Free fire 1000 Diamonds + Weekly Membership
       </Typography>
       <Image
         src={
@@ -88,7 +88,6 @@ function page() {
         className="mx-auto mt-5 rounded-lg"
       />
       <div className=" lg:w-10/12 lg:mx-auto">
-    
         <div className="mt-5">
           <Typography color="text.primary" fontWeight={600} variant="h5">
             Fill The Form:

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import '@/styles/app.css';
 import CustomThemeProvider from '@/components/ui-provider/CustomThemeProvider';
+import Provider from '@/provider/Provider';
 
 export const metadata: Metadata = {
   title: 'GameTop',
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark">
       <body>
-        <CustomThemeProvider>{children}</CustomThemeProvider>
+        <Provider>
+          <CustomThemeProvider>{children}</CustomThemeProvider>
+        </Provider>
       </body>
     </html>
   );

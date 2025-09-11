@@ -1,7 +1,14 @@
 'use client';
 import { EThemeMode } from '@/types';
 import { createTheme, ThemeProvider } from '@mui/material';
-import React, { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import React, {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 
 const getDesignTokens = (mode: EThemeMode) => ({
   palette: {
@@ -69,10 +76,16 @@ function CustomThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<EThemeMode>(EThemeMode.DARK);
   const theme = createTheme(getDesignTokens(mode));
 
+  useEffect(() => {
+    const currentMode = localStorage.getItem('mode') || mode;
+    setMode(currentMode as EThemeMode);
+  }, []);
+
   const value = {
     mode,
     setMode,
   };
+
   return (
     <ThemeProvider theme={theme}>
       <CustomThemeProviderContext.Provider value={value}>

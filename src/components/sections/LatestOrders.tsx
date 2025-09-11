@@ -12,7 +12,14 @@ function LatestOrders() {
         {Array.from({
           length: 10,
         }).map((_, index) => (
-          <Box key={index} display={'flex'} flexDirection={'row'} justifyContent={'space-between'}  alignItems={'center'} className="p-5 glass ">
+          <Box
+            key={index}
+            display={'flex'}
+            flexDirection={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            className="p-5 glass "
+          >
             <Stack direction={'row'} spacing={2}>
               <img
                 src="https://images.pexels.com/photos/14653174/pexels-photo-14653174.jpeg"
@@ -28,7 +35,7 @@ function LatestOrders() {
                 </Typography>
               </Box>
             </Stack>
-            <p className='p-2 bg-secondary  text-white rounded-full text-sm'>Processing</p>
+            <p className="p-2 bg-secondary  text-white rounded-full text-sm">Processing</p>
           </Box>
         ))}
       </Box>

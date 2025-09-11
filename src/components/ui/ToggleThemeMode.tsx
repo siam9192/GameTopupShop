@@ -16,7 +16,11 @@ function ToggleThemeMode() {
 
   return (
     <IconButton
-      onClick={() => setMode(EThemeMode.DARK === themeMode ? EThemeMode.LIGHT : EThemeMode.DARK)}
+      onClick={() => {
+        const mode = EThemeMode.DARK === themeMode ? EThemeMode.LIGHT : EThemeMode.DARK;
+        setMode(mode);
+        localStorage.setItem('mode', mode);
+      }}
       color="secondary"
       aria-label="add an alarm"
     >
