@@ -1,6 +1,6 @@
-import RecentAddBalanceSubmissions from '@/components/sections/CustomerDashboard/RecentAddBalanceSubmissions';
-import RecentWalletHistories from '@/components/sections/CustomerDashboard/RecentWalletHistories';
-import WalletOverviewData from '@/components/sections/CustomerDashboard/WalletOverviewData';
+import RecentAddBalanceSubmissions from '@/components/sections/customer-dashboard/RecentAddBalanceSubmissions';
+import RecentWalletHistories from '@/components/sections/customer-dashboard/RecentWalletHistories';
+import WalletOverviewData from '@/components/sections/customer-dashboard/WalletOverviewData';
 import { Button, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { HiPlus } from 'react-icons/hi2';

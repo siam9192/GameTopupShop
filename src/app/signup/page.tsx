@@ -15,7 +15,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 
 import AuthProviderButtons from '@/components/ui/AuthProviderButtons';
-import { customerSignupMutation } from '@/query-services/auth';
+import { customerSignupMutation } from '@/query/services/auth';
 import { getFormData } from '@/utils/helper';
 import { CustomerSignupPayload } from '@/api-services/auth';
 import { toast } from 'react-toastify';

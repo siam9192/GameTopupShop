@@ -106,12 +106,10 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       } as SigninPayload,
       {
         onSuccess: data => {
-          console.log(data);
           toast.success('Login successful');
-          // router.push('/');
+          router.push('/');
         },
         onError: error => {
-          console.log(error);
           setErrorMessage(error.message);
           toast.error(error.message);
         },

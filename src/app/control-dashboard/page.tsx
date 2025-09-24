@@ -1,8 +1,13 @@
+'use client';
 import AllOverviewData from '@/components/sections/control-dashboard/AllOverviewData';
-import NewCustoomerChart from '@/components/sections/control-dashboard/NewCustomerChart';
+import NewCustomerChart from '@/components/sections/control-dashboard/NewCustomerChart';
+import OrdersStatusChart from '@/components/sections/control-dashboard/OrdersStatusChart';
+import OrderTargetProgressChart from '@/components/sections/control-dashboard/OrderTargetProgessChart';
 import RecentOrders from '@/components/sections/control-dashboard/RecentOrders';
 import RevenueChart from '@/components/sections/control-dashboard/RevenueChart';
-import UnreadNotifications from '@/components/sections/CustomerDashboard/UnreadNotifications';
+import TargetProgress from '@/components/sections/control-dashboard/TargetProgress';
+import TopCustomers from '@/components/sections/control-dashboard/TopCustomers';
+import UnreadNotifications from '@/components/sections/customer-dashboard/UnreadNotifications';
 import { Grid } from '@mui/material';
 import React from 'react';
 
@@ -10,38 +15,18 @@ function page() {
   return (
     <div>
       <AllOverviewData />
-      <Grid
-        marginTop={5}
-        container
-        columns={{
-          xs: 1,
-          lg: 2,
-        }}
-        spacing={2}
-      >
-        <Grid size={1}>
+      <div className="mt-10 grid lg:grid-cols-3 gap-5">
+        <div className=" grid col-span-2 gap-5">
           <RevenueChart />
-        </Grid>
-        <Grid size={1}>
-          <NewCustoomerChart />
-        </Grid>
-      </Grid>
-      <Grid
-        marginTop={5}
-        container
-        columns={{
-          xs: 1,
-          lg: 2,
-        }}
-        spacing={2}
-      >
-        <Grid size={1}>
           <RecentOrders />
-        </Grid>
-        <Grid size={1}>
-          <UnreadNotifications />
-        </Grid>
-      </Grid>
+        </div>
+
+        <div className="grid gap-5 h-fit">
+          <OrdersStatusChart />
+          <TargetProgress />
+          <TopCustomers />
+        </div>
+      </div>
     </div>
   );
 }

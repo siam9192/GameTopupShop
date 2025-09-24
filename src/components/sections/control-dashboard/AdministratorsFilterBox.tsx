@@ -1,8 +1,30 @@
+import { useAdministratorsPageContext } from '@/app/control-dashboard/users/administrators/page';
+import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { AdministratorLevel } from '@/types/user.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
 function AdministratorsFilterBox() {
+  const [status, setStatus] = useState('');
+  const [level, setLevel] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { setFilters } = useAdministratorsPageContext();
+
+  const handleSearch = () => {
+    const filters: Record<string, string> = {};
+    if (status) {
+      filters['status'] = status;
+    }
+
+    if (searchTerm) {
+      filters['searchTerm'] = searchTerm;
+    }
+     if (level) {
+      filters['level'] = level;
+    }
+    setFilters(filters);
+  };
   return (
     <div className="p-5 glass  lg:block hidden">
       <Stack direction="row" gap={2} flexWrap="wrap">
@@ -19,30 +41,13 @@ function AdministratorsFilterBox() {
           >
             What are you looking for
           </Typography>
-          <Stack
-            direction="row"
-            alignItems="center"
-            gap={1}
-            className="bg-secondary/10 px-2 py-4 rounded-lg"
-            sx={{
-              display: {
-                xs: 'none',
-                md: 'flex',
-              },
-            }}
-          >
-            <span className="text-xl font-medium text-txt-primary">
-              <FiSearch />
-            </span>
-            <input
-              type="text"
-              className="grow bg-transparent border-none outline-none font-secondary font-medium text-gray-950 dark:text-gray-100 placeholder:text-primary"
-              placeholder="Topup name, game name etc..."
-            />
-          </Stack>
+          <DashboardSearchInput
+            onChange={v => setSearchTerm(v)}
+            placeholder="Search by ID name, email..."
+          />
         </Box>
 
-        {/* Level section */}
+        {/* Level Section */}
         <Box minWidth={250}>
           <Typography
             component="p"
@@ -56,13 +61,18 @@ function AdministratorsFilterBox() {
             Level
           </Typography>
           <FormControl fullWidth>
-            <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+            <Select
+              value={level}
+              onChange={e => setLevel(e.target.value)}
+              color="primary"
+              inputProps={{ 'aria-label': 'Without label' }}
+            >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {Object.values(AdministratorLevel).map(level => (
+                <MenuItem value={level}>{level.replace('_', ' ')}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
@@ -80,23 +90,30 @@ function AdministratorsFilterBox() {
             Status
           </Typography>
           <FormControl fullWidth>
-            <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+            <Select
+              value={status}
+              onChange={e => setStatus(e.target.value)}
+              color="primary"
+              inputProps={{ 'aria-label': 'Without label' }}
+            >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={'Active'}>Active</MenuItem>
+              <MenuItem value={'Blocked'}>Blocked</MenuItem>
             </Select>
           </FormControl>
         </Box>
 
         {/* Button */}
-        <Box marginTop={5.5}>
-          <button className="w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium">
-            Search
-          </button>
-        </Box>
+         <Box marginTop={5.5}>
+                <button
+                  onClick={handleSearch}
+                  className="w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium"
+                >
+                  Search
+                </button>
+              </Box>
       </Stack>
     </div>
   );

@@ -5,7 +5,7 @@ function useMutate<TData = unknown, TVariables = void, TError = Error>(
   mutationFn: (variables: TVariables) => Promise<TData>,
   options?: Omit<UseMutationOptions<TData, TError, TVariables>, 'mutationFn'>,
 ) {
-  return useMutation<IResponse<TData>, TError, TVariables>({
+  return useMutation<TData, TError, TVariables>({
     mutationFn,
     ...options,
   });

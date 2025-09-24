@@ -22,7 +22,7 @@ function RecentOrders() {
       </Stack>
 
       <Stack marginTop={2} spacing={2}>
-        {Array.from({ length: 6 }).map((_, index) => (
+        {Array.from({ length: 4 }).map((_, index) => (
           <RecentOrderCard key={index} />
         ))}
       </Stack>

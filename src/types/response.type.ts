@@ -19,7 +19,7 @@ export type TError = {
 export type TMeta = {
   limit: number;
   page: number;
-  totalResult: number;
+  totalResults: number;
   total: number;
 };
 

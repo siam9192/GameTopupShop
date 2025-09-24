@@ -8,7 +8,7 @@ import React from 'react';
 function page() {
   return (
     <div>
-      <DashboardPageHeading title="Products" />
+      <DashboardPageHeading title="Users" />
       <UsersOverviewData />
 
       <Grid

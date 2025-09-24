@@ -4,10 +4,14 @@ import { signIn } from 'next-auth/react';
 import React from 'react';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 function AuthProviderButtons() {
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Button fullWidth variant="outlined" onClick={()=>signIn('google')} startIcon={<FaGoogle />}>
+      <Button
+        fullWidth
+        variant="outlined"
+        onClick={() => signIn('google')}
+        startIcon={<FaGoogle />}
+      >
         Sign in with Google
       </Button>
       <Button
@@ -15,7 +19,6 @@ function AuthProviderButtons() {
         variant="outlined"
         onClick={() => signIn('facebook')}
         startIcon={<FaFacebook />}
-      
       >
         Sign in with Facebook
       </Button>

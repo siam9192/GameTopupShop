@@ -1,30 +1,38 @@
+'use client';
+import { getUsersMetadataQuery } from '@/query/services/metadata';
 import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { FaUserLock, FaUsers, FaUserTag } from 'react-icons/fa';
 import { HiMiniUserGroup, HiOutlineWallet } from 'react-icons/hi2';
 import { PiCurrencyDollarSimpleBold } from 'react-icons/pi';
+import { RiAdminFill } from 'react-icons/ri';
 import { TbRecharging } from 'react-icons/tb';
 
+const defaultValue = 999;
+
 function UsersOverviewData() {
-  const data = [
+  const { data: fetchData } = getUsersMetadataQuery();
+  const data = fetchData?.data;
+  const metadata = [
     {
-      name: 'User',
-      icon: HiOutlineWallet,
-      value: 7523,
+      name: 'Total users',
+      icon: FaUsers,
+      value: data?.users ?? defaultValue,
     },
     {
-      name: 'Customer',
-      icon: TbRecharging,
-      value: 2,
+      name: 'Customers',
+      icon: FaUserTag,
+      value: data?.customers ?? defaultValue,
     },
     {
-      name: 'Administrator',
-      icon: PiCurrencyDollarSimpleBold,
-      value: 24467,
+      name: 'Administrators',
+      icon: RiAdminFill,
+      value: data?.administrators ?? defaultValue,
     },
     {
       name: 'Blocked',
-      icon: HiMiniUserGroup,
-      value: 2,
+      icon: FaUserLock,
+      value: data?.blockedUsers ?? defaultValue,
     },
   ];
   return (
@@ -39,7 +47,7 @@ function UsersOverviewData() {
           lg: 4,
         }}
       >
-        {data.map((_, index) => (
+        {metadata.map((_, index) => (
           <Grid size={1} key={index}>
             <div className=" glass shadow_1  p-3 md:p-5 rounded-lg min-h-52">
               <Typography fontWeight={600} fontSize={20} variant="caption" color="text.primary">

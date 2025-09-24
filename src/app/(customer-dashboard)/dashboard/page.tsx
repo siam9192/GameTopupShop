@@ -1,6 +1,6 @@
-import AllOverviewData from '@/components/sections/CustomerDashboard/AllOverviewData';
-import RecentOrders from '@/components/sections/CustomerDashboard/RecentOrders';
-import UnreadNotifications from '@/components/sections/CustomerDashboard/UnreadNotifications';
+import AllOverviewData from '@/components/sections/customer-dashboard/AllOverviewData';
+import RecentOrders from '@/components/sections/customer-dashboard/RecentOrders';
+import UnreadNotifications from '@/components/sections/customer-dashboard/UnreadNotifications';
 import { Grid } from '@mui/material';
 import React from 'react';
 

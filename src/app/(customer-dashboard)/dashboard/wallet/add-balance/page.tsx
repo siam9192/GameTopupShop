@@ -4,8 +4,8 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import ManualPayment from '@/components/sections/CustomerDashboard/ManualPayment';
-import DirectPayment from '@/components/sections/CustomerDashboard/DirectPayment';
+import ManualPayment from '@/components/sections/customer-dashboard/ManualPayment';
+import DirectPayment from '@/components/sections/customer-dashboard/DirectPayment';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
 
 function CustomTabPanel(props: any) {
