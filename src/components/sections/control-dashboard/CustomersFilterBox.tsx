@@ -1,10 +1,7 @@
-import {
-  CustomerPageContext,
-  useCustomersPageContext,
-} from '@/app/control-dashboard/users/customers/page';
+import { useCustomersPageContext } from '@/app/control-dashboard/users/customers/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 function CustomersFilterBox() {
   const [status, setStatus] = useState('');

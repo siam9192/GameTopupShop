@@ -10,13 +10,12 @@ type TProvider = {
 };
 export const queryClient = new QueryClient();
 export default function Provider({ children }: TProvider) {
- 
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <CurrentUserProvider>
           {children}
-          <ToastContainer   position='bottom-right' theme='dark' />
+          <ToastContainer position="bottom-right" theme="dark" />
         </CurrentUserProvider>
       </QueryClientProvider>
     </SessionProvider>

@@ -9,9 +9,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 interface IProps {
   children: React.ReactNode;
+  title?: string;
+  description?: string;
+  onAgree?: () => void | any;
+  onDisagree?: () => void | any;
 }
 
-export default function AlertDialog({ children }: IProps) {
+export default function AlertDialog({ children, title, description, onAgree, onDisagree }: IProps) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -33,16 +37,32 @@ export default function AlertDialog({ children }: IProps) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {title || "Use Google's location service?"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            {description ||
+              `Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button
+            onClick={() => {
+              onDisagree && onDisagree();
+              handleClose();
+            }}
+          >
+            Disagree
+          </Button>
+          <Button
+            onClick={() => {
+              onAgree && onAgree();
+              handleClose();
+            }}
+            autoFocus
+          >
             Agree
           </Button>
         </DialogActions>

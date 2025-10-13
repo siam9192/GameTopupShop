@@ -1,72 +1,59 @@
 'use client';
-import CustomJoditEditor from '@/components/editor/CustomJoditEditor';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
-import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
-import { simplifyRatio } from '@/utils/helper';
+import { createAdministratorMutation } from '@/query/services/administrator';
+import { AdministratorLevel } from '@/types/user.type';
+import { uploadImageToImgBB } from '@/utils/helper';
+import administratorValidation, {
+  CreateAdministratorValidation,
+} from '@/validations/administrator.validation';
 import {
+  Avatar,
   Box,
   Button,
   FormControl,
-  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Stack,
   TextField,
-  Typography,
 } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
-import { FaDeleteLeft } from 'react-icons/fa6';
-import { IoIosCloudUpload } from 'react-icons/io';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-type TFormValue = {
-  imageFile: File | null;
-  link: string;
-};
+interface FormState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  level: string;
+  profilePicture: File | null;
+}
 
+type ErrorState = Partial<Record<keyof FormState, string>>;
 function page() {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [form, setForm] = useState<TFormValue>({ imageFile: null, link: '' });
-  const [errors, setErrors] = useState<Record<keyof TFormValue, string>>({
-    imageFile: '',
-    link: '',
+
+  const [form, setForm] = useState<FormState>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    level: '',
+    password: '',
+    profilePicture: null,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const [errors, setErrors] = useState<ErrorState>({});
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>,
+  ) => {
+    const { name, value } = e.target;
+
+    setForm(prev => ({ ...prev, [name as string]: value }));
   };
 
-  const validate = () => {
-    let tempErrors = { imageFile: '', link: '' };
-    let isValid = true;
-
-    const imageFile = form.imageFile;
-    if (!form.link.trim()) {
-      tempErrors.link = ' is required';
-      isValid = false;
-    }
-    if (form.imageFile === null) {
-      tempErrors.imageFile = 'Image is required';
-      isValid = false;
-    }
-
-    if (imageFile && imageFile.size > 10 * 1024 * 1024) {
-      tempErrors.imageFile = 'Image size must be in 10MB';
-      isValid = false;
-    }
-    setErrors(tempErrors);
-    return isValid;
-  };
-
-  const handleImageFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files?.length) return;
-
-    const file = files[0];
-
+  const handleFileChange = async (file: File) => {
     const dimensions = await new Promise<{ width: number; height: number }>((resolve, reject) => {
       const image = new Image();
 
@@ -86,118 +73,195 @@ function page() {
     });
 
     // Example validation: require at least 1920×720
-    if (simplifyRatio(dimensions.width, dimensions.height) !== '16:9') {
-      setErrors(p => ({
-        ...p,
-        imageFile: `Invalid image ratio require ratio is 16:9`,
-      }));
+    // if (simplifyRatio(dimensions.width, dimensions.height) !== '16:9') {
+    //   setErrors(p => ({
+    //     ...p,
+    //     profilePicture: `Invalid image ratio require ratio is 16:9`,
+    //   }));
+    //   return;
+    // }
+
+    setForm(p => ({ ...p, profilePicture: file }));
+  };
+
+  const handleReset = () => {
+    setForm({
+      firstName: '',
+      lastName: '',
+      email: '',
+      level: '',
+      password: '',
+      profilePicture: null,
+    });
+    setErrors({});
+  };
+
+  const { mutate } = createAdministratorMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const result = administratorValidation.createAdministratorSchema.safeParse(form);
+
+    if (!result.success) {
+      // collect errors
+      const fieldErrors: Partial<Record<keyof CreateAdministratorValidation, string>> = {};
+
+      result.error.issues.forEach(err => {
+        const fieldName = err.path[0] as keyof CreateAdministratorValidation;
+        fieldErrors[fieldName] = err.message;
+      });
+      setErrors(fieldErrors);
       return;
     }
+    // upload image
+    const imageUrl = await uploadImageToImgBB(form.profilePicture as File);
 
-    setForm(p => ({ ...p, imageFile: file }));
+    mutate(
+      {
+        name: {
+          first: form.firstName,
+          last: form.lastName,
+        },
+        level: form.level,
+        email: form.email,
+        profilePicture: imageUrl,
+        password: form.password,
+      },
+      {
+        onSuccess: data => {
+          toast.success(data.message);
+          handleReset();
+        },
+        onError: data => {
+          toast.error(data.message);
+        },
+      },
+    );
   };
+
   return (
     <div>
       <DashboardPageHeading title="Add Administrator" />
       <form
-        action=""
-        className=" p-3 md:p-5 lg:p-10 space-y-3 dark:bg-paper  glass  rounded-lg lg:w-10/12 "
+        onSubmit={handleSubmit}
+        className="p-5 md:p-8 lg:p-10 space-y-6 dark:bg-paper glass rounded-lg lg:w-1/2"
       >
-        <Grid
-          marginTop={2}
-          container
-          columns={{
-            xs: 1,
-            md: 2,
-          }}
-          spacing={2}
-        >
+        {/* Profile Picture */}
+        <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+          <Avatar
+            src={form.profilePicture ? URL.createObjectURL(form.profilePicture) : ''}
+            alt="Profile Preview"
+            sx={{ width: 120, height: 120 }}
+          />
+          <Button
+            variant="outlined"
+            component="label"
+            color={errors.profilePicture ? 'error' : 'primary'}
+          >
+            Upload Profile Picture
+            <input
+              type="file"
+              hidden
+              accept="image/*"
+              name="profilePicture"
+              onChange={e => {
+                if (e.target.files && e.target.files[0]) {
+                  handleFileChange(e.target.files[0]); // custom handler
+                }
+              }}
+            />
+          </Button>
+          {errors.profilePicture && <p className="text-red-500">{errors?.profilePicture}</p>}
+        </Box>
+
+        {/* Name & Level */}
+        <Grid container columns={1} spacing={3}>
           <Grid size={1}>
-            <Box>
-              <TextField
-                label="Name"
-                name="name"
-                value={form.link}
-                onChange={handleChange}
-                error={!!errors.link}
-                fullWidth
-              />
-              <p className="text-red-500">{errors.link}</p>
-            </Box>
+            <TextField
+              label="First Name"
+              name="firstName"
+              value={form.firstName}
+              onChange={handleChange}
+              error={!!errors.firstName}
+              helperText={errors.firstName}
+              fullWidth
+              required
+            />
           </Grid>
           <Grid size={1}>
-            <Box>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-helper-label">Level</InputLabel>
-                <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={''}
-                  label="Level"
-                  fullWidth
-                >
-                  <MenuItem value="">
-                    <em>None</em>
+            <TextField
+              label="Last Name"
+              name="lastName"
+              value={form.lastName}
+              onChange={handleChange}
+              error={!!errors.lastName}
+              helperText={errors.lastName}
+              fullWidth
+              required
+            />
+          </Grid>
+
+          <Grid size={1}>
+            <FormControl fullWidth error={!!errors.level}>
+              <InputLabel id="level-label">Level</InputLabel>
+              <Select
+                labelId="level-label"
+                name="level"
+                value={form.level || ''}
+                onChange={handleChange as any}
+                required
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {Object.values(AdministratorLevel).map(level => (
+                  <MenuItem key={level} value={level}>
+                    {level.replace('_', ' ')}
                   </MenuItem>
-                  <MenuItem value={10}>Admin</MenuItem>
-                  <MenuItem value={20}>Moderator</MenuItem>
-                  <MenuItem value={30}>Supporter</MenuItem>
-                </Select>
-              </FormControl>
-              <p className="text-red-500">{errors.link}</p>
-            </Box>
+                ))}
+              </Select>
+              {errors.level && <p className="text-red-500">{errors.level}</p>}
+            </FormControl>
+          </Grid>
+          <Grid size={1}>
+            <TextField
+              label="Email Address"
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
+              fullWidth
+              required
+            />
+          </Grid>
+
+          <Grid size={1}>
+            <FormControl fullWidth error={!!errors.password}>
+              <TextField
+                label="Password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password}
+                fullWidth
+                required
+              />
+              {errors.password && <p className="text-red-500">{errors.password}</p>}
+            </FormControl>
           </Grid>
         </Grid>
-        <Grid
-          marginTop={2}
-          container
-          columns={{
-            xs: 1,
-            md: 2,
-          }}
-          spacing={2}
-        >
-          <Grid size={1}>
-            <Box>
-              <TextField
-                label="Email Address"
-                name="email"
-                value={form.link}
-                onChange={handleChange}
-                error={!!errors.link}
-                fullWidth
-              />
-              <p className="text-red-500">{errors.link}</p>
-            </Box>
-          </Grid>
-          <Grid size={1}>
-            <Box>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-helper-label">Expire In</InputLabel>
-                <Select
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={''}
-                  label="Level"
-                  fullWidth
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>24 Hours</MenuItem>
-                  <MenuItem value={20}>3 Days</MenuItem>
-                  <MenuItem value={30}>7 Days</MenuItem>
-                  <MenuItem value={30}>15 Days</MenuItem>
-                  <MenuItem value={30}>1 Month</MenuItem>
-                </Select>
-              </FormControl>
-              <p className="text-red-500">{errors.link}</p>
-            </Box>
-          </Grid>
-        </Grid>
-        <Stack direction={'row'} justifyContent={'end'} marginTop={2}>
-          <Button color="warning">Reset</Button>
-          <Button variant="contained" color="primary">
+
+        {/* Actions */}
+        <Stack direction="row" justifyContent="flex-end" spacing={2} mt={10}>
+          <Button color="warning" onClick={handleReset}>
+            Reset
+          </Button>
+          <Button type="submit" variant="contained" color="primary">
             Submit
           </Button>
         </Stack>

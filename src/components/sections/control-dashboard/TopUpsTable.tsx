@@ -1,263 +1,45 @@
 'use client';
-import React, { useState } from 'react';
-import { Pagination, Stack, Tooltip, Typography } from '@mui/material';
+import React, { MouseEvent, useState } from 'react';
+import {
+  CircularProgress,
+  Menu,
+  MenuItem,
+  Pagination,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { MdOutlineEdit } from 'react-icons/md';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
-const rows: TRows[] = [
-  {
-    id: 1,
-    image: 'https://via.placeholder.com/60x60?text=G1',
-    name: 'Free Fire Diamonds',
-    packages: 5,
-    orders: 120,
-    revenue: 54000,
-    status: 'active',
-    createdAt: '2023-01-15',
-    updatedAt: '2023-06-20',
-  },
-  {
-    id: 2,
-    image: 'https://via.placeholder.com/60x60?text=G2',
-    name: 'PUBG UC',
-    packages: 4,
-    orders: 95,
-    revenue: 45000,
-    status: 'active',
-    createdAt: '2023-02-10',
-    updatedAt: '2023-06-25',
-  },
-  {
-    id: 3,
-    image: 'https://via.placeholder.com/60x60?text=G3',
-    name: 'Mobile Legends Diamonds',
-    packages: 6,
-    orders: 110,
-    revenue: 50500,
-    status: 'active',
-    createdAt: '2023-01-28',
-    updatedAt: '2023-05-30',
-  },
-  {
-    id: 4,
-    image: 'https://via.placeholder.com/60x60?text=G4',
-    name: 'Roblox Robux',
-    packages: 3,
-    orders: 85,
-    revenue: 30000,
-    status: 'inactive',
-    createdAt: '2023-03-12',
-    updatedAt: '2023-07-01',
-  },
-  {
-    id: 5,
-    image: 'https://via.placeholder.com/60x60?text=G5',
-    name: 'Valorant Points',
-    packages: 4,
-    orders: 100,
-    revenue: 48000,
-    status: 'active',
-    createdAt: '2023-04-05',
-    updatedAt: '2023-06-10',
-  },
-  {
-    id: 6,
-    image: 'https://via.placeholder.com/60x60?text=G6',
-    name: 'COD CP (Call of Duty)',
-    packages: 2,
-    orders: 60,
-    revenue: 27000,
-    status: 'draft',
-    createdAt: '2023-02-20',
-    updatedAt: '2023-06-15',
-  },
-  {
-    id: 7,
-    image: 'https://via.placeholder.com/60x60?text=G7',
-    name: 'Genshin Impact Crystals',
-    packages: 3,
-    orders: 45,
-    revenue: 20000,
-    status: 'inactive',
-    createdAt: '2023-05-02',
-    updatedAt: '2023-07-10',
-  },
-  {
-    id: 8,
-    image: 'https://via.placeholder.com/60x60?text=G8',
-    name: 'Fortnite V-Bucks',
-    packages: 5,
-    orders: 70,
-    revenue: 33000,
-    status: 'active',
-    createdAt: '2023-01-10',
-    updatedAt: '2023-07-01',
-  },
-  {
-    id: 9,
-    image: 'https://via.placeholder.com/60x60?text=G9',
-    name: 'League of Legends RP',
-    packages: 6,
-    orders: 98,
-    revenue: 47000,
-    status: 'inactive',
-    createdAt: '2023-03-25',
-    updatedAt: '2023-06-05',
-  },
-  {
-    id: 10,
-    image: 'https://via.placeholder.com/60x60?text=G10',
-    name: 'Apex Legends Coins',
-    packages: 4,
-    orders: 63,
-    revenue: 31500,
-    status: 'active',
-    createdAt: '2023-04-18',
-    updatedAt: '2023-07-05',
-  },
-  {
-    id: 11,
-    image: 'https://via.placeholder.com/60x60?text=G11',
-    name: 'Clash of Clans Gems',
-    packages: 5,
-    orders: 77,
-    revenue: 37000,
-    status: 'active',
-    createdAt: '2023-02-08',
-    updatedAt: '2023-06-30',
-  },
-  {
-    id: 12,
-    image: 'https://via.placeholder.com/60x60?text=G12',
-    name: 'Stumble Guys Gems',
-    packages: 3,
-    orders: 52,
-    revenue: 21000,
-    status: 'draft',
-    createdAt: '2023-03-14',
-    updatedAt: '2023-06-18',
-  },
-  {
-    id: 13,
-    image: 'https://via.placeholder.com/60x60?text=G13',
-    name: 'BGMI UC',
-    packages: 4,
-    orders: 90,
-    revenue: 46000,
-    status: 'active',
-    createdAt: '2023-01-05',
-    updatedAt: '2023-07-03',
-  },
-  {
-    id: 14,
-    image: 'https://via.placeholder.com/60x60?text=G14',
-    name: 'Clash Royale Gems',
-    packages: 2,
-    orders: 38,
-    revenue: 18000,
-    status: 'inactive',
-    createdAt: '2023-05-20',
-    updatedAt: '2023-07-15',
-  },
-  {
-    id: 15,
-    image: 'https://via.placeholder.com/60x60?text=G15',
-    name: 'Temple Run Coins',
-    packages: 1,
-    orders: 25,
-    revenue: 9500,
-    status: 'draft',
-    createdAt: '2023-06-01',
-    updatedAt: '2023-07-10',
-  },
-  {
-    id: 16,
-    image: 'https://via.placeholder.com/60x60?text=G16',
-    name: 'Subway Surfers Keys',
-    packages: 2,
-    orders: 42,
-    revenue: 15000,
-    status: 'inactive',
-    createdAt: '2023-02-14',
-    updatedAt: '2023-06-22',
-  },
-  {
-    id: 17,
-    image: 'https://via.placeholder.com/60x60?text=G17',
-    name: 'Lords Mobile Packs',
-    packages: 4,
-    orders: 66,
-    revenue: 31000,
-    status: 'active',
-    createdAt: '2023-03-08',
-    updatedAt: '2023-06-25',
-  },
-  {
-    id: 18,
-    image: 'https://via.placeholder.com/60x60?text=G18',
-    name: 'Brawl Stars Gems',
-    packages: 3,
-    orders: 47,
-    revenue: 20000,
-    status: 'active',
-    createdAt: '2023-04-10',
-    updatedAt: '2023-07-08',
-  },
-  {
-    id: 19,
-    image: 'https://via.placeholder.com/60x60?text=G19',
-    name: 'Zelda Points',
-    packages: 2,
-    orders: 29,
-    revenue: 12500,
-    status: 'inactive',
-    createdAt: '2023-05-01',
-    updatedAt: '2023-07-12',
-  },
-  {
-    id: 20,
-    image: 'https://via.placeholder.com/60x60?text=G20',
-    name: 'Steam Wallet Codes',
-    packages: 5,
-    orders: 150,
-    revenue: 75000,
-    status: 'active',
-    createdAt: '2023-01-01',
-    updatedAt: '2023-07-20',
-  },
-];
-type TRows = {
-  id: number;
-  image: string;
-  name: string;
-  packages: number;
-  orders: number;
-  revenue: number;
-  status: 'active' | 'inactive' | 'draft';
-  createdAt: string;
-  updatedAt: string;
-};
+import { useTopupPageContext } from '@/app/control-dashboard/products/top-ups/page';
+import { SortOrder } from '@/types/utils.type';
+import { useRouter } from 'next/navigation';
+import { TopupStatus } from '@/types/topup.type';
+import { SlOptionsVertical } from 'react-icons/sl';
+import { deleteTopupMutation, updateTopupStatusMutation } from '@/query/services/topup';
+import { queryClient } from '@/provider/Provider';
+import { toast } from 'react-toastify';
 
 const heads = [
   {
-    name: 'ID',
-    sortable: false,
-  },
-  {
     name: 'Name',
+    fieldName: 'name',
     sortable: true,
   },
   {
     name: 'Packages',
-    sortable: true,
+    sortable: false,
   },
   {
     name: 'Orders',
+    fieldName: 'ordersCount',
     sortable: true,
   },
   {
-    name: 'Revenue',
+    name: "Start's From",
+    fieldName: 'startForm',
     sortable: true,
   },
   {
@@ -267,11 +49,13 @@ const heads = [
 
   {
     name: 'Created At',
+    fieldName: 'createdAt',
     sortable: true,
   },
 
   {
-    name: 'Last Updated At',
+    name: 'Updated At',
+    fieldName: 'updatedAt',
     sortable: true,
   },
   {
@@ -281,7 +65,69 @@ const heads = [
 ];
 
 function TopUpsTable() {
-  const [sort, setSort] = useState<{ name: string; by: 'asc' | 'desc' } | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuId, setMenuId] = useState<string | null>(null);
+  const { queryResult, setPage, sort, setSort } = useTopupPageContext();
+  const { data, isLoading, error } = queryResult;
+  const topups = data?.data;
+
+  const meta = data?.meta;
+  const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
+
+  const router = useRouter();
+  const navigate = (path: string) => {
+    router.push(path);
+  };
+
+  const handleOpenMenu = (e: MouseEvent<HTMLButtonElement>, id: string) => {
+    setAnchorEl(e.currentTarget);
+    setMenuId(id);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+    setMenuId(null);
+  };
+
+  const { mutate: deleteMutate, isPending: isDeleting } = deleteTopupMutation();
+  const { mutate: updateStatusMutate, isPending: isStatusUpdating } = updateTopupStatusMutation();
+
+  async function handleUpdateStatus(id: string, status: TopupStatus) {
+    updateStatusMutate(
+      {
+        id,
+        status,
+      },
+      {
+        onSuccess: () => {
+          toast.success(
+            status === TopupStatus.ACTIVE ? 'Product Activated' : 'Product Inactivated',
+          );
+          handleCloseMenu();
+          queryClient.invalidateQueries({ queryKey: ['getTopups'] });
+        },
+        onError: (err: any) => {
+          toast.error(err.message);
+          handleCloseMenu();
+        },
+      },
+    );
+  }
+  const handelDeleteTopup = (id: string) => {
+    deleteMutate(id, {
+      onSuccess: data => {
+        queryClient.invalidateQueries({ queryKey: ['getTopups'] });
+        toast.success(data.message);
+        handleCloseMenu();
+      },
+      onError: error => {
+        toast.error(error.message);
+      },
+    });
+  };
+
+  const isPending = isDeleting || isStatusUpdating;
+
   return (
     <div className="mt-10 p-3 lg:p-5 glass overflow-x-auto dark:bg-paper">
       <Typography
@@ -295,82 +141,163 @@ function TopUpsTable() {
         Top ups
       </Typography>
 
-      <div className=" overflow-x-auto">
-        <TableContainer sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {heads.map(head => (
-                  <TableCell key={head.name}>
-                    {head.sortable ? (
-                      <Stack direction={'row'} gap={0.5}>
-                        <span>{head.name.toUpperCase()}</span>
-                        <button
-                          onClick={() => setSort(p => ({ name: head.name, by: p?.by || 'asc' }))}
-                          className={` text-xl ${sort?.name === head.name ? 'text-primary' : 'text-txt-primary'}`}
-                        >
-                          {sort?.name === head.name && sort?.by === 'asc' ? (
-                            <IoMdArrowUp />
-                          ) : (
-                            <IoMdArrowDown />
-                          )}
-                        </button>
-                      </Stack>
-                    ) : (
-                      head.name.toUpperCase()
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map(row => (
-                <TableRow key={row.id}>
-                  <TableCell>#{row.id}</TableCell>
-                  <TableCell style={{ minWidth: '300px' }}>
-                    <Stack direction={'row'} alignItems={'center'} gap={1}>
-                      <img
-                        src="https://play-lh.googleusercontent.com/Odw8BGugaJLdbaSbCeZWbTE3Qz1wTiQ0Tsn9nzpoQdnkzWb-gaI58zzTmYDvGpdYKg"
-                        alt={'image'}
-                        className=" size-14 md:size-16 rounded-lg"
-                      />
-                      <Typography>{row.name}</Typography>
-                    </Stack>
-                  </TableCell>
-                  <TableCell>{row.packages}</TableCell>
-
-                  <TableCell>{row.orders}</TableCell>
-                  <TableCell>{row.revenue}</TableCell>
-                  <TableCell>{row.status.toUpperCase()}</TableCell>
-                  <TableCell>{new Date().toDateString()}</TableCell>
-                  <TableCell>{new Date().toDateString()}</TableCell>
-
-                  <TableCell>
-                    <Tooltip title="View Full Details">
-                      <button className="text-2xl hover:text-primary mr-2 hover:cursor-pointer">
-                        <HiOutlineViewfinderCircle />
-                      </button>
-                    </Tooltip>
-                    <Tooltip title="Make changes">
-                      <button className="text-2xl hover:text-primary mr-2 hover:cursor-pointer">
-                        <MdOutlineEdit />
-                      </button>
-                    </Tooltip>
-                  </TableCell>
+      {isLoading ? (
+        <div className="h-[300px] flex justify-center items-center">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div className=" overflow-x-auto">
+          <TableContainer sx={{ width: '100%', display: 'table', tableLayout: 'fixed' }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {heads.map(head => (
+                    <TableCell key={head.name}>
+                      {head.fieldName && head.sortable ? (
+                        <Stack direction="row" gap={0.5} alignItems="center">
+                          <span>{head.name.toUpperCase()}</span>
+                          <button
+                            onClick={() =>
+                              setSort(p => ({
+                                by: head.fieldName,
+                                order:
+                                  p.by === head.fieldName && p.order === SortOrder.ASC
+                                    ? SortOrder.DESC
+                                    : SortOrder.ASC,
+                              }))
+                            }
+                            className={`text-xl ${
+                              sort?.by === head.fieldName ? 'text-primary' : 'text-txt-primary'
+                            }`}
+                          >
+                            {sort?.by === head.fieldName && sort?.order === 'asc' ? (
+                              <IoMdArrowUp />
+                            ) : (
+                              <IoMdArrowDown />
+                            )}
+                          </button>
+                        </Stack>
+                      ) : (
+                        head.name.toUpperCase()
+                      )}
+                    </TableCell>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <Pagination
-            style={{ marginTop: '15px' }}
-            count={10}
-            size="large"
-            color="primary"
-            variant="outlined"
-            shape="rounded"
-          />
-        </TableContainer>
-      </div>
+              </TableHead>
+              <TableBody>
+                {topups?.map(topup => (
+                  <TableRow key={topup._id}>
+                    <TableCell style={{ minWidth: '300px' }}>
+                      <p className="text-primary text-sm">#{topup._id}</p>
+                      <Stack direction={'row'} alignItems={'center'} gap={1}>
+                        <img
+                          src={topup.coverPhoto}
+                          alt={'image'}
+                          className=" size-14 md:size-16 rounded-lg bg-cover"
+                        />
+
+                        <Typography>{topup.name}</Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell>{topup.packages.length}</TableCell>
+
+                    <TableCell>{topup.ordersCount}</TableCell>
+                    <TableCell>${topup.startFrom}</TableCell>
+                    <TableCell>{topup.status}</TableCell>
+                    <TableCell>{new Date(topup.createdAt).toDateString()}</TableCell>
+                    <TableCell>{new Date(topup.updatedAt).toDateString()}</TableCell>
+
+                    <TableCell>
+                      <Tooltip title="View Full Details">
+                        <button
+                          onClick={() => navigate(`top-ups/${topup._id}`)}
+                          className="text-2xl hover:text-primary mr-2 hover:cursor-pointer"
+                        >
+                          <HiOutlineViewfinderCircle />
+                        </button>
+                      </Tooltip>
+                      <Tooltip title="Make changes">
+                        <button
+                          onClick={() => router.push(`top-ups/edit/${topup._id}`)}
+                          className="text-2xl hover:text-primary mr-2 hover:cursor-pointer"
+                        >
+                          <MdOutlineEdit />
+                        </button>
+                      </Tooltip>
+                      <Tooltip title="Menu">
+                        <button
+                          onClick={e => handleOpenMenu(e, topup._id)}
+                          className="text-xl hover:text-secondary mr-2 hover:cursor-pointer"
+                        >
+                          <SlOptionsVertical />
+                        </button>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {meta?.totalResults === 0 && (
+              <Typography variant="h5" color="text.primary" align="center">
+                No results
+              </Typography>
+            )}
+
+            <Pagination
+              style={{ marginTop: '15px' }}
+              count={totalPages}
+              onChange={(e, value) => setPage(value)}
+              size="large"
+              color="primary"
+              variant="outlined"
+              shape="rounded"
+            />
+
+            {/* Shared Menu */}
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl) && Boolean(menuId)}
+              onClose={handleCloseMenu}
+              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+            >
+              {menuId &&
+                (() => {
+                  const topup = topups?.find(c => c._id === menuId);
+                  if (!topup) return null;
+
+                  return [
+                    topup.status === TopupStatus.ACTIVE ? (
+                      <MenuItem
+                        key="active"
+                        disabled={isPending}
+                        onClick={() => handleUpdateStatus(menuId, TopupStatus.INACTIVE)}
+                      >
+                        Inactive
+                      </MenuItem>
+                    ) : (
+                      <MenuItem
+                        key="inactive"
+                        disabled={isPending}
+                        onClick={() => handleUpdateStatus(menuId, TopupStatus.ACTIVE)}
+                      >
+                        Active
+                      </MenuItem>
+                    ),
+
+                    <MenuItem
+                      key="delete"
+                      disabled={isPending}
+                      onClick={() => handelDeleteTopup(menuId)}
+                    >
+                      Delete
+                    </MenuItem>,
+                  ];
+                })()}
+            </Menu>
+          </TableContainer>
+        </div>
+      )}
     </div>
   );
 }

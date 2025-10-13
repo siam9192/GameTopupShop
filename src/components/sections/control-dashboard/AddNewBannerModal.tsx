@@ -1,11 +1,16 @@
 'use client';
+import { createBanner } from '@/api-services/banner';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
+import { queryClient } from '@/provider/Provider';
+import { createBannerMutation } from '@/query/services/banner';
+import { uploadImageToImgBB } from '@/utils/helper';
 import styled from '@emotion/styled';
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
 import { IoIosCloudUpload } from 'react-icons/io';
 import { RiImageAddFill } from 'react-icons/ri';
+import { toast } from 'react-toastify';
 
 const style = {
   position: 'absolute',
@@ -62,12 +67,32 @@ function AddNewBannerModal() {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { mutate, isPending } = createBannerMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      console.log('Form Data:', form);
-      alert('Form submitted!');
+    if (!validate()) {
+      return;
     }
+
+    const imageUrl = await uploadImageToImgBB(form.imageFile as File);
+
+    mutate(
+      {
+        image: imageUrl,
+        link: form.link,
+      },
+      {
+        onSuccess: data => {
+          toast.success(data.message);
+          queryClient.invalidateQueries({ queryKey: ['getBanners'] });
+          setOpen(false);
+        },
+        onError: data => {
+          toast.error(data.message);
+        },
+      },
+    );
   };
 
   const handleImageFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -167,7 +192,7 @@ function AddNewBannerModal() {
                 />
                 <p className="text-red-500">{errors.link}</p>
               </Box>
-              <Button type="submit" size="large" variant="outlined">
+              <Button disabled={isPending} type="submit" size="large" variant="outlined">
                 Submit
               </Button>
             </Box>

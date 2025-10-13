@@ -1,23 +1,26 @@
 'use client';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTheme } from '@mui/material/styles';
 
 // Dynamically import JoditEditor to avoid SSR issues in Next.js
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
-const CustomJoditEditor: React.FC = () => {
-  const editor = useRef(null);
-  const [content, setContent] = useState('');
+interface Props {
+  onChange: (value: string) => void;
+  defaultValue?: string;
+  value?: string;
+}
+
+const CustomJoditEditor = ({ onChange, value, defaultValue }: Props) => {
+  const editor = useRef<any>(null);
 
   const theme = useTheme();
-
   const mode = theme.palette.mode;
 
-  // Jodit editor configuration
   const config = useMemo(
     () => ({
-      readonly: false, // all options from https://xdsoft.net/jodit/docs/
+      readonly: false,
       placeholder: 'Start typing...',
       minHeight: 400,
       theme: mode,
@@ -29,10 +32,10 @@ const CustomJoditEditor: React.FC = () => {
     <div className="editor-wrapper">
       <JoditEditor
         ref={editor}
-        value={content}
+        value={defaultValue}
         config={config}
-        tabIndex={1} // tabIndex of textarea
-        onChange={newContent => setContent(newContent)}
+        tabIndex={1}
+        onChange={newContent => onChange(newContent)}
       />
     </div>
   );

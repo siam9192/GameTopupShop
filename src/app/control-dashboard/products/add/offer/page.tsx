@@ -1,55 +1,60 @@
 'use client';
+
+import { useState, ChangeEvent } from 'react';
 import CustomJoditEditor from '@/components/editor/CustomJoditEditor';
+import AddInfoField from '@/components/sections/control-dashboard/AddInfoField';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
 import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
-import { simplifyRatio } from '@/utils/helper';
-import { Box, Button, FormHelperText, Grid, Stack, TextField, Typography } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { simplifyRatio, uploadImageToImgBB } from '@/utils/helper';
+import {
+  Box,
+  Button,
+  Chip,
+  FormHelperText,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import { IoIosCloudUpload } from 'react-icons/io';
+import offerValidation from '@/validations/offer.validation';
+import { createOfferMutation } from '@/query/services/offer';
+import { toast } from 'react-toastify';
+import { CreateOfferPayload, OfferInfoField } from '@/types/offer.type';
 
-type TFormValue = {
-  imageFile: File | null;
-  link: string;
+type FormValue = {
+  name: string;
+  coverPhoto: File | null;
+  platformName: string;
+  description: string;
+  price: string | number;
+  startDate: string;
+  endDate: string;
 };
 
-function page() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [form, setForm] = useState<TFormValue>({ imageFile: null, link: '' });
-  const [errors, setErrors] = useState<Record<keyof TFormValue, string>>({
-    imageFile: '',
-    link: '',
-  });
+type FormError = Partial<Record<keyof FormValue | 'coverPhoto', string>>;
+
+const formDefaultValue = {
+  name: '',
+  coverPhoto: null,
+  platformName: '',
+  description: '',
+  price: '',
+  startDate: '',
+  endDate: '',
+};
+function Page() {
+  const [infoFields, setInfoFields] = useState<OfferInfoField[]>([]);
+  const [form, setForm] = useState<FormValue>(formDefaultValue);
+  const [errors, setErrors] = useState<FormError>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const validate = () => {
-    let tempErrors = { imageFile: '', link: '' };
-    let isValid = true;
-
-    const imageFile = form.imageFile;
-    if (!form.link.trim()) {
-      tempErrors.link = ' is required';
-      isValid = false;
-    }
-    if (form.imageFile === null) {
-      tempErrors.imageFile = 'Image is required';
-      isValid = false;
-    }
-
-    if (imageFile && imageFile.size > 10 * 1024 * 1024) {
-      tempErrors.imageFile = 'Image size must be in 10MB';
-      isValid = false;
-    }
-    setErrors(tempErrors);
-    return isValid;
-  };
-
-  const handleImageFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCoverPhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files?.length) return;
 
@@ -77,139 +82,280 @@ function page() {
     if (simplifyRatio(dimensions.width, dimensions.height) !== '16:9') {
       setErrors(p => ({
         ...p,
-        imageFile: `Invalid image ratio require ratio is 16:9`,
+        coverPhoto: `Invalid image ratio require ratio is 16:9`,
       }));
       return;
     }
 
-    setForm(p => ({ ...p, imageFile: file }));
+    setForm(p => ({ ...p, coverPhoto: file }));
   };
+
+  const removeInfoField = (index: number) => {
+    setInfoFields(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const resetForm = () => {
+    setForm({
+      name: '',
+      coverPhoto: null,
+      platformName: '',
+      description: '',
+      price: '',
+      startDate: '',
+      endDate: '',
+    });
+    setInfoFields([]);
+    setErrors({});
+  };
+
+  const handelReset = () => {
+    setErrors({});
+    setForm(formDefaultValue);
+    setInfoFields([]);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const startDate = new Date(form.startDate).toISOString();
+
+    const endDate = new Date(form.endDate).toISOString();
+    // Prepare validation payload
+    const payload = {
+      ...form,
+      coverPhoto: form.coverPhoto,
+      price: Number(form.price),
+      infoFields,
+      startDate: startDate,
+      endDate: endDate,
+    };
+
+    const result = offerValidation.createOfferValidation.safeParse(payload);
+
+    if (!result.success) {
+      const fieldErrors: FormError = {};
+      result.error.issues.forEach(err => {
+        const fieldName = err.path[0] as keyof FormValue;
+        fieldErrors[fieldName] = err.message;
+      });
+
+      setErrors(fieldErrors);
+      return;
+    }
+
+    // upload image
+    const coverPhotoUrl = await uploadImageToImgBB(form.coverPhoto as File);
+    let toastId = toast.loading('Pending...');
+    const finalPayload: CreateOfferPayload = {
+      name: form.name!,
+      platformName: form.platformName!,
+      price: Number(form.price),
+      description: form.description!,
+      coverPhoto: coverPhotoUrl,
+      startDate: startDate,
+      endDate: endDate,
+      infoFields,
+    };
+
+    mutate(finalPayload, {
+      onSuccess: () => {
+        toast.dismiss(toastId);
+        toast.success('Offer created successfully');
+        handelReset();
+      },
+      onError: error => {
+        toast.dismiss(toastId);
+        toast.error(error.message);
+      },
+    });
+  };
+
+  const { mutate, isPending } = createOfferMutation();
+
   return (
-    <div>
-      <DashboardPageHeading title="Add Offer" />
+    <Box>
+      <DashboardPageHeading title="Add Top Up" />
+
       <form
-        action=""
-        className=" p-3 md:p-5 lg:p-10 space-y-3 dark:bg-paper  rounded-lg lg:w-10/12 glass"
+        onSubmit={handleSubmit}
+        className="p-3 md:p-5 lg:p-10 dark:bg-paper rounded-lg lg:w-10/12 glass"
       >
+        {/* Cover Photo Upload */}
         <Box>
-          {form.imageFile ? (
-            <img src={URL.createObjectURL(form.imageFile)} alt="" className="w-[400px] h-[225px]" />
-          ) : null}
-          {/* Upload button */}
+          {form.coverPhoto && (
+            <img
+              src={URL.createObjectURL(form.coverPhoto)}
+              alt="Cover"
+              className="w-[400px] h-[225px] object-cover rounded"
+            />
+          )}
           <Button
             component="label"
-            role={undefined}
             variant="contained"
-            tabIndex={-1}
-            sx={{
-              mt: 1,
-            }}
             startIcon={<IoIosCloudUpload />}
+            sx={{ mt: 1 }}
           >
-            Upload Image file
-            <VisuallyHiddenInput type="file" accept="image/*" onChange={handleImageFileChange} />
+            Upload Image
+            <VisuallyHiddenInput type="file" accept="image/*" onChange={handleCoverPhotoChange} />
           </Button>
-          <FormHelperText>Required image ratio is 16:9 example size (1200x720) px</FormHelperText>
-          <p className="text-red-500">{errors.imageFile}</p>
+          <FormHelperText>Required ratio: 16:9 (e.g., 1200x720)</FormHelperText>
+          {errors.coverPhoto && <FormHelperText error>{errors.coverPhoto}</FormHelperText>}
         </Box>
 
-        <Grid
-          marginTop={2}
-          container
-          columns={{
-            xs: 1,
-            md: 2,
-          }}
-          spacing={2}
-        >
-          <Grid size={1}>
-            <Box>
-              <TextField
-                label="Name"
-                name="name"
-                value={form.link}
-                onChange={handleChange}
-                error={!!errors.link}
-                fullWidth
-              />
-              <p className="text-red-500">{errors.link}</p>
-            </Box>
-          </Grid>
-          <Grid size={1}>
-            <Box>
-              <TextField
-                label="Price"
-                name="price"
-                value={form.link}
-                onChange={handleChange}
-                error={!!errors.link}
-                fullWidth
-              />
-              <p className="text-red-500">{errors.link}</p>
-            </Box>
-          </Grid>
-        </Grid>
+        {/* Basic Fields */}
+        <Stack mt={2} spacing={2}>
+          <TextField
+            label="Name"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            error={!!errors.name}
+            helperText={errors.name}
+            fullWidth
+          />
 
-        <Box>
-          <Typography color="text.primary" fontSize={22}>
+          <TextField
+            label="Platform Name"
+            name="platformName"
+            value={form.platformName}
+            onChange={handleChange}
+            error={!!errors.platformName}
+            helperText={errors.platformName}
+            fullWidth
+          />
+
+          <TextField
+            label="Price"
+            name="price"
+            type="number"
+            value={form.price}
+            onChange={handleChange}
+            error={!!errors.price}
+            helperText={errors.price}
+            fullWidth
+          />
+        </Stack>
+
+        {/* Date & Time */}
+        <Box mt={3}>
+          <Typography color="text.primary" fontSize={22} mb={1}>
             Set Date & Time:
           </Typography>
-          <Grid
-            marginTop={2}
-            container
-            columns={{
-              xs: 1,
-              md: 2,
-            }}
-            spacing={2}
-          >
+          <Grid container spacing={2} columns={2}>
             <Grid size={1}>
               <TextField
                 label="Start From"
-                name="startForm"
+                name="startDate"
                 type="datetime-local"
+                value={form.startDate}
                 onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
+                error={!!errors.startDate}
+                helperText={errors.startDate}
                 fullWidth
-                InputLabelProps={{
-                  shrink: true, // prevents label overlap with date value
+                sx={{
+                  '& input::-webkit-calendar-picker-indicator': {
+                    filter: 'invert(60%) sepia(80%) saturate(500%) hue-rotate(160deg)', // 🎨 Adjust to your color
+                    cursor: 'pointer',
+                  },
                 }}
               />
             </Grid>
             <Grid size={1}>
               <TextField
                 label="End At"
-                name="endAt"
+                name="endDate"
                 type="datetime-local"
+                value={form.endDate}
                 onChange={handleChange}
+                error={!!errors.endDate}
+                helperText={errors.endDate}
+                InputLabelProps={{ shrink: true }}
                 fullWidth
-                InputLabelProps={{
-                  shrink: true, // prevents label overlap with date value
+                sx={{
+                  '& input::-webkit-calendar-picker-indicator': {
+                    filter: 'invert(60%) sepia(80%) saturate(500%) hue-rotate(160deg)', // 🎨 Adjust to your color
+                    cursor: 'pointer',
+                  },
                 }}
               />
             </Grid>
           </Grid>
-          <Stack marginTop={1} direction={'row'} justifyContent={'end'}>
-            <Button variant="outlined" color="secondary">
-              Add Package
-            </Button>
-          </Stack>
         </Box>
 
-        <Box>
+        {/* Description */}
+        <Box mt={3}>
           <Typography mb={1} color="text.primary" fontSize={22}>
-            Description :
+            Description:
           </Typography>
-          <CustomJoditEditor />
+          <CustomJoditEditor
+            onChange={value => setForm(prev => ({ ...prev, description: value }))}
+          />
         </Box>
-        <Stack direction={'row'} justifyContent={'end'} marginTop={2}>
-          <Button color="warning">Reset</Button>
-          <Button variant="contained" color="primary">
+
+        {/* Info Fields */}
+        <Box mt={3}>
+          <AddInfoField onSubmit={val => setInfoFields(prev => [...prev, val] as any)} />
+
+          {infoFields.length > 0 && (
+            <Typography color="text.primary" fontSize={22} mt={2}>
+              Added Info Fields:
+            </Typography>
+          )}
+
+          <Grid container spacing={2} mt={1} columns={2}>
+            {infoFields.map((field, index) => (
+              <Grid key={index} size={1}>
+                <Box
+                  sx={{
+                    p: 2,
+                    bgcolor: 'background.paper',
+                    borderRadius: 2,
+                    position: 'relative',
+                  }}
+                >
+                  <Stack direction="row" flexWrap="wrap" gap={1} alignItems="center">
+                    <Typography variant="h6" color="primary">
+                      {index + 1}.
+                    </Typography>
+                    <Chip label={`Name: ${field.name}`} size="small" />
+                    <Chip label={`Placeholder: ${field.placeholder}`} size="small" />
+                    <Chip label={`Min: ${field.minLength}`} size="small" />
+                    <Chip label={`Max: ${field.maxLength}`} size="small" />
+                    <Chip label={`Type: ${field.type}`} size="small" />
+                    <Chip
+                      label={field.optional ? 'Optional' : 'Required'}
+                      size="small"
+                      color={field.optional ? 'default' : 'error'}
+                      variant="outlined"
+                    />
+                  </Stack>
+                  <IconButton
+                    color="error"
+                    sx={{ position: 'absolute', top: 4, right: 4 }}
+                    onClick={() => removeInfoField(index)}
+                  >
+                    <FaDeleteLeft />
+                  </IconButton>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        {/* Actions */}
+        <Stack direction="row" justifyContent="flex-end" spacing={2} mt={3}>
+          <Button color="warning" disabled={isPending} onClick={resetForm}>
+            Reset
+          </Button>
+          <Button type="submit" disabled={isPending} variant="contained" color="primary">
             Submit
           </Button>
         </Stack>
       </form>
-    </div>
+    </Box>
   );
 }
 
-export default page;
+export default Page;

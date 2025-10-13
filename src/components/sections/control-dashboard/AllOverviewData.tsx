@@ -1,7 +1,6 @@
 import { Box, Grid, Icon, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { HiMiniUserGroup, HiOutlineWallet } from 'react-icons/hi2';
-import { IoBagCheck } from 'react-icons/io5';
 import { PiCurrencyDollarSimpleBold } from 'react-icons/pi';
 import { TbRecharging } from 'react-icons/tb';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';

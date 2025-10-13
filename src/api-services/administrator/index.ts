@@ -5,6 +5,23 @@ import { AccountStatus, AdministratorLevel } from '@/types/user.type';
 import { paramsToString } from '@/utils/helper';
 import { AxiosError } from 'axios';
 
+export async function createAdministrator(payload: any) {
+  try {
+    const res = await axiosInstance.post(`/administrators`, payload);
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
 export async function getAdministrators(params: Param[]) {
   try {
     const res = await axiosInstance.get(`/administrators?${paramsToString(params)}`);
@@ -39,12 +56,9 @@ export async function getAdministratorById(id: string) {
   }
 }
 
-
-
-
-export async function updateAdministratorLevel(payload:{id: string,level:AdministratorLevel}) {
+export async function updateAdministratorLevel(payload: { id: string; level: AdministratorLevel }) {
   try {
-    const res = await axiosInstance.patch(`/administrators/level`,payload);
+    const res = await axiosInstance.patch(`/administrators/level`, payload);
     return res.data;
   } catch (err: unknown) {
     let message = 'Something went wrong';
@@ -58,10 +72,7 @@ export async function updateAdministratorLevel(payload:{id: string,level:Adminis
   }
 }
 
-
-
-
-export async function deleteAdministrator(id:string) {
+export async function deleteAdministrator(id: string) {
   try {
     const res = await axiosInstance.delete(`/administrators/${id}`);
     return res.data;
@@ -76,8 +87,6 @@ export async function deleteAdministrator(id:string) {
     throw new Error(message);
   }
 }
-
-
 
 export async function updateAdministratorStatus(payload: { id: string; status: AccountStatus }) {
   try {

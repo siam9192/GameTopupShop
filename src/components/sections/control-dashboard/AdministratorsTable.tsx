@@ -14,7 +14,11 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
 import { LiaUserEditSolid } from 'react-icons/lia';
-import { deleteAdministratorMutation, getAdministratorsQuery, updateAdministratorStatusMutation } from '@/query/services/administrator';
+import {
+  deleteAdministratorMutation,
+  getAdministratorsQuery,
+  updateAdministratorStatusMutation,
+} from '@/query/services/administrator';
 import { useAdministratorsPageContext } from '@/app/control-dashboard/users/administrators/page';
 import { Param } from '@/types/metadata.type';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
@@ -43,10 +47,10 @@ function AdministratorsTable() {
   const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [detailId, setDetailsId] = useState<string | null>(null);
-  const [editId,setEditId] =  useState<string | null>(null)
-  const [menuId,setMenuId] =  useState<string|null>(null)
+  const [editId, setEditId] = useState<string | null>(null);
+  const [menuId, setMenuId] = useState<string | null>(null);
   const { filters } = useAdministratorsPageContext();
-  
+
   const params: Param[] = [
     { name: 'page', value: page },
     ...Object.entries(filters).map(([key, value]) => ({ name: key, value })),
@@ -69,48 +73,47 @@ function AdministratorsTable() {
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
 
-   useEffect(() => {
-      if (isPending) return;
-      refetch();
-    }, [page, sort, filters]);
+  useEffect(() => {
+    if (isPending) return;
+    refetch();
+  }, [page, sort, filters]);
 
-     
-     const { mutate: updateStatus } = updateAdministratorStatusMutation();
-     const { mutate: deleteAdministrator } = deleteAdministratorMutation();
+  const { mutate: updateStatus } = updateAdministratorStatusMutation();
+  const { mutate: deleteAdministrator } = deleteAdministratorMutation();
 
-     async function handleUpdateStatus(id: string, status: AccountStatus) {
-        updateStatus(
-          { id, status },
-          {
-            onSuccess: () => {
-              toast.success(
-                status === AccountStatus.ACTIVE ? 'Customer unblocked' : 'Customer blocked',
-              );
-              handleCloseMenu();
-              queryClient.invalidateQueries({ queryKey: ['getAdministrators'] });
-            },
-            onError: (err: any) => {
-              toast.error(err.message);
-              handleCloseMenu();
-            },
-          },
-        );
-      }
-    
-      async function handleDelete(id: string) {
-          deleteAdministrator(id, {
-            onSuccess: () => {
-              toast.success('Administrator deleted successfully');
-              handleCloseMenu();
-              queryClient.invalidateQueries({ queryKey: ['administrators'] });
-            },
-            onError: (err: any) => {
-              toast.error(err.message);
-              handleCloseMenu();
-            },
-          });
-        }
-      
+  async function handleUpdateStatus(id: string, status: AccountStatus) {
+    updateStatus(
+      { id, status },
+      {
+        onSuccess: () => {
+          toast.success(
+            status === AccountStatus.ACTIVE ? 'Customer unblocked' : 'Customer blocked',
+          );
+          handleCloseMenu();
+          queryClient.invalidateQueries({ queryKey: ['getAdministrators'] });
+        },
+        onError: (err: any) => {
+          toast.error(err.message);
+          handleCloseMenu();
+        },
+      },
+    );
+  }
+
+  async function handleDelete(id: string) {
+    deleteAdministrator(id, {
+      onSuccess: () => {
+        toast.success('Administrator deleted successfully');
+        handleCloseMenu();
+        queryClient.invalidateQueries({ queryKey: ['administrators'] });
+      },
+      onError: (err: any) => {
+        toast.error(err.message);
+        handleCloseMenu();
+      },
+    });
+  }
+
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
       <DashboardSectionHeading title="Administrators Table" />
@@ -184,15 +187,21 @@ function AdministratorsTable() {
                         </button>
                       </Tooltip>
 
-                      <Tooltip  title="Edit administrator">
-                        <button onClick={(e)=>handleOpenMenu(e,administrator._id)} className="text-2xl hover:text-secondary mr-2 hover:cursor-pointer">
+                      <Tooltip title="Edit administrator">
+                        <button
+                          onClick={e => handleOpenMenu(e, administrator._id)}
+                          className="text-2xl hover:text-secondary mr-2 hover:cursor-pointer"
+                        >
                           <LiaUserEditSolid />
                         </button>
                       </Tooltip>
-                         
-                      {
-                        administrator._id === editId && (<UpdateAdministratorLevelDialog administrator={administrator} onClose={()=>setEditId(null)}/>)
-                      }
+
+                      {administrator._id === editId && (
+                        <UpdateAdministratorLevelDialog
+                          administrator={administrator}
+                          onClose={() => setEditId(null)}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -215,58 +224,52 @@ function AdministratorsTable() {
             variant="outlined"
             shape="rounded"
           />
-  {/* Shared Menu */}
-                      <Menu
-  anchorEl={anchorEl}
-  open={Boolean(anchorEl) && Boolean(menuId)}
-  onClose={handleCloseMenu}
-  anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-  transformOrigin={{ vertical: 'top', horizontal: 'left' }}
->
-  {menuId &&
-    (() => {
-      const administrator = administrators?.find(c => c._id === menuId);
-      if (!administrator) return null;
-
-      return [
-        administrator.status === AccountStatus.ACTIVE ? (
-          <MenuItem
-            key={`block-${administrator._id}`}
-            onClick={() =>
-              handleUpdateStatus(administrator._id, AccountStatus.BLOCKED)
-            }
+          {/* Shared Menu */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl) && Boolean(menuId)}
+            onClose={handleCloseMenu}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           >
-            Block
-          </MenuItem>
-        ) : (
-          <MenuItem
-            key={`unblock-${administrator._id}`}
-            onClick={() =>
-              handleUpdateStatus(administrator._id, AccountStatus.ACTIVE)
-            }
-          >
-            Unblock
-          </MenuItem>
-        ),
+            {menuId &&
+              (() => {
+                const administrator = administrators?.find(c => c._id === menuId);
+                if (!administrator) return null;
 
-        <MenuItem
-          key={`delete-${administrator._id}`}
-          onClick={() => handleDelete(administrator._id)}
-        >
-          Delete
-        </MenuItem>,
+                return [
+                  administrator.status === AccountStatus.ACTIVE ? (
+                    <MenuItem
+                      key={`block-${administrator._id}`}
+                      onClick={() => handleUpdateStatus(administrator._id, AccountStatus.BLOCKED)}
+                    >
+                      Block
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      key={`unblock-${administrator._id}`}
+                      onClick={() => handleUpdateStatus(administrator._id, AccountStatus.ACTIVE)}
+                    >
+                      Unblock
+                    </MenuItem>
+                  ),
 
-        <MenuItem
-          key={`update-${administrator._id}`}
-          onClick={() => setEditId(administrator._id)}
-        >
-          Update Level
-        </MenuItem>,
-      ];
-    })()}
-</Menu>
+                  <MenuItem
+                    key={`delete-${administrator._id}`}
+                    onClick={() => handleDelete(administrator._id)}
+                  >
+                    Delete
+                  </MenuItem>,
 
-        
+                  <MenuItem
+                    key={`update-${administrator._id}`}
+                    onClick={() => setEditId(administrator._id)}
+                  >
+                    Update Level
+                  </MenuItem>,
+                ];
+              })()}
+          </Menu>
         </>
       )}
 

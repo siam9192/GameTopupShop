@@ -20,7 +20,7 @@ function AdministratorsFilterBox() {
     if (searchTerm) {
       filters['searchTerm'] = searchTerm;
     }
-     if (level) {
+    if (level) {
       filters['level'] = level;
     }
     setFilters(filters);
@@ -106,14 +106,14 @@ function AdministratorsFilterBox() {
         </Box>
 
         {/* Button */}
-         <Box marginTop={5.5}>
-                <button
-                  onClick={handleSearch}
-                  className="w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium"
-                >
-                  Search
-                </button>
-              </Box>
+        <Box marginTop={5.5}>
+          <button
+            onClick={handleSearch}
+            className="w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium"
+          >
+            Search
+          </button>
+        </Box>
       </Stack>
     </div>
   );

@@ -1,5 +1,6 @@
+import envConfig from '@/config/env.config';
 import { Param } from '@/types/metadata.type';
-import { FormEvent } from 'react';
+import axios from 'axios';
 
 export function simplifyRatio(width: number, height: number) {
   const gcd: any = (a: number, b: number) => (b === 0 ? a : gcd(b, a % b));
@@ -51,3 +52,17 @@ export function paramsToString(params: Param[]) {
   const str = urlSearchParams.toString();
   return str ? `?${str}` : '';
 }
+
+export const uploadImageToImgBB = async (file: File) => {
+  const response = await axios.post(
+    `${envConfig.img_bb_uploadUrl}?key=${envConfig.img_bb_key}` as string,
+    { image: file },
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
+
+  const url = response.data.data.display_url;
+  if (!url) throw new Error();
+  return url;
+};

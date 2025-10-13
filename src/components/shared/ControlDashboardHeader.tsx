@@ -6,7 +6,7 @@ import { RiMenuUnfoldLine } from 'react-icons/ri';
 import ToggleThemeMode from '../ui/ToggleThemeMode';
 import NotificationBar from '../ui/NotificationBar';
 import { useCurrentUser } from '@/provider/CurrentUserProvider';
-import { Administrator } from '@/types/user.type';
+import { Administrator } from '@/types/administrator.type';
 
 function ControlDashboardHeader() {
   const data = useCurrentUser();

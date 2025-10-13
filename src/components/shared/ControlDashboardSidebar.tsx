@@ -48,10 +48,10 @@ const sidebarRoutesGroup1: RouteItem[] = [
     path: '/control-dashboard/products',
     icon: TbRecharging,
     children: [
-      { label: 'Top ups', path: '/dashboard/products/top-up' },
-      { label: 'Offers', path: '/dashboard/products/top-up' },
-      { label: 'Add Top Up', path: '/dashboard/products/add/top-up' },
-      { label: 'Add Offer', path: '/dashboard/products/add/offer' },
+      { label: 'Top ups', path: '/control-dashboard/products/top-up' },
+      { label: 'Offers', path: '/control-dashboard/products/top-up' },
+      { label: 'Add Top Up', path: '/control-dashboard/products/add/top-up' },
+      { label: 'Add Offer', path: '/control-dashboard/products/add/offer' },
     ],
   },
 
@@ -60,9 +60,9 @@ const sidebarRoutesGroup1: RouteItem[] = [
     icon: HiOutlineWallet,
     path: '/control-dashboard/wallet',
     children: [
-      { label: 'Customers Wallet', path: '/dashboard/wallet/transactions' },
-      { label: 'Submissions', path: '/dashboard/wallet/transactions' },
-      { label: 'Config Payment Methods', path: '/dashboard/wallet/payment-methods' },
+      { label: 'Customers Wallet', path: '/control-dashboard/wallet/transactions' },
+      { label: 'Submissions', path: '/control-dashboard/wallet/transactions' },
+      { label: 'Config Payment Methods', path: '/control-dashboard/wallet/payment-methods' },
     ],
   },
   {
@@ -79,8 +79,8 @@ const sidebarRoutesGroup1: RouteItem[] = [
     icon: MdOutlinePayment,
     path: '/control-dashboard/transactions',
     children: [
-      { label: 'All Payments', path: '/dashboard/transactions/all' },
-      { label: 'Payment Methods', path: '/dashboard/transactions/methods' },
+      { label: 'All Payments', path: '/control-dashboard/transactions/all' },
+      { label: 'Payment Methods', path: '/control-dashboard/transactions/methods' },
     ],
   },
   {
@@ -88,8 +88,8 @@ const sidebarRoutesGroup1: RouteItem[] = [
     path: '/control-dashboard/appearances',
     icon: SiTaichigraphics,
     children: [
-      { label: 'Banner Slides', path: '/dashboard/appearances/banner' },
-      { label: 'Branding', path: '/dashboard/appearances/branding' },
+      { label: 'Banner Slides', path: '/control-dashboard/appearances/banner' },
+      { label: 'Branding', path: '/control-dashboard/appearances/branding' },
     ],
   },
 ];
@@ -152,6 +152,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ route, isOpen, toggleMenu }) 
               e.stopPropagation();
               toggleMenu(route.label);
             }}
+            color="primary"
           >
             {isOpen ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
@@ -181,8 +182,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ route, isOpen, toggleMenu }) 
 };
 
 function ControlDashboardSidebar() {
-  const router = useRouter();
-  const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const toggleMenu = (label: string) => {

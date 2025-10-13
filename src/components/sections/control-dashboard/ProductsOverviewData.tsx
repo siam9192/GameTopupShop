@@ -1,32 +1,34 @@
+'use client';
+import { getProductsMetadataQuery } from '@/query/services/metadata';
 import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { AiOutlineGift, AiOutlineProduct } from 'react-icons/ai';
-import { HiMiniUserGroup, HiOutlineWallet } from 'react-icons/hi2';
-import { IoBagCheck } from 'react-icons/io5';
-import { PiCurrencyDollarSimpleBold } from 'react-icons/pi';
-import { TbRecharging } from 'react-icons/tb';
+import { MdInventory, MdFlashOn, MdLocalOffer, MdNewReleases } from 'react-icons/md';
+
+const defaultValue = 999;
 
 function ProductsOverviewData() {
+  const { data: resData, isLoading } = getProductsMetadataQuery();
+  const metadata = resData?.data;
   const data = [
     {
       name: 'Product',
-      icon: AiOutlineProduct,
-      value: 7523,
+      icon: MdInventory,
+      value: isLoading ? defaultValue : metadata?.products,
     },
     {
       name: 'Topup',
-      icon: TbRecharging,
-      value: 2,
+      icon: MdFlashOn,
+      value: isLoading ? defaultValue : metadata?.topups,
     },
     {
       name: 'Offer',
-      icon: PiCurrencyDollarSimpleBold,
-      value: 24467,
+      icon: MdLocalOffer,
+      value: isLoading ? defaultValue : metadata?.offers,
     },
     {
       name: 'Recent Product',
-      icon: AiOutlineGift,
-      value: 2,
+      icon: MdNewReleases,
+      value: isLoading ? defaultValue : metadata?.newProducts,
     },
   ];
 
@@ -71,7 +73,7 @@ function ProductsOverviewData() {
                   color="secondary"
                   fontFamily={'jost'}
                 >
-                  {_.value.toLocaleString()}
+                  {_.value?.toLocaleString()}
                 </Typography>
               </Stack>
             </div>

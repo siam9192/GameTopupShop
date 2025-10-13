@@ -56,7 +56,7 @@ export async function updateCustomerStatus(payload: { id: string; status: Accoun
 
 export async function deleteCustomer(id: string) {
   try {
-    const res = await axiosInstance.delete(`/customers/:${id}`);
+    const res = await axiosInstance.delete(`/customers/${id}`);
     return res.data;
   } catch (err: unknown) {
     let message = 'Something went wrong';

@@ -3,10 +3,8 @@ import { getUsersMetadataQuery } from '@/query/services/metadata';
 import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { FaUserLock, FaUsers, FaUserTag } from 'react-icons/fa';
-import { HiMiniUserGroup, HiOutlineWallet } from 'react-icons/hi2';
-import { PiCurrencyDollarSimpleBold } from 'react-icons/pi';
+
 import { RiAdminFill } from 'react-icons/ri';
-import { TbRecharging } from 'react-icons/tb';
 
 const defaultValue = 999;
 
