@@ -23,7 +23,7 @@ export async function createBanner(payload: CreateBannerPayload) {
 
 export async function getBanners(params: Param[]) {
   try {
-    const res = await axiosInstance.get(`/banners?${paramsToString(params)}`);
+    const res = await axiosInstance.get(`/banners${paramsToString(params)}`);
 
     return res.data; // return only the useful data
   } catch (err) {

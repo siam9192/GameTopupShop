@@ -79,7 +79,7 @@ const sidebarRoutesGroup1: RouteItem[] = [
     icon: MdOutlinePayment,
     path: '/control-dashboard/transactions',
     children: [
-      { label: 'All Payments', path: '/control-dashboard/transactions/all' },
+      { label: 'All', path: '/control-dashboard/transactions/all' },
       { label: 'Payment Methods', path: '/control-dashboard/transactions/methods' },
     ],
   },

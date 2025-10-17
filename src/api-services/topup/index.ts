@@ -13,7 +13,7 @@ import { AxiosError } from 'axios';
 
 export async function getTopups(params: Param[]) {
   try {
-    const res = await axiosInstance.get(`/topups?${paramsToString(params)}`);
+    const res = await axiosInstance.get(`/topups${paramsToString(params)}`);
 
     return res.data;
   } catch (err: unknown) {

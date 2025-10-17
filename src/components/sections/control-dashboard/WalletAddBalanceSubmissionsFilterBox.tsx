@@ -1,8 +1,26 @@
+'use client';
+import { useManualPaymentMethodsPageContext } from '@/app/control-dashboard/payment-methods/manual/page';
+import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { WalletSubmissionStatus } from '@/types/wallet-submission.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
-import React from 'react';
-import { FiSearch } from 'react-icons/fi';
+import React, { useState } from 'react';
 
 function WalletAddBalanceSubmissionsFilterBox() {
+  const [status, setStatus] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const { setFilters } = useManualPaymentMethodsPageContext();
+
+  const handleSearch = () => {
+    const filters: Record<string, string> = {};
+    if (status) {
+      filters['status'] = status;
+    }
+    if (searchTerm) {
+      filters['searchTerm'] = searchTerm;
+    }
+    setFilters(filters);
+  };
+
   return (
     <div className="p-5 glass  lg:block hidden">
       <Stack direction="row" gap={2} flexWrap="wrap">
@@ -19,51 +37,10 @@ function WalletAddBalanceSubmissionsFilterBox() {
           >
             What are you looking for
           </Typography>
-          <Stack
-            direction="row"
-            alignItems="center"
-            gap={1}
-            className="bg-secondary/10 px-2 py-4 rounded-lg"
-            sx={{
-              display: {
-                xs: 'none',
-                md: 'flex',
-              },
-            }}
-          >
-            <span className="text-xl font-medium text-txt-primary">
-              <FiSearch />
-            </span>
-            <input
-              type="text"
-              className="grow bg-transparent border-none outline-none font-secondary font-medium text-gray-950 dark:text-gray-100 placeholder:text-primary"
-              placeholder="Topup name, game name etc..."
-            />
-          </Stack>
-        </Box>
-        {/* Method */}
-        <Box minWidth={250}>
-          <Typography
-            component="p"
-            variant="h6"
-            fontSize={20}
-            fontFamily="jost"
-            fontWeight={600}
-            color="text.primary"
-            mb={1}
-          >
-            Method
-          </Typography>
-          <FormControl fullWidth>
-            <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
+          <DashboardSearchInput
+            onChange={v => setSearchTerm(v)}
+            placeholder="Search by ID name, email..."
+          />
         </Box>
 
         {/* Status Section */}
@@ -80,20 +57,30 @@ function WalletAddBalanceSubmissionsFilterBox() {
             Status
           </Typography>
           <FormControl fullWidth>
-            <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+            <Select
+              value={status}
+              onChange={e => setStatus(e.target.value)}
+              color="primary"
+              inputProps={{ 'aria-label': 'Without label' }}
+            >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {Object.values(WalletSubmissionStatus).map(_ => (
+                <MenuItem key={_} value={_}>
+                  {_}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
 
         {/* Button */}
         <Box marginTop={5.5}>
-          <button className="w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium">
+          <button
+            onClick={handleSearch}
+            className="w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium"
+          >
             Search
           </button>
         </Box>

@@ -1,11 +1,9 @@
 'use client';
-import { createBanner } from '@/api-services/banner';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
 import { queryClient } from '@/provider/Provider';
 import { createBannerMutation } from '@/query/services/banner';
 import { uploadImageToImgBB } from '@/utils/helper';
-import styled from '@emotion/styled';
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
 import { IoIosCloudUpload } from 'react-icons/io';

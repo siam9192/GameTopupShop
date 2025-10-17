@@ -1,17 +1,12 @@
 'use client';
 import OffersFilterBox from '@/components/sections/control-dashboard/OffersFilterBox';
-import OffersFilterBoxModal from '@/components/sections/control-dashboard/OffersFilterModal';
+import OffersFilterBoxModal from '@/components/sections/control-dashboard/OffersFilterBoxModal';
 import OffersTable from '@/components/sections/control-dashboard/OffersTable';
-import TopUpsFilterBox from '@/components/sections/control-dashboard/TopUpsFilterBox';
-import TopUpsFilterBoxModal from '@/components/sections/control-dashboard/TopUpsFilterBoxModal';
-import TopUpsTable from '@/components/sections/control-dashboard/TopUpsTable';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
 import { getOffersQuery } from '@/query/services/offer';
-import { getTopupsQuery } from '@/query/services/topup';
 import { Param } from '@/types/metadata.type';
 import { Offer } from '@/types/offer.type';
 import { IResponse } from '@/types/response.type';
-import { Topup } from '@/types/topup.type';
 import { Filters, SortOrder, SortState } from '@/types/utils.type';
 import { UseQueryResult } from '@tanstack/react-query';
 import React, { createContext, useContext, useEffect, useState } from 'react';

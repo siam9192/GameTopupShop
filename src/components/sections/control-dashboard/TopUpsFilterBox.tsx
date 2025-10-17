@@ -36,7 +36,7 @@ function TopUpsFilterBox() {
           </Typography>
           <DashboardSearchInput
             onChange={v => setSearchTerm(v)}
-            placeholder="Search by ID name, email..."
+            placeholder="Search by ID,keyword."
           />
         </Box>
 

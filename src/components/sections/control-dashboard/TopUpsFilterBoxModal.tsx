@@ -25,7 +25,6 @@ function TopUpsFilterBoxModal() {
   const [status, setStatus] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const { setFilters } = useTopupPageContext();
-  const [category, setCategory] = useState('');
   const handleSearch = () => {
     const filters: Record<string, string> = {};
     if (status) {

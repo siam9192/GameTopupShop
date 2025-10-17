@@ -3,7 +3,6 @@ import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
 import { AdministratorLevel } from '@/types/user.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
 
 function AdministratorsFilterBox() {
   const [status, setStatus] = useState('');

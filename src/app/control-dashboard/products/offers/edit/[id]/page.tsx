@@ -37,17 +37,16 @@ type FormValue = {
   endDate: string;
 };
 
-
 type FormError = Record<string, string>;
 
 const formDefaultValue: FormValue = {
   name: '',
   coverPhoto: null,
   platformName: '',
-   price:'',
+  price: '',
   description: '',
-  startDate:'',
-  endDate:''
+  startDate: '',
+  endDate: '',
 };
 
 function Page() {
@@ -103,37 +102,34 @@ function Page() {
     e.preventDefault();
     setErrors({});
     const startDate = new Date(form.startDate).toISOString();
-   
-       const endDate = new Date(form.endDate).toISOString();
-       // Prepare validation payload
-       const payload:UpdateOfferPayload = {
-         name:form.name,
-         platformName:form.platformName,
-         price: Number(form.price),
-         description:form.description,
-         infoFields,
-         startDate: startDate,
-         endDate: endDate,
-       };
-   
-       const result = offerValidation.updateOfferValidation.safeParse(payload);
-   
-       if (!result.success) {
-         const fieldErrors: FormError = {};
-         result.error.issues.forEach(err => {
-           const fieldName = err.path[0] as keyof FormValue;
-           fieldErrors[fieldName] = err.message;
-         });
-   
-         setErrors(fieldErrors);
-         return;
-       }
+
+    const endDate = new Date(form.endDate).toISOString();
+    // Prepare validation payload
+    const payload: UpdateOfferPayload = {
+      name: form.name,
+      platformName: form.platformName,
+      price: Number(form.price),
+      description: form.description,
+      infoFields,
+      startDate: startDate,
+      endDate: endDate,
+    };
+
+    const result = offerValidation.updateOfferValidation.safeParse(payload);
+
+    if (!result.success) {
+      const fieldErrors: FormError = {};
+      result.error.issues.forEach(err => {
+        const fieldName = err.path[0] as keyof FormValue;
+        fieldErrors[fieldName] = err.message;
+      });
+
+      setErrors(fieldErrors);
+      return;
+    }
     if (form.coverPhoto) {
       payload.coverPhoto = await uploadImageToImgBB(form.coverPhoto);
     }
-
-
-
 
     const toastId = toast.loading('Submitting...');
     mutate(
@@ -167,10 +163,10 @@ function Page() {
       name: offer.name,
       coverPhoto: null,
       platformName: offer.platformName,
-       price:offer.price,
+      price: offer.price,
       description: offer.description,
-      startDate:offer.startDate,
-      endDate:offer.endDate
+      startDate: offer.startDate,
+      endDate: offer.endDate,
     });
   }, [data, isLoading, error]);
 
@@ -240,7 +236,7 @@ function Page() {
             helperText={errors.platformName}
             fullWidth
           />
-            <TextField
+          <TextField
             label="Price"
             name="price"
             type="number"
@@ -252,7 +248,7 @@ function Page() {
           />
         </Stack>
 
-              {/* Date & Time */}
+        {/* Date & Time */}
         <Box mt={3}>
           <Typography color="text.primary" fontSize={22} mb={1}>
             Set Date & Time:
@@ -263,7 +259,7 @@ function Page() {
                 label="Start From"
                 name="startDate"
                 type="datetime-local"
-               defaultValue={ new Date(offer?.startDate||new Date()).toISOString().slice(0, 16)}
+                defaultValue={new Date(offer?.startDate || new Date()).toISOString().slice(0, 16)}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: true }}
                 error={!!errors.startDate}
@@ -282,7 +278,7 @@ function Page() {
                 label="End At"
                 name="endDate"
                 type="datetime-local"
-         defaultValue={ new Date(offer?.endDate||new Date()).toISOString().slice(0, 16)}
+                defaultValue={new Date(offer?.endDate || new Date()).toISOString().slice(0, 16)}
                 onChange={handleChange}
                 error={!!errors.endDate}
                 helperText={errors.endDate}
@@ -298,7 +294,6 @@ function Page() {
             </Grid>
           </Grid>
         </Box>
-
 
         {/* Info Fields */}
         <Box mt={3}>

@@ -1,4 +1,5 @@
 'use client';
+import { useOrdersPageContext } from '@/app/control-dashboard/orders/page';
 import { useTopupPageContext } from '@/app/control-dashboard/products/top-ups/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
@@ -7,7 +8,7 @@ import React, { useState } from 'react';
 function OrdersFilterBox() {
   const [status, setStatus] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const { setFilters } = useTopupPageContext();
+  const { setFilters } = useOrdersPageContext();
   const [category, setCategory] = useState('');
   const handleSearch = () => {
     const filters: Record<string, string> = {};
@@ -41,7 +42,7 @@ function OrdersFilterBox() {
           </Typography>
           <DashboardSearchInput
             onChange={v => setSearchTerm(v)}
-            placeholder="Search by ID name, email..."
+            placeholder="Search by ID,keyword."
           />
         </Box>
 

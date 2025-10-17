@@ -1,4 +1,7 @@
 'use client';
+import { useTransactionsPageContext } from '@/app/control-dashboard/transactions/all/page';
+import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { TransactionStatus } from '@/types/transaction.type';
 import {
   Box,
   Button,
@@ -9,11 +12,36 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React from 'react';
-import { FiSearch } from 'react-icons/fi';
+import React, { useState } from 'react';
 
 function TransactionsFilterBoxModal() {
   const [open, setOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { setFilters } = useTransactionsPageContext();
+  const [minBalance, setMinBalance] = useState(0);
+  const [maxBalance, setMaxBalance] = useState(0);
+  const [status, setStatus] = useState('');
+  const handleSearch = () => {
+    const filters: Record<string, string | number> = {};
+    if (searchTerm) {
+      filters['id'] = searchTerm;
+    }
+
+    if (minBalance) {
+      filters['minBalance'] = minBalance;
+    }
+
+    if (maxBalance) {
+      filters['minBalance'] = maxBalance;
+    }
+
+    if (status) {
+      filters['status'] = status;
+    }
+
+    setFilters(filters);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -50,7 +78,7 @@ function TransactionsFilterBoxModal() {
               <Typography
                 component="p"
                 variant="h6"
-                fontSize={25}
+                fontSize={20}
                 fontFamily="jost"
                 fontWeight={600}
                 color="text.primary"
@@ -58,21 +86,78 @@ function TransactionsFilterBoxModal() {
               >
                 What are you looking for
               </Typography>
-              <Stack
-                direction="row"
-                alignItems="center"
-                gap={1}
-                className="bg-secondary/10 px-2 py-4 rounded-lg"
+              <DashboardSearchInput
+                onChange={v => setSearchTerm(v)}
+                placeholder="Search by ID..."
+              />
+            </Box>
+
+            {/* Min balance Section */}
+            <Box minWidth={200}>
+              <Typography
+                component="p"
+                variant="h6"
+                fontSize={20}
+                fontFamily="jost"
+                fontWeight={600}
+                color="text.primary"
+                mb={1}
               >
-                <span className="text-xl font-medium text-txt-primary">
-                  <FiSearch />
-                </span>
-                <input
-                  type="text"
-                  className="grow bg-transparent border-none outline-none font-secondary font-medium text-gray-950 dark:text-gray-100 placeholder:text-primary"
-                  placeholder="Topup name, game name etc..."
-                />
-              </Stack>
+                Min Balance
+              </Typography>
+              <input
+                type="number"
+                className="
+        w-full
+        bg-secondary/10 px-3 py-4
+        rounded-lg 
+        outline-none font-secondary font-medium
+        text-gray-900 dark:text-gray-100
+        placeholder:text-gray-400
+        focus:ring-2 focus:ring-primary
+        transition
+      "
+                onChange={e => {
+                  const val = parseInt(e.target.value);
+                  if (!Number.isNaN(val) && val > -1) {
+                    setMinBalance(val); // ✅ fixed typo (was setMaxBalance)
+                  }
+                }}
+              />
+            </Box>
+
+            {/* Max balance Section */}
+            <Box minWidth={200}>
+              <Typography
+                component="p"
+                variant="h6"
+                fontSize={20}
+                fontFamily="jost"
+                fontWeight={600}
+                color="text.primary"
+                mb={1}
+              >
+                Max Balance
+              </Typography>
+              <input
+                type="number"
+                className="
+        w-full
+        bg-secondary/10 px-3 py-4
+        rounded-lg 
+        outline-none font-secondary font-medium
+        text-gray-900 dark:text-gray-100
+        placeholder:text-gray-400
+        focus:ring-2 focus:ring-primary
+        transition
+      "
+                onChange={e => {
+                  const val = parseInt(e.target.value);
+                  if (!Number.isNaN(val) && val > -1) {
+                    setMaxBalance(val);
+                  }
+                }}
+              />
             </Box>
 
             {/* Status Section */}
@@ -89,20 +174,30 @@ function TransactionsFilterBoxModal() {
                 Status
               </Typography>
               <FormControl fullWidth>
-                <Select value={'hi'} displayEmpty inputProps={{ 'aria-label': 'Without label' }}>
+                <Select
+                  value={status}
+                  onChange={e => setStatus(e.target.value)}
+                  color="primary"
+                  inputProps={{ 'aria-label': 'Without label' }}
+                >
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {Object.values(TransactionStatus).map(st => (
+                    <MenuItem key={st} value={st}>
+                      {st}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
 
             {/* Button */}
             <Box>
-              <button className="w-full md:w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium">
+              <button
+                onClick={handleSearch}
+                className="w-full md:w-60 px-2 py-4 rounded-lg bg-primary hover:bg-primary/80 text-white font-medium"
+              >
                 Search
               </button>
             </Box>

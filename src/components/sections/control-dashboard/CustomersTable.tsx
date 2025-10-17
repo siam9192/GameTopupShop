@@ -1,5 +1,5 @@
 'use client';
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import {
   Avatar,
   CircularProgress,
@@ -20,17 +20,13 @@ import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
 import { LiaUserEditSolid } from 'react-icons/lia';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
-import {
-  deleteCustomerMutation,
-  getCustomersQuery,
-  updateCustomerStatusMutation,
-} from '@/query/services/customer';
-import { Param } from '@/types/metadata.type';
+import { deleteCustomerMutation, updateCustomerStatusMutation } from '@/query/services/customer';
 import CustomerDetailsDialog from '@/components/ui/CustomerDetailsDialog';
 import { useCustomersPageContext } from '@/app/control-dashboard/users/customers/page';
 import { AccountStatus } from '@/types/user.type';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/provider/Provider';
+import { SortOrder } from '@/types/utils.type';
 
 const heads = [
   { name: 'ID', fieldName: '_id', sortable: true },
@@ -45,39 +41,24 @@ const heads = [
 ];
 
 function CustomersTable() {
-  const [sort, setSort] = useState<{ by: string; order: 'asc' | 'desc' }>({
-    by: 'createdAt',
-    order: 'desc',
-  });
-  const [page, setPage] = useState(1);
-
-  // Menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [activeCustomerId, setActiveCustomerId] = useState<string | null>(null);
+  const [menuId, setMenuId] = useState<string | null>(null);
+  const [detailsId, setDetailsId] = useState<string | null>();
+  const { queryResult, setPage, sort, setSort } = useCustomersPageContext();
+  const { data, isLoading } = queryResult;
+  const customers = data?.data;
 
+  const meta = data?.meta;
+  const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
   const handleOpenMenu = (e: MouseEvent<HTMLButtonElement>, id: string) => {
     setAnchorEl(e.currentTarget);
-    setActiveCustomerId(id);
+    setMenuId(id);
   };
 
   const handleCloseMenu = () => {
     setAnchorEl(null);
-    setActiveCustomerId(null);
+    setMenuId(null);
   };
-
-  const { filters } = useCustomersPageContext();
-
-  const params: Param[] = [
-    { name: 'page', value: page },
-    ...Object.entries(filters).map(([key, value]) => ({ name: key, value })),
-    { name: 'sortBy', value: sort.by },
-    { name: 'sortOrder', value: sort.order },
-  ];
-
-  const { data, isLoading, refetch, isPending } = getCustomersQuery(params);
-  const customers = data?.data;
-  const meta = data?.meta;
-  const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
 
   const { mutate: updateStatus } = updateCustomerStatusMutation();
   const { mutate: deleteCustomer } = deleteCustomerMutation();
@@ -115,11 +96,6 @@ function CustomersTable() {
     });
   }
 
-  const [customerId, setCustomerId] = useState<string | null>(null);
-  useEffect(() => {
-    if (isPending) return;
-    refetch();
-  }, [page, sort, filters]);
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
       <DashboardSectionHeading title="Customers Table" />
@@ -138,7 +114,7 @@ function CustomersTable() {
                 <TableRow>
                   {heads.map(head => (
                     <TableCell key={head.name}>
-                      {head.sortable ? (
+                      {head.fieldName && head.sortable ? (
                         <Stack direction="row" gap={0.5} alignItems="center">
                           <span>{head.name.toUpperCase()}</span>
                           <button
@@ -146,7 +122,9 @@ function CustomersTable() {
                               setSort(p => ({
                                 by: head.fieldName,
                                 order:
-                                  p.by === head.fieldName && p.order === 'asc' ? 'desc' : 'asc',
+                                  p.by === head.fieldName && p.order === SortOrder.ASC
+                                    ? SortOrder.DESC
+                                    : SortOrder.ASC,
                               }))
                             }
                             className={`text-xl ${
@@ -167,7 +145,6 @@ function CustomersTable() {
                   ))}
                 </TableRow>
               </TableHead>
-
               <TableBody>
                 {customers?.map(customer => (
                   <TableRow key={customer._id}>
@@ -187,7 +164,7 @@ function CustomersTable() {
                     <TableCell>
                       <Tooltip title="View Full Details">
                         <button
-                          onClick={() => setCustomerId(customer._id)}
+                          onClick={() => setDetailsId(customer._id)}
                           className="text-2xl hover:text-primary mr-2 hover:cursor-pointer"
                         >
                           <HiOutlineViewfinderCircle />
@@ -228,14 +205,14 @@ function CustomersTable() {
           {/* Shared Menu */}
           <Menu
             anchorEl={anchorEl}
-            open={Boolean(anchorEl) && Boolean(activeCustomerId)}
+            open={Boolean(anchorEl) && Boolean(menuId)}
             onClose={handleCloseMenu}
             anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           >
-            {activeCustomerId &&
+            {menuId &&
               (() => {
-                const customer = customers?.find(c => c._id === activeCustomerId);
+                const customer = customers?.find(c => c._id === menuId);
                 if (!customer) return null;
 
                 return [
@@ -264,7 +241,7 @@ function CustomersTable() {
         </>
       )}
 
-      {customerId && <CustomerDetailsDialog id={customerId} onClose={() => setCustomerId(null)} />}
+      {detailsId && <CustomerDetailsDialog id={detailsId} onClose={() => setDetailsId(null)} />}
     </div>
   );
 }

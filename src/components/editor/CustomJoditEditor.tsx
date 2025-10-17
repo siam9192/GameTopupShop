@@ -23,6 +23,7 @@ const CustomJoditEditor = ({ onChange, value, defaultValue }: Props) => {
       readonly: false,
       placeholder: 'Start typing...',
       minHeight: 400,
+      maxHeight: 800,
       theme: mode,
     }),
     [mode],
@@ -32,7 +33,7 @@ const CustomJoditEditor = ({ onChange, value, defaultValue }: Props) => {
     <div className="editor-wrapper">
       <JoditEditor
         ref={editor}
-        value={defaultValue}
+        value={value || defaultValue}
         config={config}
         tabIndex={1}
         onChange={newContent => onChange(newContent)}

@@ -13,7 +13,7 @@ import { AxiosError } from 'axios';
 
 export async function getOffers(params: Param[]) {
   try {
-    const res = await axiosInstance.get(`/offers?${paramsToString(params)}`);
+    const res = await axiosInstance.get(`/offers${paramsToString(params)}`);
 
     return res.data;
   } catch (err: unknown) {
