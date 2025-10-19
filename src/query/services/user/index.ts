@@ -8,5 +8,5 @@ export function getCurrentUserQuery() {
 }
 
 export function getRecentUserQuery() {
-  return useFetch<IResponse<RecentUser[]>>(['getCurrentUser'], getRecentUsers);
+  return useFetch<IResponse<RecentUser[]>>(['getRecentUser'], getRecentUsers);
 }

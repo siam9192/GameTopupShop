@@ -7,11 +7,6 @@ import {
   UpdateManualPaymentMethodStatusPayload,
 } from '@/types/manual-payment-method.type';
 import { Param } from '@/types/metadata.type';
-import {
-  CreateOfferPayload,
-  UpdateOfferPayload,
-  UpdateOfferStatusPayload,
-} from '@/types/offer.type';
 
 import { paramsToString } from '@/utils/helper';
 import { AxiosError } from 'axios';

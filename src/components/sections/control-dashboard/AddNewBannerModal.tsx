@@ -3,7 +3,7 @@ import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
 import { queryClient } from '@/provider/Provider';
 import { createBannerMutation } from '@/query/services/banner';
-import { uploadImageToImgBB } from '@/utils/helper';
+import { simplifyRatio, uploadImageToImgBB } from '@/utils/helper';
 import { Box, Button, FormHelperText, Modal, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
 import { IoIosCloudUpload } from 'react-icons/io';
@@ -33,7 +33,9 @@ function AddNewBannerModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [form, setForm] = useState<TFormValue>({ imageFile: null, link: '' });
+
+  const defaultValue =  { imageFile: null, link: '' }
+  const [form, setForm] = useState<TFormValue>(defaultValue);
   const [errors, setErrors] = useState<Record<keyof TFormValue, string>>({
     imageFile: '',
     link: '',
@@ -85,6 +87,7 @@ function AddNewBannerModal() {
           toast.success(data.message);
           queryClient.invalidateQueries({ queryKey: ['getBanners'] });
           setOpen(false);
+          setForm(defaultValue)
         },
         onError: data => {
           toast.error(data.message);
@@ -118,13 +121,21 @@ function AddNewBannerModal() {
     });
 
     // Example validation: require at least 1920×720
-    if (dimensions.width !== 1900 && dimensions.height !== 720) {
-      setErrors(p => ({
-        ...p,
-        imageFile: `Invalid image size: ${dimensions.width}x${dimensions.height}`,
-      }));
-      return;
-    }
+    // if (dimensions.width !== 1900 && dimensions.height !== 720) {
+    //   setErrors(p => ({
+    //     ...p,
+    //     imageFile: `Invalid image size: ${dimensions.width}x${dimensions.height}`,
+    //   }));
+    //   return;
+    // }
+
+     if (simplifyRatio(dimensions.width, dimensions.height) !== '16:9') {
+          setErrors(prev => ({
+            ...prev,
+            coverPhoto: 'Invalid image ratio. Required: `16:9',
+          }));
+          return;
+        }
 
     setForm(p => ({ ...p, imageFile: file }));
   };
@@ -165,7 +176,7 @@ function AddNewBannerModal() {
                   onChange={handleImageFileChange}
                 />
               </Button>
-              <FormHelperText>Image size must be 1920px * 720px</FormHelperText>
+              <FormHelperText>Image ratio must be 16:9 example size (1280px x 720px)</FormHelperText>
               <p className="text-red-500">{errors.imageFile}</p>
             </Box>
 

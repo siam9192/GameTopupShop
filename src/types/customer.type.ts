@@ -18,3 +18,16 @@ export interface Customer {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UpdateCustomerProfilePayload {
+  name: Name;
+  profilePicture: string;
+  phone: string;
+}
+
+export interface TopCustomer {
+  rank: number;
+  name: string;
+  profilePicture?: string;
+  point: number;
+}

@@ -33,10 +33,10 @@ export enum OfferInfoFieldType {
 
 export enum OfferStatus {
   PENDING = 'Pending',
-  Running = 'Running',
+  RUNNING = 'Running',
   PAUSED = 'Paused',
   ENDED = 'Ended',
-  DELETED = 'DELETED',
+  DELETED = 'Deleted',
 }
 
 export interface CreateOfferPayload
@@ -62,3 +62,16 @@ export type OffersFilterPayload = Partial<
     endDate: string;
   }
 >;
+
+
+export  type  PopularOffer =  {
+  _id:string
+  rank:number,
+  name:string,
+  coverPhoto:string
+  platformName: string;
+  revenue:number,
+  ordersSuccess:number
+  ordersCount:number,
+  status: OfferStatus;
+}

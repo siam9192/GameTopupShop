@@ -43,6 +43,26 @@ export async function getOrderById(id: string) {
   }
 }
 
+export async function getRecentOrders(recentDate: string, params?: Param[]) {
+  try {
+    const res = await axiosInstance.get(
+      `/orders/recent/${recentDate}${paramsToString(params || [])}`,
+    );
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
 export async function createOrder(payload: CreateOrderPayload) {
   try {
     const res = await axiosInstance.post(`/orders`, payload);

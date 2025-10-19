@@ -18,6 +18,7 @@ import { SigninPayload } from '@/api-services/auth';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { administratorSigninMutation } from '@/query/services/auth';
+import { queryClient } from '@/provider/Provider';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -71,10 +72,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  
   const { mutate } = administratorSigninMutation();
   const router = useRouter();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -105,6 +103,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       } as SigninPayload,
       {
         onSuccess: data => {
+          queryClient.invalidateQueries({queryKey:['getCurrentUser']})
           toast.success('Login successful');
           router.push('/control-dashboard');
         },

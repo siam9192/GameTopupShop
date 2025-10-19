@@ -9,10 +9,10 @@ function UserLoading({ children }: Props) {
   const { isLoading } = useCurrentUser();
   if (isLoading) {
     return (
-      <div className="h-screen w-full flex justify-center items-center">
+      <div className="h-screen w-full flex justify-center items-center ">
         <div className="text-center">
           <CircularProgress size={80} color="primary" />
-          <Typography color="text.primary" mt={2} fontSize={24}>
+          <Typography color="white" mt={2} fontSize={20}>
             Loading...
           </Typography>
         </div>

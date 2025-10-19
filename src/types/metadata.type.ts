@@ -13,6 +13,27 @@ export type ProductsMetadata = {
   newProducts: number;
 };
 
+export type SuperAdminDashboardMetaData = {
+  users: number;
+  revenue: number;
+  products: number;
+  orders: number;
+};
+
+export type AdminDashboardMetaData = {
+  customers: number;
+  revenue: number;
+  products: number;
+  orders: number;
+};
+
+export type ModeratorDashboardMetaData = {
+  products: number;
+  orders: number;
+  runningOrders: number;
+  newCustomers: number;
+};
+
 export type Param = {
   name: string;
   value: string | number;

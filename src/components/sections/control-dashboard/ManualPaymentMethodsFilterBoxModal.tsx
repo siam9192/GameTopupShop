@@ -1,8 +1,8 @@
 'use client';
-import { useTransactionsPageContext } from '@/app/control-dashboard/transactions/all/page';
+import { useManualPaymentMethodsPageContext } from '@/app/control-dashboard/payment-methods/manual/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
 import { ManualPaymentMethodStatus } from '@/types/manual-payment-method.type';
-import { TransactionStatus } from '@/types/transaction.type';
+
 import {
   Box,
   Button,
@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 function ManualPaymentMethodsFilterBoxModal() {
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const { setFilters } = useTransactionsPageContext();
+  const { setFilters } = useManualPaymentMethodsPageContext();
   const [minBalance, setMinBalance] = useState(0);
   const [maxBalance, setMaxBalance] = useState(0);
   const [status, setStatus] = useState('');

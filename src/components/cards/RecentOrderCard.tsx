@@ -1,8 +1,19 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import AlertDialog from '../ui/AleartDialog';
+import { Order } from '@/types/order.type';
+import { getTimeAgo } from '@/utils/helper';
+import OrderDetailsDialog from '../sections/control-dashboard/OrderDetailsDialog';
 
-function RecentOrderCard() {
+interface Props {
+  order: Order;
+}
+
+function RecentOrderCard({ order }: Props) {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const { product } = order;
+  const { payment } = order;
+
   return (
     <div className=" p-2 md:p-3 relative">
       <Stack
@@ -13,15 +24,11 @@ function RecentOrderCard() {
         spacing={2}
       >
         <Box>
-          <img
-            src="https://play-lh.googleusercontent.com/Odw8BGugaJLdbaSbCeZWbTE3Qz1wTiQ0Tsn9nzpoQdnkzWb-gaI58zzTmYDvGpdYKg"
-            alt=""
-            className=" size-20 rounded-lg"
-          />
+          <img src={product.image} alt="" className=" size-20 rounded-lg" />
         </Box>
         <Stack spacing={0.5}>
           <Typography fontWeight={500} fontSize={20} color="text.primary">
-            Free fire
+            {product.name}
           </Typography>
           <Stack
             marginTop={2}
@@ -32,25 +39,27 @@ function RecentOrderCard() {
               md: 2,
             }}
           >
+            {product.package ? (
+              <Typography
+                fontWeight={500}
+                fontSize={{
+                  xs: 14,
+                  lg: 16,
+                }}
+                color="text.secondary"
+              >
+                Package: {product.package}
+              </Typography>
+            ) : null}
             <Typography
-              fontWeight={500}
               fontSize={{
                 xs: 14,
                 lg: 16,
               }}
-              color="text.secondary"
-            >
-              Package: 25 Diamond
-            </Typography>
-            <Typography
-              fontSize={{
-                xs: 14,
-                lg: 16,
-              }}
               fontWeight={500}
               color="text.secondary"
             >
-              Quantity: 2
+              Quantity: {product.quantity}
             </Typography>
             <Typography
               fontSize={{
@@ -69,7 +78,7 @@ function RecentOrderCard() {
                 color="success"
               >
                 {' '}
-                Success
+                {order.status}
               </Typography>
             </Typography>
           </Stack>
@@ -90,7 +99,7 @@ function RecentOrderCard() {
               }}
               color="text.secondary"
             >
-              Customer : Md.Rafi Ahmed
+              Customer : {order.customer.fullName}
             </Typography>
             <Typography
               fontSize={{
@@ -100,7 +109,7 @@ function RecentOrderCard() {
               fontWeight={500}
               color="text.secondary"
             >
-              Customer ID: #87783678393896
+              Customer ID: #{order.customerId}
             </Typography>
           </Stack>
         </Stack>
@@ -114,23 +123,26 @@ function RecentOrderCard() {
         gap={1}
       >
         <Typography variant="h5" fontSize={25} fontWeight={500} color="secondary">
-          $23
+          ${payment.amount}
         </Typography>
         <Stack direction={'row'} spacing={2}>
-          <AlertDialog>
-            <Button variant="outlined" className="w-fit " color="secondary">
-              Details
-            </Button>
-          </AlertDialog>
-          <AlertDialog>
-            <Button variant="outlined" className="w-fit " color="warning">
-              Cancel
-            </Button>
-          </AlertDialog>
+          <Button
+            onClick={() => setIsDetailsOpen(true)}
+            variant="outlined"
+            className="w-fit "
+            color="secondary"
+          >
+            Details
+          </Button>
+
+          {isDetailsOpen ? (
+            <OrderDetailsDialog onClose={() => setIsDetailsOpen(false)} id={order._id} />
+          ) : null}
         </Stack>
       </Stack>
-
-      <p className="text-primary font-medium absolute right-1 top-0 ">2Hrs</p>
+      <p className="text-primary font-medium absolute right-1 top-0 ">
+        {getTimeAgo(order.createdAt)}
+      </p>
     </div>
   );
 }

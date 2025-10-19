@@ -6,6 +6,7 @@ import type { ChartData, ChartOptions } from 'chart.js';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title, Filler } from 'chart.js';
 import { Typography, useTheme } from '@mui/material';
 import { EThemeMode } from '@/types';
+import { OrderStatus } from '@/types/order.type';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, Filler);
 
@@ -21,7 +22,7 @@ export default function OrdersStatusChart({ initialData, title = '' }: SweetPieC
   const theme = useTheme();
   // fallback sample data
   const sample: ChartData<'pie', number[], string> = {
-    labels: ['Chocolate', 'Strawberry', 'Vanilla', 'Matcha', 'Blueberry'],
+    labels: Object.values(OrderStatus),
     datasets: [
       {
         label: 'Slices',
@@ -70,7 +71,7 @@ export default function OrdersStatusChart({ initialData, title = '' }: SweetPieC
             const index = legendItem.index;
             const ci = legend.chart;
             const meta = ci.getDatasetMeta(0);
-            meta.data[index!].hidden = !meta.data[index!].hidden;
+            // meta.data[index!].hidden = !meta.data[index!].hidden;
             ci.update();
           },
         },
@@ -152,9 +153,9 @@ export default function OrdersStatusChart({ initialData, title = '' }: SweetPieC
         color="text.primary"
         mb={2}
       >
-        Orders Percentage
+        Orders Status Chart
       </Typography>
-      <div className="lg:h-[400px] max-w-[300px] lg:max-w-full ">
+      <div className="lg:h-[400px] @max-xs:max-w-[200px] max-w-[300px] lg:max-w-full mx-auto ">
         <Pie ref={chartRef} data={processedData} options={options} plugins={[explodePlugin]} />
       </div>
     </div>

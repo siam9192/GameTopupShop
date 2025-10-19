@@ -13,3 +13,9 @@ export interface Administrator {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UpdateAdministratorProfilePayload
+  extends Partial<{
+    name: Name;
+    profilePicture: string;
+  }> {}

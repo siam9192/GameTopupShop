@@ -2,26 +2,32 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 
-// Register required Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const transactionsData = [
-  { name: 'Transactions', value: 7523 },
-  { name: 'Total Revenue', value: 245000 },
-  { name: 'Pending Transactions', value: 24467 },
-  { name: 'Failed Transactions', value: 12 },
+// ✅ Sample grouped data
+const manualPaymentData = [
+  { name: 'bKash', value: 7523 },
+  { name: 'Nagad', value: 24500 },
+  { name: 'Rocket', value: 8600 },
+  { name: 'Upay', value: 4500 },
+];
+
+const livePaymentData = [
+  { name: 'PayPal', value: 24467 },
+  { name: 'Stripe', value: 12500 },
+  { name: 'Visa', value: 10800 },
+  { name: 'MasterCard', value: 9700 },
 ];
 
 function TransactionsMethodsUsageChart() {
-  const chartData = {
-    labels: transactionsData.map(item => item.name),
+  const createChartData = (data: typeof manualPaymentData) => ({
+    labels: data.map(item => item.name),
     datasets: [
       {
         label: 'Amount',
-        data: transactionsData.map(item => item.value),
+        data: data.map(item => item.value),
         backgroundColor: [
           '#4CAF50', // Green
           '#2196F3', // Blue
@@ -32,24 +38,23 @@ function TransactionsMethodsUsageChart() {
         borderWidth: 2,
       },
     ],
-  };
+  });
 
   const chartOptions = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'bottom',
+        position: 'bottom' as const,
         labels: {
           font: {
-            size: 14,
+            size: 13,
             weight: 'bold',
           },
-
-          padding: 20, // spacing between items
-          boxWidth: 18, // size of color box
-          boxHeight: 18,
-          usePointStyle: true, // makes legend box circular
-          pointStyle: 'circle', // could also be 'rectRounded'
+          padding: 18,
+          boxWidth: 16,
+          boxHeight: 16,
+          usePointStyle: true,
+          pointStyle: 'circle',
         },
       },
       tooltip: {
@@ -64,11 +69,29 @@ function TransactionsMethodsUsageChart() {
   };
 
   return (
-    <div className="max-[500px] p-3 md:p-5 glass">
-      <DashboardSectionHeading title="Methods Usage" />
+    <div className="glass p-4 sm:p-6 md:p-8 max-h-[500px]">
+      <DashboardSectionHeading title="Payment Methods Usage" />
 
-      <div className="lg:h-[400px] max-w-[300px] lg:max-w-full flex justify-center ">
-        <Pie data={chartData} options={chartOptions as any} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+        {/* Manual Payment Methods */}
+        <div className="flex flex-col items-center">
+          <h3 className="text-lg font-semibold text-secondary mb-3">
+            Manual
+          </h3>
+          <div className="max-w-[300px] md:max-w-[400px] lg:h-[350px] flex justify-center">
+            <Pie data={createChartData(manualPaymentData)} options={chartOptions as any} />
+          </div>
+        </div>
+
+        {/* Live Payment Methods */}
+        <div className="flex flex-col items-center">
+          <h3 className="text-lg font-semibold text-secondary mb-3">
+            Live 
+          </h3>
+          <div className="max-w-[300px] md:max-w-[400px] lg:h-[350px] flex justify-center">
+            <Pie data={createChartData(livePaymentData)}  options={chartOptions as any} />
+          </div>
+        </div>
       </div>
     </div>
   );

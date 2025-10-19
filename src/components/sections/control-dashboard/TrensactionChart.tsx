@@ -99,7 +99,7 @@ const TransactionChart: React.FC = () => {
   };
 
   return (
-    <div className=" p-3  md:p-5 glass max-h-[600px]">
+    <div className=" p-3  md:p-5 glass  h-full">
       <DashboardSectionHeading title="Last 12 Month Transactions" />
 
       <div className="lg:h-[400px] max-w-[300px] lg:max-w-full ">

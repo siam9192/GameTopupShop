@@ -97,7 +97,7 @@ function OrdersTable() {
       },
       {
         onSuccess: () => {
-          toast.success(status === OfferStatus.Running ? 'Offer is running' : 'Offer is paused');
+          toast.success(status === OfferStatus.RUNNING ? 'Offer is running' : 'Offer is paused');
           handleCloseMenu();
           queryClient.invalidateQueries({ queryKey: ['getOffers'] });
         },
@@ -265,7 +265,7 @@ function OrdersTable() {
                   if (!offer) return null;
 
                   return [
-                    offer.status === OfferStatus.Running ? (
+                    offer.status === OfferStatus.RUNNING ? (
                       <MenuItem
                         key="active"
                         disabled={isPending}
@@ -277,7 +277,7 @@ function OrdersTable() {
                       <MenuItem
                         key="inactive"
                         disabled={isPending}
-                        onClick={() => handleUpdateStatus(menuId, OfferStatus.Running)}
+                        onClick={() => handleUpdateStatus(menuId, OfferStatus.RUNNING)}
                       >
                         Resume
                       </MenuItem>

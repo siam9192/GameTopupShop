@@ -1,28 +1,14 @@
 'use client';
-import {
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Collapse,
-  Typography,
-  ListItem,
-  Stack,
-} from '@mui/material';
+import { List, ListItemIcon, ListItemText, Collapse, ListItem, Stack } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useState } from 'react';
 
 import React from 'react';
-import { TbRecharging } from 'react-icons/tb';
-import { usePathname, useRouter } from 'next/navigation';
-import { BiHomeAlt } from 'react-icons/bi';
-import { HiOutlineWallet } from 'react-icons/hi2';
-import { IoHomeOutline, IoLockClosed, IoSettingsOutline } from 'react-icons/io5';
-import { RiHistoryFill } from 'react-icons/ri';
-import { MdManageAccounts } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 import { IconType } from 'react-icons';
 import { FaUsersCog } from 'react-icons/fa';
 import { TiUserDelete } from 'react-icons/ti';
+import { IoLockClosed } from 'react-icons/io5';
 
 interface RouteItem {
   label: string;
@@ -31,36 +17,40 @@ interface RouteItem {
   children?: RouteItem[];
 }
 
-const sidebarRoutesGroup1: RouteItem[] = [
-  {
-    label: 'Personal Info',
-    path: '/dashboard',
-    icon: FaUsersCog,
-  },
+interface Props {
+  for: 'customer-dashboard' | 'control-dashboard';
+}
 
-  {
-    label: 'Password Setting',
-    path: '/dashboard',
-    icon: IoLockClosed,
-    children: [
-      { label: 'Change Password', path: '/users' },
-      { label: 'Forget Password', path: '/users/add' },
-    ],
-  },
-  {
-    label: 'Account Deletion',
-    icon: TiUserDelete,
-  },
-];
-
-function ManageAccountSidebar() {
+function ManageAccountSidebar(props: Props) {
   const router = useRouter();
-  const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const toggleMenu = (label: string) => {
     setOpenMenus(prev => ({ ...prev, [label]: !prev[label] }));
   };
+  const parentPath = props.for === 'control-dashboard' ? '/control-dashboard' : '/dashboard';
+  const sidebarRoutesGroup1: RouteItem[] = [
+    {
+      label: 'Personal Info',
+      path: `${parentPath}/manage-account`,
+      icon: FaUsersCog,
+    },
+
+    {
+      label: 'Password Setting',
+
+      icon: IoLockClosed,
+      children: [
+        { label: 'Change Password', path: `${parentPath}/manage-account/change-password` },
+        { label: 'Forget Password', path: `${parentPath}/manage-account/forget-password` },
+      ],
+    },
+    {
+      label: 'Account Deletion',
+      icon: TiUserDelete,
+      path: `${parentPath}/manage-account/account-deletion`,
+    },
+  ];
 
   return (
     <div className="w-full min-h-[600px] dark:bg-[#0d1120] bg-black  p-5 rounded-lg ">
@@ -101,7 +91,7 @@ function ManageAccountSidebar() {
                     <List component="div" disablePadding sx={{ pl: 4 }}>
                       {route.children?.map(child => (
                         <ListItem key={child.label} onClick={() => router.push(child.path!)}>
-                          <ListItemText className="text-txt-primary" primary={child.label} />
+                          <ListItemText className="text-white" primary={child.label} />
                         </ListItem>
                       ))}
                     </List>

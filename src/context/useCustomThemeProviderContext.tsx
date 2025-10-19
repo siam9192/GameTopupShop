@@ -1,4 +1,4 @@
-import { CustomThemeProviderContext } from '@/components/ui-provider/CustomThemeProvider';
+import { CustomThemeProviderContext } from '@/provider/CustomThemeProvider';
 import { useContext } from 'react';
 
 function useCustomThemeProviderContext() {

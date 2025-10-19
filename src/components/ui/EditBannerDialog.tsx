@@ -130,13 +130,13 @@ function EditBannerDialog({ id, onClose }: Props) {
     //    return;
     //  }
 
-    if (simplifyRatio(dimensions.width, dimensions.height) !== '16:8') {
-      setErrors(p => ({
-        ...p,
-        imageFile: `Invalid image size: ${dimensions.width}x${dimensions.height}`,
-      }));
-      return;
-    }
+      if (simplifyRatio(dimensions.width, dimensions.height) !== '16:9') {
+          setErrors(prev => ({
+            ...prev,
+            coverPhoto: 'Invalid image ratio. Required: `16:9',
+          }));
+          return;
+        }
 
     setForm(p => ({ ...p, imageFile: file }));
   };
@@ -174,7 +174,7 @@ function EditBannerDialog({ id, onClose }: Props) {
                   onChange={handleImageFileChange}
                 />
               </Button>
-              <FormHelperText>Image size must be 1920px * 720px</FormHelperText>
+               <FormHelperText>Image ratio must be 16:9 example size (1280px x 720px)</FormHelperText>
               <p className="text-red-500">{errors.imageFile}</p>
             </Box>
 

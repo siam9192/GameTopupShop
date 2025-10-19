@@ -19,7 +19,6 @@ import {
   Transaction,
   TransactionStatus,
   TransactionType,
-  PaymentMethod,
 } from '@/types/transaction.type';
 import { getTransactionByIdQuery } from '@/query/services/transaction';
 
@@ -77,7 +76,7 @@ export default function TransactionDetailsDialog({ id, onClose }: Props) {
                     label={transaction.type}
                     color={transaction.type === TransactionType.CREDIT ? 'success' : 'error'}
                     size="small"
-                    component={'p'}
+                    component={'span'}
                   />
                 </Typography>
 
@@ -88,7 +87,7 @@ export default function TransactionDetailsDialog({ id, onClose }: Props) {
                     color="primary"
                     size="small"
                     sx={{ textTransform: 'capitalize' }}
-                    component={'p'}
+                    component={'span'}
                   />
                 </Typography>
 
@@ -121,7 +120,7 @@ export default function TransactionDetailsDialog({ id, onClose }: Props) {
                           ? 'warning'
                           : 'error'
                     }
-                    component={'p'}
+                    component={'span'}
                     size="small"
                   />
                 </Typography>

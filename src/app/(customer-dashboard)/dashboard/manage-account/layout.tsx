@@ -18,7 +18,7 @@ function layout({ children }: { children: React.ReactNode }) {
         gap={2}
       >
         <Box>
-          <ManageAccountSidebar />
+          <ManageAccountSidebar for="customer-dashboard" />
         </Box>
         <Box sx={{ flex: 1, p: 5, bgcolor: 'background.default' }}>{children}</Box>
       </Stack>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import '@/styles/app.css';
-import CustomThemeProvider from '@/components/ui-provider/CustomThemeProvider';
+import CustomThemeProvider from '@/provider/CustomThemeProvider';
 import Provider from '@/provider/Provider';
 
 export const metadata: Metadata = {

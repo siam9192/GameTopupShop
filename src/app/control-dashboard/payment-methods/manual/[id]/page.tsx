@@ -98,7 +98,7 @@ function page() {
 
       {/* Description */}
       <Box>
-        <Typography variant="h5" fontWeight={600} mb={1}>
+        <Typography variant="h4" color="text.primary" fontWeight={600} mb={1}>
           Description
         </Typography>
 
@@ -123,7 +123,7 @@ function page() {
 
       {/* Meta Info */}
       <Box>
-        <Typography variant="h5" fontWeight={600} mb={2}>
+        <Typography variant="h4" color="text.primary" fontWeight={600} mb={1}>
           Metadata
         </Typography>
 

@@ -66,3 +66,4 @@ export const uploadImageToImgBB = async (file: File) => {
   if (!url) throw new Error();
   return url;
 };
+

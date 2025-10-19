@@ -1,5 +1,6 @@
 'use server';
 import axiosInstance from '@/axios/axiosInstance';
+import { ChangePasswordPayload } from '@/server/utils/auth.type';
 import { IResponse } from '@/types/response.type';
 import { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
@@ -74,6 +75,22 @@ export async function administratorSignin(payload: SigninPayload) {
   }
 }
 
+export async function changePassword(payload: ChangePasswordPayload) {
+  try {
+    const res = await axiosInstance.patch('/auth/change-password', payload);
+
+    return res.data;
+  } catch (err) {
+    const error = err as AxiosError<{ message?: string }>;
+
+    // Custom error message (backend message OR fallback)
+    const message = error.response?.data?.message || error.message || 'Something went wrong';
+
+    // Re-throw clean error
+    throw new Error(message);
+  }
+}
+
 export async function setAuthTokens(accessToken: string, refreshToken: string) {
   const cookieStore = await cookies();
   cookieStore.set({
@@ -90,4 +107,12 @@ export async function setAuthTokens(accessToken: string, refreshToken: string) {
     path: '/',
     maxAge: 10 * 365 * 24 * 60 * 60,
   });
+}
+
+
+
+export async function logout() {
+  const cookieStore = await cookies();
+  cookieStore.delete('accessToken')
+  cookieStore.delete('refreshToken')
 }

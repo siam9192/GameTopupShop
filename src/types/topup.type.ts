@@ -65,3 +65,17 @@ export interface CreateTopupPayload
   extends Pick<Topup, 'name' | 'platformName' | 'coverPhoto' | 'description' | 'infoFields'> {
   packages: CreatePackage[];
 }
+
+
+
+export  type  PopularTopup =  {
+  _id:string
+  rank:number,
+  name:string,
+  coverPhoto:string
+  platformName: string;
+  revenue:number,
+  ordersSuccess:number
+  ordersCount:number,
+  status:TopupStatus;
+}

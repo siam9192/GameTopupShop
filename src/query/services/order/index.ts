@@ -1,5 +1,11 @@
 import { updateOffer } from '@/api-services/offer';
-import { createOrder, getOrderById, getOrders, updateOrderStatus } from '@/api-services/order';
+import {
+  createOrder,
+  getOrderById,
+  getOrders,
+  getRecentOrders,
+  updateOrderStatus,
+} from '@/api-services/order';
 import useFetch from '@/query/client/useFetch';
 import useMutate from '@/query/client/useMutation';
 import { Param } from '@/types/metadata.type';
@@ -13,6 +19,12 @@ export function getOrdersQuery(params: Param[]) {
 
 export function getOrderByIdQuery(id: string) {
   return useFetch<IResponse<Order>>(['getOrderById', id], () => getOrderById(id));
+}
+
+export function getRecentOrdersQuery(recentDate: string, params?: Param[]) {
+  return useFetch<IResponse<Order[]>>(['getRecentOrders'], () =>
+    getRecentOrders(recentDate, params),
+  );
 }
 
 export function updateOrderStatusMutation() {

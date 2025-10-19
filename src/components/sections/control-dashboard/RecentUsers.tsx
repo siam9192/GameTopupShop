@@ -10,7 +10,7 @@ function RecentUsers() {
   const { data, isLoading } = getRecentUserQuery();
   const users = data?.data;
   return (
-    <Stack className="glass p-3 md:p-5 h-full  ">
+    <Stack className="glass p-3 md:p-5 h-full min-h-[400px]  ">
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <DashboardSectionHeading title="Recent Users" />
         <Badge color="secondary" badgeContent={users?.length || 0} variant="standard">
