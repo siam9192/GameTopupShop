@@ -3,10 +3,10 @@ import React from 'react';
 import { PopularOffer } from '@/types/offer.type';
 
 interface Props {
-  offer:PopularOffer
+  offer: PopularOffer;
 }
 
-function PopularOfferCard({offer}:Props) {
+function PopularOfferCard({ offer }: Props) {
   return (
     <div className=" p-2 md:p-3 relative ">
       <Stack
@@ -20,15 +20,11 @@ function PopularOfferCard({offer}:Props) {
           {offer.rank}.
         </Typography>
         <Box>
-          <img
-            src={offer.coverPhoto}
-            alt=""
-            className=" size-20 rounded-lg"
-          />
+          <img src={offer.coverPhoto} alt="" className=" size-20 rounded-lg" />
         </Box>
         <Stack spacing={0.5}>
           <Typography fontWeight={500} fontSize={20} color="text.primary">
-          {offer.name}
+            {offer.name}
           </Typography>
           <Typography
             fontSize={{
@@ -77,7 +73,7 @@ function PopularOfferCard({offer}:Props) {
               fontWeight={500}
               color="text.secondary"
             >
-              Order:  {offer.ordersCount} BDT
+              Order: {offer.ordersCount} BDT
             </Typography>
             <Typography
               fontSize={{
@@ -105,12 +101,9 @@ function PopularOfferCard({offer}:Props) {
 
       <Stack marginTop={1} direction={'row'} alignItems={'center'} justifyContent={'end'} gap={1}>
         <Stack direction={'row'} spacing={2}>
-         
-            <Button variant="outlined" className="w-fit " color="secondary">
-              Details
-            </Button>
-          
-    
+          <Button variant="outlined" className="w-fit " color="secondary">
+            Details
+          </Button>
         </Stack>
       </Stack>
     </div>

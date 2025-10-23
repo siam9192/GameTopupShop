@@ -9,7 +9,8 @@ export const offers: PopularOffer[] = [
     _id: '1',
     rank: 1,
     name: 'Netflix Gift Card',
-    coverPhoto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiAQjUrfAF_r_j9N_XpMtjiRU02en3U_ea-w&s',
+    coverPhoto:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiAQjUrfAF_r_j9N_XpMtjiRU02en3U_ea-w&s',
     platformName: 'Netflix',
     revenue: 186000,
     ordersSuccess: 1740,
@@ -20,7 +21,8 @@ export const offers: PopularOffer[] = [
     _id: '2',
     rank: 2,
     name: 'Spotify Premium Subscription',
-    coverPhoto: 'https://ariksoft.com.bd/wp-content/uploads/2020/05/Spotify-Premium-Account.png.webp',
+    coverPhoto:
+      'https://ariksoft.com.bd/wp-content/uploads/2020/05/Spotify-Premium-Account.png.webp',
     platformName: 'Spotify',
     revenue: 162000,
     ordersSuccess: 1550,
@@ -31,7 +33,8 @@ export const offers: PopularOffer[] = [
     _id: '3',
     rank: 3,
     name: 'Amazon Gift Voucher',
-    coverPhoto: 'https://5.imimg.com/data5/SELLER/Default/2023/10/357079646/FU/IS/UD/74172299/amazon-gift-voucher.jpeg',
+    coverPhoto:
+      'https://5.imimg.com/data5/SELLER/Default/2023/10/357079646/FU/IS/UD/74172299/amazon-gift-voucher.jpeg',
     platformName: 'Amazon',
     revenue: 142000,
     ordersSuccess: 1370,
@@ -42,7 +45,8 @@ export const offers: PopularOffer[] = [
     _id: '4',
     rank: 4,
     name: 'Google Play Credit',
-    coverPhoto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs-RgOnhZSTDHuZuEqCK55mFPGUl_zfbd3gA&s',
+    coverPhoto:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs-RgOnhZSTDHuZuEqCK55mFPGUl_zfbd3gA&s',
     platformName: 'Google Play',
     revenue: 126000,
     ordersSuccess: 1190,
@@ -64,7 +68,8 @@ export const offers: PopularOffer[] = [
     _id: '6',
     rank: 6,
     name: 'Disney+ Hotstar Subscription',
-    coverPhoto: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfnxa1ue3i_MAD8hfxaia528-HaIFrxt1FCg&s',
+    coverPhoto:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfnxa1ue3i_MAD8hfxaia528-HaIFrxt1FCg&s',
     platformName: 'Disney+ Hotstar',
     revenue: 96000,
     ordersSuccess: 910,
@@ -75,7 +80,8 @@ export const offers: PopularOffer[] = [
     _id: '7',
     rank: 7,
     name: 'YouTube Premium Voucher',
-    coverPhoto: 'https://zamve.com/wp-content/uploads/2023/08/Youtube-Premium-Subscription-from-Zmave-Online-Subscription-Shop-BD-by-zamve.com_.jpg',
+    coverPhoto:
+      'https://zamve.com/wp-content/uploads/2023/08/Youtube-Premium-Subscription-from-Zmave-Online-Subscription-Shop-BD-by-zamve.com_.jpg',
     platformName: 'YouTube',
     revenue: 89000,
     ordersSuccess: 860,
@@ -128,7 +134,7 @@ function PopularOffers() {
 
       <Stack marginTop={2} spacing={2}>
         {offers.map((_, index) => (
-          <PopularOfferCard offer={_}  key={index} />
+          <PopularOfferCard offer={_} key={index} />
         ))}
       </Stack>
     </Stack>

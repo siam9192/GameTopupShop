@@ -1,5 +1,5 @@
 import CustomJoditEditor from '@/components/editor/CustomJoditEditor';
-import ManualPaymentForm from '@/components/forms/ManualPaymentForm';
+import ManualPaymentForm from '@/components/forms/ManualPaymentAddMoneySubmissionForm';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import React from 'react';

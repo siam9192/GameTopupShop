@@ -58,7 +58,7 @@ function UpdateAdministratorLevelDialog({ administrator, onClose }: Props) {
             onChange={e => setLevel(e.target.value as AdministratorLevel)}
             defaultValue={administrator.level}
           >
-            {Object.values(AdministratorLevel).map(level => (
+            {Object.values([AdministratorLevel.ADMIN, AdministratorLevel.MODERATOR]).map(level => (
               <FormControlLabel
                 key={level}
                 value={level}

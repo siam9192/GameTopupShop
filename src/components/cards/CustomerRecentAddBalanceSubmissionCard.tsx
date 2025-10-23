@@ -1,10 +1,18 @@
-import React from 'react';
-import { Button, Chip, Stack, Typography, Divider, Paper } from '@mui/material';
-import AlertDialog from '../ui/AleartDialog';
+import React, { useState } from 'react';
+import { Button, Stack, Typography, Divider, Paper } from '@mui/material';
+import { WalletSubmission } from '@/types/wallet-submission.type';
+import { getTimeAgo } from '@/utils/helper';
+import CustomerWalletAddBalanceSubmissionDetailsDialog from '../sections/customer-dashboard/CustomerWalletAddBalanceSubmissionDetailsDialog';
 
-function RecentAddBalanceSubmissionCard() {
+interface Props {
+  submission: WalletSubmission;
+}
+
+function CustomerRecentAddBalanceSubmissionCard({ submission }: Props) {
+  const [showDetails, setShowDetails] = useState(false);
+
   return (
-    <div className=" p-2 md:p-3 relative">
+    <div className=" p-2 relative">
       <Stack
         direction={{
           xs: 'column',
@@ -14,7 +22,7 @@ function RecentAddBalanceSubmissionCard() {
       >
         <Stack spacing={0.5}>
           <Typography variant="h5" fontSize={20} fontWeight={500} color="secondary">
-            Amount: $23
+            Amount: ${submission.amount}
           </Typography>
 
           <Stack
@@ -34,18 +42,9 @@ function RecentAddBalanceSubmissionCard() {
               }}
               color="text.secondary"
             >
-              Method: Bkash
+              Method: {submission.methodName}
             </Typography>
-            <Typography
-              fontSize={{
-                xs: 14,
-                lg: 16,
-              }}
-              fontWeight={500}
-              color="text.secondary"
-            >
-              Trx ID: 38786kjschbkjcbc
-            </Typography>
+
             <Typography
               fontSize={{
                 xs: 14,
@@ -63,7 +62,7 @@ function RecentAddBalanceSubmissionCard() {
                 color="success"
               >
                 {' '}
-                Fulfilled
+                {submission.status}
               </Typography>
             </Typography>
           </Stack>
@@ -71,16 +70,27 @@ function RecentAddBalanceSubmissionCard() {
       </Stack>
 
       <Stack marginTop={1} direction={'row'} alignItems={'center'} justifyContent={'end'} gap={1}>
-        <AlertDialog>
-          <Button variant="outlined" className="w-fit " color="info">
-            Details
-          </Button>
-        </AlertDialog>
+        <Button
+          onClick={() => setShowDetails(true)}
+          variant="outlined"
+          className="w-fit "
+          color="info"
+        >
+          Details
+        </Button>
       </Stack>
 
-      <p className="text-primary font-medium absolute right-1 top-0 ">2Hrs</p>
+      <p className="text-primary font-medium absolute right-1 top-0 ">
+        {getTimeAgo(submission.createdAt)}
+      </p>
+      {showDetails ? (
+        <CustomerWalletAddBalanceSubmissionDetailsDialog
+          id={submission._id}
+          onClose={() => setShowDetails(false)}
+        />
+      ) : null}
     </div>
   );
 }
 
-export default RecentAddBalanceSubmissionCard;
+export default CustomerRecentAddBalanceSubmissionCard;

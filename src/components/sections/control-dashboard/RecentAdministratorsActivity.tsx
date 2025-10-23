@@ -1,11 +1,14 @@
 import RecentAdministratorActivityCard from '@/components/cards/RecentAdministratorActivityCard';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
-import { AdministratorActivity, AdministratorActivityAction } from '@/types/administrator-activity.type';
+import {
+  AdministratorActivity,
+  AdministratorActivityAction,
+} from '@/types/administrator-activity.type';
 import { AdministratorLevel } from '@/types/user.type';
 import { Badge, Divider, Stack } from '@mui/material';
 import React, { Fragment } from 'react';
 import { TbRecharging } from 'react-icons/tb';
-  const activities: AdministratorActivity[] = [
+const activities: AdministratorActivity[] = [
   {
     _id: '1',
     title: 'New Top-up Added',
@@ -108,11 +111,9 @@ import { TbRecharging } from 'react-icons/tb';
     createdAt: '2025-10-17T15:18:00.000Z',
     updatedAt: '2025-10-17T15:18:00.000Z',
   },
-  
 ];
 
 function RecentAdministratorsActivity() {
- 
   return (
     <Stack className="glass p-3 md:p-5 h-full min-h-[400px] ">
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -124,15 +125,10 @@ function RecentAdministratorsActivity() {
 
       <Stack marginTop={2} spacing={2}>
         {activities.map((_, index) => (
-        <Fragment key={index}>
-          {
-            index !== 0 ?
-            <Divider/>
-            :
-            null
-          }
-            <RecentAdministratorActivityCard activity={_}  />
-        </Fragment>
+          <Fragment key={index}>
+            {index !== 0 ? <Divider /> : null}
+            <RecentAdministratorActivityCard activity={_} />
+          </Fragment>
         ))}
       </Stack>
     </Stack>

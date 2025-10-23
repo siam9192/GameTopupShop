@@ -29,9 +29,45 @@ export async function getManualPaymentMethods(params: Param[]) {
   }
 }
 
+export async function getPublicManualPaymentMethods(params: Param[]) {
+  try {
+    const res = await axiosInstance.get(`/manual-payment-methods/public${paramsToString(params)}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
 export async function getManualPaymentMethodById(id: string) {
   try {
     const res = await axiosInstance.get(`/manual-payment-methods/${id}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
+export async function getPublicManualPaymentMethodById(id: string) {
+  try {
+    const res = await axiosInstance.get(`/manual-payment-methods/public/${id}`);
 
     return res.data;
   } catch (err: unknown) {

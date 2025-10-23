@@ -1,86 +1,114 @@
 import { Button, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import AlertDialog from '../ui/AleartDialog';
+import { Order, OrderStatus } from '@/types/order.type';
+import { getTimeAgo } from '@/utils/helper';
+import CustomerOrderDetailsDialog from '../sections/customer-dashboard/CustomerOrderDetailsDialog';
+import { updateOrderMutation, updateOrderStatusMutation } from '@/query/services/order';
+import { toast } from 'react-toastify';
+import { queryClient } from '@/provider/Provider';
+interface Props {
+  order: Order;
+}
+function CustomerRecentOrderCard({ order }: Props) {
+  const { product } = order;
+  const [showDetails, setShowDetails] = useState(false);
 
-function CustomerRecentOrderCard() {
+  const { mutate: updateStatusMutate, isPending } = updateOrderStatusMutation();
+  async function handleCancelOrder(id: string, status: OrderStatus) {
+    updateStatusMutate(
+      {
+        id,
+        status,
+      },
+      {
+        onSuccess: data => {
+          toast.success('Order is canceled successfully');
+
+          queryClient.invalidateQueries({ queryKey: ['getMyRecentOrders'] });
+        },
+        onError: (err: any) => {
+          toast.error(err.message);
+        },
+      },
+    );
+  }
+
   return (
-    <div className=" p-2 md:p-3 relative">
+    <div className="relative p-2 duration-300">
+      {/* Header: Product Info */}
       <Stack
-        direction={{
-          xs: 'column',
-          md: 'row',
-        }}
+        direction={{ xs: 'column', md: 'row' }}
+        justifyContent="space-between"
+        alignItems={{ xs: 'flex-start', md: 'center' }}
         spacing={2}
       >
-        <Stack spacing={0.5}>
-          <Typography fontWeight={500} fontSize={20} color="text.primary">
-            Free fire
+        <div className="mt-2">
+          <Typography variant="h6" fontWeight={600} color="text.primary">
+            {product.name}
           </Typography>
+
           <Stack
-            marginTop={2}
-            direction={'row'}
-            alignItems={'center'}
-            spacing={{
-              xs: 1,
-              md: 2,
-            }}
+            marginTop={1.5}
+            direction="row"
+            flexWrap="wrap"
+            alignItems="center"
+            gap={{ xs: 1.5, md: 3 }}
           >
-            <Typography
-              fontWeight={500}
-              fontSize={{
-                xs: 14,
-                lg: 16,
-              }}
-              color="text.secondary"
-            >
-              Recharge: 25 Diamond
+            <Typography fontSize={15} fontWeight={500} color="text.secondary">
+              Category: <span className="text-txt-primary">{product.category}</span>
             </Typography>
-            <Typography
-              fontSize={{
-                xs: 14,
-                lg: 16,
-              }}
-              fontWeight={500}
-              color="text.secondary"
-            >
-              Quantity: $23
+
+            {product.package && (
+              <Typography fontSize={15} fontWeight={500} color="text.secondary">
+                Package: <span className="text-txt-primary">{product.package}</span>
+              </Typography>
+            )}
+
+            <Typography fontSize={15} fontWeight={500} color="text.secondary">
+              Quantity: <span className="text-txt-primary">{product.quantity}</span>
             </Typography>
-            <Typography
-              fontSize={{
-                xs: 14,
-                lg: 16,
-              }}
-              fontWeight={500}
-              color="text.secondary"
-            >
-              Status:
+
+            <Typography fontSize={15} fontWeight={500} color="text.secondary">
+              Status:{' '}
               <Typography
-                fontSize={'inherit'}
-                component={'span'}
-                display={'inline'}
-                fontWeight={500}
-                color="success"
+                component="span"
+                fontSize="inherit"
+                fontWeight={600}
+                color={'text.primary'}
               >
-                {' '}
-                Success
+                {order.status}
               </Typography>
             </Typography>
           </Stack>
-        </Stack>
-      </Stack>
+        </div>
 
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} gap={1}>
-        <Typography variant="h5" fontSize={25} fontWeight={500} color="secondary">
-          $23
+        {/* Amount */}
+        <Typography variant="h5" fontWeight={600} color="secondary" className="text-right">
+          ${order.payment.amount}
         </Typography>
-        <AlertDialog>
-          <Button variant="outlined" className="w-fit " color="warning">
-            Cancel
-          </Button>
-        </AlertDialog>
       </Stack>
 
-      <p className="text-primary font-medium absolute right-1 top-0 ">2Hrs</p>
+      {/* Actions */}
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="flex-end"
+        spacing={1.5}
+        marginTop={3}
+      >
+        <Button onClick={() => setShowDetails(true)} variant="outlined" color="info" size="medium">
+          Details
+        </Button>
+      </Stack>
+
+      {/* Time badge */}
+      <span className="absolute top-0 right-3 text-[.6rem] font-medium text-primary bg-primary/10 px-2 py-1 rounded-md">
+        {getTimeAgo(order.createdAt)}
+      </span>
+      {showDetails ? (
+        <CustomerOrderDetailsDialog onClose={() => setShowDetails(false)} id={order._id} />
+      ) : null}
     </div>
   );
 }

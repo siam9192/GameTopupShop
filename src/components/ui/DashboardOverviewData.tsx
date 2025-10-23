@@ -30,7 +30,7 @@ const DashboardOverviewData: React.FC<DashboardOverviewDataProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <Grid container spacing={2} columns={{ xs: 1, sm: 2, md: 4 }}>
+      <Grid container spacing={2} columns={{ xs: 1, sm: 2, lg: 4 }}>
         {Array.from({ length: 4 }).map((_, idx) => (
           <Grid size={1} key={idx}>
             <Skeleton

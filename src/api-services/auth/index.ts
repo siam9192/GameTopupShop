@@ -109,10 +109,8 @@ export async function setAuthTokens(accessToken: string, refreshToken: string) {
   });
 }
 
-
-
 export async function logout() {
   const cookieStore = await cookies();
-  cookieStore.delete('accessToken')
-  cookieStore.delete('refreshToken')
+  cookieStore.delete('accessToken');
+  cookieStore.delete('refreshToken');
 }

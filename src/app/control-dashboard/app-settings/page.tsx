@@ -28,8 +28,7 @@ import { IoIosCloudUpload } from 'react-icons/io';
 import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
 import appSettingValidations from '@/validations/app-setting.validation';
 import { simplifyRatio, uploadImageToImgBB } from '@/utils/helper';
-import { queryClient } from '@/provider/Provider';
-
+import { CURRENCIES } from '@/utils/constant';
 export default function AppSettingsPage() {
   const { data, isLoading } = getAppSettingsQuery();
 
@@ -279,9 +278,9 @@ export default function AppSettingsPage() {
           error={!!errors.currency}
           helperText={errors.currency || ''}
         >
-          {Object.values(AppCurrency).map(currency => (
-            <MenuItem key={currency} value={currency}>
-              {currency}
+          {CURRENCIES.map(currency => (
+            <MenuItem key={currency.code} value={currency.code}>
+              {currency.code}
             </MenuItem>
           ))}
         </TextField>

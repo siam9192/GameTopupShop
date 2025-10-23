@@ -216,7 +216,7 @@ function page() {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {Object.values(AdministratorLevel).map(level => (
+                {[AdministratorLevel.ADMIN, AdministratorLevel.SUPER_ADMIN].map(level => (
                   <MenuItem key={level} value={level}>
                     {level.replace('_', ' ')}
                   </MenuItem>

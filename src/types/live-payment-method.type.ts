@@ -1,12 +1,10 @@
-
-
-export interface LivePaymentMethod  {
-  _id:string
+export interface LivePaymentMethod {
+  _id: string;
   name: string;
   logo: string;
-  code:string
+  code: string;
   status: LivePaymentMethodStatus;
-  isAvailable:boolean
+  isAvailable: boolean;
 }
 
 export enum LivePaymentMethodStatus {
@@ -15,11 +13,11 @@ export enum LivePaymentMethodStatus {
 }
 
 export interface LivePaymentMethodsFilterPayload {
-    searchTerm?:string,
-    status?:LivePaymentMethodStatus
+  searchTerm?: string;
+  status?: LivePaymentMethodStatus;
 }
 
 export interface UpdateLivePaymentMethodStatus {
-    id:string
-    status:LivePaymentMethodStatus
+  id: string;
+  status: LivePaymentMethodStatus;
 }

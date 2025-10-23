@@ -1,4 +1,4 @@
-import  { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import { AppSetting } from '@/types/app-setting.type';
 import { IResponse } from '@/types/response.type';
 import { UseQueryResult } from '@tanstack/react-query';
@@ -6,10 +6,12 @@ import { getAppSettingsQuery } from '@/query/services/app-setting';
 
 export type AppSettingsProviderContextType = {
   queryResult: UseQueryResult<IResponse<AppSetting>, unknown>;
-  settings?:AppSetting
+  settings?: AppSetting;
 };
 
-const AppSettingsProviderContext = createContext<AppSettingsProviderContextType | undefined>(undefined);
+const AppSettingsProviderContext = createContext<AppSettingsProviderContextType | undefined>(
+  undefined,
+);
 
 export function useAppSettings() {
   const context = useContext(AppSettingsProviderContext);
@@ -19,18 +21,16 @@ export function useAppSettings() {
   return context;
 }
 
-function  AppSettingsProvider({ children }: { children: ReactNode }) {
+function AppSettingsProvider({ children }: { children: ReactNode }) {
   const result = getAppSettingsQuery();
-
-  
 
   return (
     <AppSettingsProviderContext.Provider
-     value={{queryResult:result,settings:result.data?.data}}
+      value={{ queryResult: result, settings: result.data?.data }}
     >
       {children}
     </AppSettingsProviderContext.Provider>
   );
 }
 
-export default  AppSettingsProvider;
+export default AppSettingsProvider;

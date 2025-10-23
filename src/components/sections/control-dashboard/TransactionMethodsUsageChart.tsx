@@ -75,9 +75,7 @@ function TransactionsMethodsUsageChart() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
         {/* Manual Payment Methods */}
         <div className="flex flex-col items-center">
-          <h3 className="text-lg font-semibold text-secondary mb-3">
-            Manual
-          </h3>
+          <h3 className="text-lg font-semibold text-secondary mb-3">Manual</h3>
           <div className="max-w-[300px] md:max-w-[400px] lg:h-[350px] flex justify-center">
             <Pie data={createChartData(manualPaymentData)} options={chartOptions as any} />
           </div>
@@ -85,11 +83,9 @@ function TransactionsMethodsUsageChart() {
 
         {/* Live Payment Methods */}
         <div className="flex flex-col items-center">
-          <h3 className="text-lg font-semibold text-secondary mb-3">
-            Live 
-          </h3>
+          <h3 className="text-lg font-semibold text-secondary mb-3">Live</h3>
           <div className="max-w-[300px] md:max-w-[400px] lg:h-[350px] flex justify-center">
-            <Pie data={createChartData(livePaymentData)}  options={chartOptions as any} />
+            <Pie data={createChartData(livePaymentData)} options={chartOptions as any} />
           </div>
         </div>
       </div>

@@ -1,4 +1,14 @@
+'use client';
+import VisuallyHiddenInput from '@/components/ui/VisuallyHiddenInput';
+import { useCurrentUser } from '@/provider/CurrentUserProvider';
+import { updateUserProfileMutation } from '@/query/services/metadata';
+import { UpdateAdministratorProfilePayload } from '@/types/administrator.type';
+import { Customer, UpdateCustomerProfilePayload } from '@/types/customer.type';
+import { Name } from '@/types/user.type';
+import { simplifyRatio, uploadImageToImgBB } from '@/utils/helper';
+import userValidations, { UpdateCustomerProfileValidation } from '@/validations/user.validation';
 import {
+  Avatar,
   Box,
   Button,
   FormControl,
@@ -8,40 +18,225 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { IoIosCloudUpload } from 'react-icons/io';
+import { toast } from 'react-toastify';
 
-function page() {
+type FormValue = Partial<
+  Pick<UpdateCustomerProfilePayload, 'name' | 'phone'> & {
+    profilePicture: File;
+    phone: string | null;
+  }
+>;
+
+function Page() {
+  const [form, setForm] = useState<FormValue>({
+    name: { first: '', last: '' },
+    phone: null,
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const currentUser = useCurrentUser();
+  const user = currentUser.user! as Customer;
+
+  useEffect(() => {
+    if (user) {
+      setForm({
+        name: user.name,
+        phone: user.phone || null,
+      });
+    }
+  }, [currentUser.isLoading]);
+
+  const handleProfilePictureChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+
+    const file = files[0];
+
+    try {
+      const dimensions = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => {
+          resolve({ width: image.width, height: image.height });
+          URL.revokeObjectURL(image.src);
+        };
+        image.onerror = () => reject(new Error('Failed to load image'));
+        image.src = URL.createObjectURL(file);
+      });
+
+      if (simplifyRatio(dimensions.width, dimensions.height) !== '1:1') {
+        setErrors(p => ({
+          ...p,
+          profilePicture: `Invalid image ratio. Required ratio is 1:1.`,
+        }));
+        return;
+      }
+
+      setErrors(p => ({ ...p, profilePicture: '' }));
+      setForm(p => ({ ...p, profilePicture: file }));
+    } catch (err) {
+      setErrors(p => ({
+        ...p,
+        profilePicture: 'Unable to read image dimensions.',
+      }));
+    }
+  };
+
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setForm(p => ({
+      ...p,
+      name: {
+        ...((p.name ?? {}) as Name), // ensure name object always exists
+        [name as keyof Name]: value,
+      },
+    }));
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm(p => ({
+      ...p,
+      [name]: value,
+    }));
+  };
+
+  const { mutate } = updateUserProfileMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const payload: UpdateCustomerProfileValidation = {
+      name: form.name,
+    };
+    if (form.phone) {
+      payload['phone'] = form.phone;
+    }
+
+    if (form.profilePicture) {
+      payload['profilePicture'] = form.profilePicture;
+    }
+
+    const result = userValidations.updateCustomerProfileValidation.safeParse(payload);
+
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach(err => {
+        const fieldName = err.path.join('.') as keyof FormValue;
+        fieldErrors[fieldName] = err.message;
+      });
+
+      setErrors(fieldErrors);
+      return;
+    }
+    let toastId = toast.loading('Pending...');
+
+    const finalPayload: UpdateCustomerProfilePayload = {
+      name: form.name!,
+    };
+    if (form.profilePicture) {
+      finalPayload['profilePicture'] = await uploadImageToImgBB(form.profilePicture);
+    }
+
+    if (form.phone) {
+      finalPayload['phone'] = form.phone;
+    }
+
+    mutate(finalPayload, {
+      onSuccess: data => {
+        toast.dismiss(toastId);
+        toast.success(data.message);
+      },
+      onError: error => {
+        toast.dismiss(toastId);
+        toast.error(error.message);
+      },
+    });
+  };
+  console.log(form);
+
   return (
     <Box width={{ xs: '100%', lg: '80%' }} height={'100%'}>
       <Typography fontSize={20} fontWeight={600} color="text.primary" mb={2}>
         My Personal Information
       </Typography>
 
-      <form>
-        <Stack spacing={3} height={'100%'}>
-          <FormControl fullWidth variant="standard">
-            <InputLabel htmlFor="firstName">First Name</InputLabel>
-            <Input id="firstName" aria-describedby="firstName-text" />
+      <form onSubmit={handleSubmit}>
+        {/* Profile Picture Upload */}
+        <Box mb={4}>
+          <Avatar
+            src={
+              form.profilePicture
+                ? URL.createObjectURL(form.profilePicture)
+                : user.profilePicture || ''
+            }
+            alt="Profile"
+            sx={{
+              width: 150,
+              height: 150,
+              border: '2px solid #ccc',
+              bgcolor: '#f0f0f0',
+            }}
+          />
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<IoIosCloudUpload />}
+            sx={{ mt: 1 }}
+          >
+            Upload Image
+            <VisuallyHiddenInput
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePictureChange}
+            />
+          </Button>
+          <FormHelperText>Required ratio: 1:1 (e.g., 100x100)</FormHelperText>
+          {errors.profilePicture && <FormHelperText error>{errors.profilePicture}</FormHelperText>}
+        </Box>
+
+        <Stack spacing={3}>
+          <FormControl fullWidth variant="standard" error={!!errors.first}>
+            <InputLabel htmlFor="first">First Name</InputLabel>
+            <Input
+              id="first"
+              name="first"
+              value={form.name?.first ?? ''}
+              onChange={handleNameChange}
+              aria-describedby="first-text"
+              error={!!errors['name.first']}
+            />
+            {errors['name.first'] && <FormHelperText error>{errors['name.first']}</FormHelperText>}
           </FormControl>
 
-          <FormControl fullWidth variant="standard">
-            <InputLabel htmlFor="lastName">Last Name</InputLabel>
-            <Input id="lastName" aria-describedby="lastName-text" />
+          <FormControl fullWidth variant="standard" error={!!errors.last}>
+            <InputLabel htmlFor="last">Last Name</InputLabel>
+            <Input
+              id="last"
+              name="last"
+              value={form.name?.last ?? ''}
+              onChange={handleNameChange}
+              aria-describedby="last-text"
+              error={!!errors['name.last']}
+            />
+            {errors['name.last'] && <FormHelperText error>{errors['name.last']}</FormHelperText>}
           </FormControl>
-
-          <FormControl fullWidth variant="standard">
-            <InputLabel htmlFor="contactEmail">Contact Email</InputLabel>
-            <Input id="contactEmail" aria-describedby="contactEmail-text" />
-            <FormHelperText id="contactEmail-text">We’ll contact you on our update</FormHelperText>
+          <FormControl fullWidth variant="standard" error={!!errors.first}>
+            <InputLabel htmlFor="phone">Phone</InputLabel>
+            <Input
+              id="first"
+              name="phone"
+              value={form.phone || ''}
+              onChange={handleChange}
+              aria-describedby="first-text"
+              error={!!errors['phone']}
+            />
+            {errors['phone'] && <FormHelperText error>{errors['phone']}</FormHelperText>}
           </FormControl>
-
-          <FormControl fullWidth variant="standard">
-            <InputLabel htmlFor="favoriteGame">Favorite Game</InputLabel>
-            <Input id="favoriteGame" aria-describedby="favoriteGame-text" />
-          </FormControl>
-
           <Stack direction="row" justifyContent="flex-end" spacing={2} mt={2}>
-            <Button variant="outlined" color="warning">
+            <Button variant="outlined" color="warning" type="button">
               Cancel
             </Button>
             <Button variant="contained" type="submit">
@@ -54,4 +249,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

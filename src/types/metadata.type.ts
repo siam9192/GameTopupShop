@@ -34,6 +34,20 @@ export type ModeratorDashboardMetaData = {
   newCustomers: number;
 };
 
+export type CustomerDashboardMetaData = {
+  walletBalance: number;
+  pendingWalletAmount: number;
+  orderInProcess: number;
+  ordersCompleted: number;
+  ordersAmount: number;
+};
+
+export type CustomerWalletMetaData = {
+  balance: number;
+  totalSpend: number;
+  last30DaysSpend: number;
+  pendingAmount: number;
+};
 export type Param = {
   name: string;
   value: string | number;

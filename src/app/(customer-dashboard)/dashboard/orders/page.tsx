@@ -1,62 +1,118 @@
 'use client';
-import OrderCard from '@/components/cards/OrderCard';
-import { Box, Divider, MenuItem, Pagination, Select, Stack, Typography } from '@mui/material';
-import React from 'react';
 
-function page() {
-  const length = 12;
-  const [sort, setSort] = React.useState('date_desc');
+import React, { useState } from 'react';
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+  Stack,
+  Typography,
+} from '@mui/material';
+import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
+import { getMyOrdersQuery } from '@/query/services/order';
+import CustomerOrderCard from '@/components/cards/CustomerOrderCard';
 
-  const handleChange = (event: any) => {
-    const {
-      target: { value },
-    } = event;
-    setSort(value);
+const sortOptions = [
+  { label: 'Date (Newest → Oldest)', value: 'createdAt-desc' },
+  { label: 'Date (Oldest → Newest)', value: 'createdAt-asc' },
+  { label: 'Amount (High → Low)', value: 'amount-desc' },
+  { label: 'Amount (Low → High)', value: 'amount-asc' },
+];
+
+export default function Page() {
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState(sortOptions[0].value);
+
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSort(event.target.value as string);
   };
+
+  const { data, isLoading } = getMyOrdersQuery([
+    { name: 'page', value: String(page) },
+    { name: 'sortBy', value: sort.split('-')[0] },
+    { name: 'sortOrder', value: sort.split('-')[1] },
+  ]);
+
+  const orders = data?.data || [];
+  const meta = data?.meta;
+  const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
+
   return (
     <Box>
-      <Typography fontSize={28} fontWeight={600} color="text.primary">
-        My Orders
-      </Typography>
-      <Stack marginTop={2} direction={'row'} justifyContent={'end'}>
-        <Select
-          labelId="demo-select-small-label"
-          id="demo-select-small"
-          value={sort}
-          label="Sort"
-          onChange={handleChange}
-          sx={{
-            minWidth: 200,
-          }}
-        >
-          <MenuItem value="date_desc">Date (Newest → Oldest)</MenuItem>
-          <MenuItem value="date_asc">Date (Oldest → Newest)</MenuItem>
-          <MenuItem value="title_asc">Title (A → Z)</MenuItem>
-          <MenuItem value="title_desc">Title (Z → A)</MenuItem>
-        </Select>
-      </Stack>
-      <Stack marginTop={5} spacing={2}>
-        {Array.from({ length }).map((_, index) => (
-          <Box key={index}>
-            {0 === index ? <Divider /> : null}
-            <OrderCard />
-            {length - 1 !== index ? <Divider /> : null}
-          </Box>
-        ))}
-      </Stack>
-      <Stack direction={'row'} justifyContent={'center'}>
-        <Pagination
-          color="primary"
-          sx={{
-            marginTop: 3,
-          }}
-          count={10}
-          showFirstButton
-          showLastButton
-        />
-      </Stack>
+      <DashboardPageHeading title="My Orders" />
+
+      {/* Loading State */}
+      {isLoading ? (
+        <Box className="h-[300px] flex justify-center items-center">
+          <CircularProgress />
+        </Box>
+      ) : meta?.totalResults === 0 ? (
+        <Box height={300} display="flex" justifyContent="center" alignItems="center">
+          <Typography color="text.primary" align="center" fontSize={20}>
+            You have no orders yet
+          </Typography>
+        </Box>
+      ) : (
+        <Box>
+          {/* Sort Dropdown */}
+          <Stack mt={2} direction="row" justifyContent="flex-end">
+            <FormControl sx={{ minWidth: 220 }} size="small">
+              <InputLabel id="sort-label">Sort By</InputLabel>
+              <Select
+                labelId="sort-label"
+                id="sort"
+                value={sort}
+                label="Sort By"
+                onChange={handleChange as any}
+              >
+                {sortOptions.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          {/* Orders List */}
+          {orders.length > 0 ? (
+            <Stack mt={4} spacing={2}>
+              {orders.map((order: any, index: number) => (
+                <Box key={order._id || index}>
+                  {index === 0 && <Divider />}
+                  <CustomerOrderCard order={order} />
+                  {index !== orders.length - 1 && <Divider />}
+                </Box>
+              ))}
+            </Stack>
+          ) : (
+            <Box height={300} display="flex" justifyContent="center" alignItems="center">
+              <Typography color="text.primary" align="center" fontSize={20}>
+                No results found
+              </Typography>
+            </Box>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <Stack direction="row" justifyContent="center" mt={4}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(_, value) => setPage(value)}
+                color="primary"
+                showFirstButton
+                showLastButton
+              />
+            </Stack>
+          )}
+        </Box>
+      )}
     </Box>
   );
 }
-
-export default page;

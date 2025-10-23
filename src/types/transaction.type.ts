@@ -1,19 +1,31 @@
 import { Customer } from './customer.type';
-
 export interface Transaction {
-  _id: string;
   customerId: string;
   customer: Customer;
-  orderId: string;
+  orderId?: string;
   amount: number;
   currency: string;
   type: TransactionType;
-  method: PaymentMethod;
+  paymentBy: PaymentBy;
+  paymentCurrency: string;
+  method?: TransactionMethod;
   reference?: string;
   description?: string;
+  category: TransactionCategory;
   status: TransactionStatus;
   createdAt: string;
   updatedAt: string;
+}
+
+export type TransactionMethod = {
+  id: string;
+  name: string;
+  type: MethodType;
+};
+
+export enum MethodType {
+  MANUAL = 'Manual',
+  LIVE = 'Live',
 }
 
 export enum TransactionType {
@@ -35,23 +47,13 @@ export enum TransactionStatus {
   FAILED = 'Failed',
 }
 
-export enum PaymentMethod {
+export enum PaymentBy {
   WALLET = 'Wallet',
   CARD = 'Card',
   CASH = 'Cash',
-  GATEWAY = 'Gateway', // online payment (Stripe, SSLCommerz, bKash, etc.)
+  LIVE_PAYMENT_METHOD = 'Live Payment Method',
+  MANUAL_PAYMENT_METHOD = 'Manual Payment Method',
 }
-
-export interface TransactionsFilterPayload
-  extends Partial<{
-    id: string;
-    orderId: string;
-    customerId: string;
-    method: PaymentMethod;
-    status: TransactionStatus;
-    minAmount: string;
-    maxAmount: string;
-  }> {}
 
 export interface UpdateTransactionStatusPayload {
   id: string;
@@ -60,14 +62,14 @@ export interface UpdateTransactionStatusPayload {
 
 export interface MakeOrderLivePaymentPayload {
   orderId: string;
-  method: LivePaymentMethod;
+  methodId: string;
+}
+
+export interface MakeWalletAddBalanceLivePaymentPayload {
+  amount: number;
+  methodId: string;
 }
 
 export interface MakeWalletPaymentPayload {
   orderId: string;
-}
-
-export enum LivePaymentMethod {
-  SSLCOMMERZ = 'Sslcommerz',
-  STRIPE = 'Stripe',
 }

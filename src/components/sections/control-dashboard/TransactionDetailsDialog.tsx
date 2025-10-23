@@ -15,11 +15,7 @@ import {
   Typography,
   Chip,
 } from '@mui/material';
-import {
-  Transaction,
-  TransactionStatus,
-  TransactionType,
-} from '@/types/transaction.type';
+import { Transaction, TransactionStatus, TransactionType } from '@/types/transaction.type';
 import { getTransactionByIdQuery } from '@/query/services/transaction';
 
 interface Props {

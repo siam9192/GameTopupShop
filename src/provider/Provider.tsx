@@ -16,9 +16,9 @@ export default function Provider({ children }: TProvider) {
       <QueryClientProvider client={queryClient}>
         <AppSettingsProvider>
           <CurrentUserProvider>
-          {children}
-          <ToastContainer position="bottom-right" theme="dark" />
-        </CurrentUserProvider>
+            {children}
+            <ToastContainer position="bottom-right" theme="dark" />
+          </CurrentUserProvider>
         </AppSettingsProvider>
       </QueryClientProvider>
     </SessionProvider>

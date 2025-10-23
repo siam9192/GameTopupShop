@@ -1,5 +1,5 @@
 'use client';
-import AllOverviewData from '@/components/sections/control-dashboard/AllOverviewData';
+import AllOverviewData from '@/components/ui/AllOverviewData';
 import OrdersStatusChart from '@/components/sections/control-dashboard/OrdersStatusChart';
 import RecentOrders from '@/components/sections/control-dashboard/RecentOrders';
 import RevenueChart from '@/components/sections/control-dashboard/RevenueChart';

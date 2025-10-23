@@ -66,16 +66,14 @@ export interface CreateTopupPayload
   packages: CreatePackage[];
 }
 
-
-
-export  type  PopularTopup =  {
-  _id:string
-  rank:number,
-  name:string,
-  coverPhoto:string
+export type PopularTopup = {
+  _id: string;
+  rank: number;
+  name: string;
+  coverPhoto: string;
   platformName: string;
-  revenue:number,
-  ordersSuccess:number
-  ordersCount:number,
-  status:TopupStatus;
-}
+  revenue: number;
+  ordersSuccess: number;
+  ordersCount: number;
+  status: TopupStatus;
+};

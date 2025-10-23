@@ -15,10 +15,11 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { getFormData } from '@/utils/helper';
-import { customerSigninMutation } from '@/query-services/auth';
+
 import { SigninPayload } from '@/api-services/auth';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { customerSigninMutation } from '@/query/services/auth';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -70,10 +71,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [errorMessage, setErrorMessage] = React.useState('');
   const handleClickOpen = () => {
     setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   const { mutate } = customerSigninMutation();

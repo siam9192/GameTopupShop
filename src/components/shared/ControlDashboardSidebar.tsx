@@ -144,14 +144,14 @@ function ControlDashboardSidebar() {
   const visibleGroup1 = filterRoutes(sidebarRoutesGroup1);
   const visibleGroup2 = filterRoutes(sidebarRoutesGroup2);
 
-  const router = useRouter()
-  
- async function handelLogout () {
-   await logout()
-   router.replace('/')
-}
+  const router = useRouter();
 
-const {settings} = useAppSettings()
+  async function handelLogout() {
+    await logout();
+    router.replace('/');
+  }
+
+  const { settings } = useAppSettings();
 
   return (
     <div className="w-full h-full dark:bg-[#0d1120] bg-black py-5 px-3">
@@ -165,7 +165,7 @@ const {settings} = useAppSettings()
             fontFamily="jost"
             mb={2}
           >
-           {settings?.name}
+            {settings?.name}
           </Typography>
 
           <List>
@@ -190,12 +190,15 @@ const {settings} = useAppSettings()
             />
           ))}
           <ListItem>
-              <ListItemIcon >
-                       <CiLogout size={22} color="white" /> 
-                      </ListItemIcon>
-                      <ListItemText onClick={handelLogout}    className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer ">
-                        Logout
-                      </ListItemText>
+            <ListItemIcon>
+              <CiLogout size={22} color="white" />
+            </ListItemIcon>
+            <ListItemText
+              onClick={handelLogout}
+              className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer "
+            >
+              Logout
+            </ListItemText>
           </ListItem>
         </List>
       </Stack>

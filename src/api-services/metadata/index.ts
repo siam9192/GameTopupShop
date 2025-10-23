@@ -55,6 +55,43 @@ export async function getModeratorDashboardMetadata() {
     throw new Error(message);
   }
 }
+
+export async function getCustomerDashboardMetadata() {
+  try {
+    const res = await axiosInstance.get('/metadata/role/customer');
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
+export async function getCustomerWalletMetadata() {
+  try {
+    const res = await axiosInstance.get('/metadata/customer-wallet');
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
 export async function getUsersMetadata() {
   try {
     const res = await axiosInstance.get('/metadata/users');

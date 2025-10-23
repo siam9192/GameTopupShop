@@ -1,43 +1,38 @@
 'use client';
 import DashboardOverviewData from '@/components/ui/DashboardOverviewData';
 import { getUsersMetadataQuery } from '@/query/services/metadata';
-import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { FaUserLock, FaUsers, FaUserTag } from 'react-icons/fa';
-
-import { RiAdminFill } from 'react-icons/ri';
-
+import { FaUsers } from 'react-icons/fa';
+import { FaUserSlash } from 'react-icons/fa6';
+import { PiUserListBold } from 'react-icons/pi';
+import { MdAdminPanelSettings } from 'react-icons/md';
 
 function UsersOverviewData() {
-  const { data,isLoading } = getUsersMetadataQuery();
-  
+  const { data, isLoading } = getUsersMetadataQuery();
+
   const mapping = [
     {
       key: 'users',
-       label: 'Total users',
-      icon: FaUsers,
+      label: 'Total Users',
+      icon: FaUsers, // 👥 All users
     },
     {
-      key:'customers',
+      key: 'customers',
       label: 'Customers',
-      icon: FaUserTag,
+      icon: PiUserListBold, // 🧾 User list / regular users
     },
     {
-      key:'administrators',
+      key: 'administrators',
       label: 'Administrators',
-      icon: RiAdminFill,
-    
+      icon: MdAdminPanelSettings, // 🛡️ Admins / security feel
     },
     {
-      key:'blockedUsers',
-      label: 'Blocked',
-      icon: FaUserLock,
-      
+      key: 'blockedUsers',
+      label: 'Blocked Users',
+      icon: FaUserSlash, // 🚫 Clearly represents blocked/banned
     },
   ];
-  return (
-  <DashboardOverviewData  data={data?.data} mapping={mapping} isLoading={isLoading}/>
-  );
+  return <DashboardOverviewData data={data?.data} mapping={mapping} isLoading={isLoading} />;
 }
 
 export default UsersOverviewData;

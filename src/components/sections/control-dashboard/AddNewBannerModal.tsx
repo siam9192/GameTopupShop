@@ -34,7 +34,7 @@ function AddNewBannerModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const defaultValue =  { imageFile: null, link: '' }
+  const defaultValue = { imageFile: null, link: '' };
   const [form, setForm] = useState<TFormValue>(defaultValue);
   const [errors, setErrors] = useState<Record<keyof TFormValue, string>>({
     imageFile: '',
@@ -87,7 +87,7 @@ function AddNewBannerModal() {
           toast.success(data.message);
           queryClient.invalidateQueries({ queryKey: ['getBanners'] });
           setOpen(false);
-          setForm(defaultValue)
+          setForm(defaultValue);
         },
         onError: data => {
           toast.error(data.message);
@@ -129,13 +129,13 @@ function AddNewBannerModal() {
     //   return;
     // }
 
-     if (simplifyRatio(dimensions.width, dimensions.height) !== '16:9') {
-          setErrors(prev => ({
-            ...prev,
-            coverPhoto: 'Invalid image ratio. Required: `16:9',
-          }));
-          return;
-        }
+    if (simplifyRatio(dimensions.width, dimensions.height) !== '16:9') {
+      setErrors(prev => ({
+        ...prev,
+        coverPhoto: 'Invalid image ratio. Required: `16:9',
+      }));
+      return;
+    }
 
     setForm(p => ({ ...p, imageFile: file }));
   };
@@ -176,7 +176,9 @@ function AddNewBannerModal() {
                   onChange={handleImageFileChange}
                 />
               </Button>
-              <FormHelperText>Image ratio must be 16:9 example size (1280px x 720px)</FormHelperText>
+              <FormHelperText>
+                Image ratio must be 16:9 example size (1280px x 720px)
+              </FormHelperText>
               <p className="text-red-500">{errors.imageFile}</p>
             </Box>
 

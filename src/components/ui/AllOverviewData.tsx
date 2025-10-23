@@ -1,9 +1,11 @@
+'use client';
 import { useCurrentUser } from '@/provider/CurrentUserProvider';
-import SuperAdminDashboardAllOverviewData from './SuperAdminDashboardAllOverviewData';
+import SuperAdminDashboardAllOverviewData from '../sections/control-dashboard/SuperAdminDashboardAllOverviewData';
 import { Administrator } from '@/types/administrator.type';
 import { UserRole } from '@/types/user.type';
-import AdminDashboardOverviewData from './AdminDashboardAllOverviewData';
-import ModeratorDashboardOverviewData from './ModeratorDashboardAllOverviewData';
+import AdminDashboardOverviewData from '../sections/control-dashboard/AdminDashboardAllOverviewData';
+import ModeratorDashboardOverviewData from '../sections/control-dashboard/ModeratorDashboardAllOverviewData';
+import CustomerDashboardAllOverviewData from '../sections/customer-dashboard/CustomerDashboardAllOverviewData';
 
 function AllOverviewData() {
   const { user } = useCurrentUser();
@@ -15,7 +17,7 @@ function AllOverviewData() {
   }
   switch (role) {
     case UserRole.CUSTOMER:
-      return null;
+      return <CustomerDashboardAllOverviewData />;
     case UserRole.SUPER_ADMIN:
       return <SuperAdminDashboardAllOverviewData />;
     case UserRole.ADMIN:

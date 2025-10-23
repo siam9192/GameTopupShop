@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ManualPayment from '@/components/sections/customer-dashboard/ManualPayment';
-import DirectPayment from '@/components/sections/customer-dashboard/DirectPayment';
+import DirectPayment from '@/components/sections/customer-dashboard/LivePayment';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import ManageLivePayment from '@/components/sections/control-dashboard/ManageLivePayment';
 import ManageManualPayment from '@/components/sections/control-dashboard/ManageManualPayment';

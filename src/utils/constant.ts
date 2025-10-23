@@ -6,3 +6,30 @@ export const DEFAULT_PROFILE_PICTURE =
 export const ALL_USERS_ROLE = Object.values(UserRole);
 
 export const ALL_ADMINISTRATORS_LEVEL = Object.values(AdministratorLevel);
+
+export const CURRENCIES = [
+  {
+    name: 'Bangladeshi Taka',
+    code: 'BDT',
+    symbol: '৳',
+    status: 'Active',
+  },
+  {
+    name: 'United States Dollar',
+    code: 'USD',
+    symbol: '$',
+    status: 'Active',
+  },
+  {
+    name: 'Indian Rupee',
+    code: 'INR',
+    symbol: '₹',
+    status: 'Active',
+  },
+  {
+    name: 'Euro',
+    code: 'EUR',
+    symbol: '€',
+    status: 'Active',
+  },
+];

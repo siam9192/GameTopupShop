@@ -1,9 +1,17 @@
+'use client';
 import CustomerRecentOrderCard from '@/components/cards/CustomerRecentOrderCard';
-import { Badge, Divider, Stack, Typography } from '@mui/material';
-import React from 'react';
+import { getMyRecentOrdersQuery } from '@/query/services/order';
+import { Badge, CircularProgress, Divider, Stack, Typography } from '@mui/material';
+import React, { Fragment } from 'react';
 import { TbRecharging } from 'react-icons/tb';
 
 function RecentOrders() {
+  const recentDate = new Date();
+  recentDate.setDate(recentDate.getDate() - 60);
+  recentDate.setHours(0, 0, 0, 0); // reset time to midnight
+
+  const { data, isLoading } = getMyRecentOrdersQuery(recentDate.toISOString(), []);
+  const recentOrders = data?.data;
   return (
     <Stack className="glass p-3 md:p-5 h-full  ">
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -16,14 +24,23 @@ function RecentOrders() {
         >
           Recent Orders
         </Typography>
-        <Badge color="secondary" badgeContent={10} variant="standard">
+        <Badge color="secondary" badgeContent={recentOrders?.length||0} variant="standard">
           <TbRecharging className="text-txt-primary" size={28} />
         </Badge>
       </Stack>
 
+      {isLoading ? (
+        <div className="h-[300px] flex justify-center items-center">
+          <CircularProgress />
+        </div>
+      ) : null}
+
       <Stack marginTop={2} spacing={2}>
-        {Array.from({ length: 6 }).map((_, index) => (
-          <CustomerRecentOrderCard key={index} />
+        {recentOrders?.map((_, index) => (
+          <Fragment key={index}>
+            {index !== 0 ? <Divider /> : null}
+            <CustomerRecentOrderCard order={_} />
+          </Fragment>
         ))}
       </Stack>
     </Stack>

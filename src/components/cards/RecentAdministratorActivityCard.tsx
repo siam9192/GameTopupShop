@@ -12,17 +12,11 @@ const ActivityCard = ({ activity }: Props) => {
   const timeAgo = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   const actionColor =
-    activity.action === 'Create'
-      ? 'success'
-      : activity.action === 'Update'
-      ? 'info'
-      : 'error';
+    activity.action === 'Create' ? 'success' : activity.action === 'Update' ? 'info' : 'error';
 
   return (
-    <Box
-      className="relative rounded-xl transition-all duration-300"
-    >
-       {/* Header */}
+    <Box className="relative rounded-xl transition-all duration-300">
+      {/* Header */}
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         alignItems={{ xs: 'flex-start', sm: 'center' }}
@@ -59,18 +53,8 @@ const ActivityCard = ({ activity }: Props) => {
 
       {/* Meta Info */}
       <Stack spacing={1.5} marginTop={3}>
-        <Stack
-          direction="row"
-          flexWrap="wrap"
-          spacing={1}
-          rowGap={1}
-          useFlexGap
-        >
-          <Chip
-            label={`Action: ${activity.action}`}
-            color={actionColor as any}
-            size="small"
-          />
+        <Stack direction="row" flexWrap="wrap" spacing={1} rowGap={1} useFlexGap>
+          <Chip label={`Action: ${activity.action}`} color={actionColor as any} size="small" />
           <Chip
             label={`Category: ${activity.category}`}
             color="default"
@@ -108,17 +92,9 @@ const ActivityCard = ({ activity }: Props) => {
         marginTop={3}
         spacing={1.5}
       >
-      
-      
-          <Button
-            variant="outlined"
-            color="secondary"
-            size="small"
-            className="w-full sm:w-fit"
-          >
-            View Details
-          </Button>
-        
+        <Button variant="outlined" color="secondary" size="small" className="w-full sm:w-fit">
+          View Details
+        </Button>
       </Stack>
 
       {/* Timestamp Badge */}

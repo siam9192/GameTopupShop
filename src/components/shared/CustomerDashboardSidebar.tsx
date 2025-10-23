@@ -1,7 +1,6 @@
 'use client';
 import {
   List,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   Collapse,
@@ -9,18 +8,19 @@ import {
   ListItem,
   Stack,
 } from '@mui/material';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useState } from 'react';
 
 import React from 'react';
 import { TbRecharging } from 'react-icons/tb';
-import { usePathname, useRouter } from 'next/navigation';
 import { BiHomeAlt } from 'react-icons/bi';
 import { HiOutlineWallet } from 'react-icons/hi2';
 import { IoHomeOutline, IoSettingsOutline } from 'react-icons/io5';
-import { RiHistoryFill } from 'react-icons/ri';
 import { MdManageAccounts } from 'react-icons/md';
 import { IconType } from 'react-icons';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
+import SidebarItem from '../ui/SidebarItem';
+import { CiLogout } from 'react-icons/ci';
+import { useCustomerDashboardLayoutContext } from '@/app/(customer-dashboard)/layout';
 
 interface RouteItem {
   label: string;
@@ -40,161 +40,90 @@ const sidebarRoutesGroup1: RouteItem[] = [
     label: 'My Orders',
     path: '/dashboard',
     icon: TbRecharging,
-    children: [
-      { label: 'Orders', path: '/users' },
-      { label: 'Order History', path: '/users/add' },
-    ],
   },
   {
     label: 'My Wallet',
     icon: HiOutlineWallet,
     children: [
-      { label: 'Wallet', path: '/users' },
-      { label: 'Add Balance', path: '/users/add' },
-      { label: 'Wallet History', path: '/users/add' },
+      { label: 'Wallet', path: '/dashboard/wallet' },
+      { label: 'Add Balance', path: '/dashboard/wallet/add-balance' },
+      { label: 'Wallet History', path: '/dashboard/wallet/history' },
+      { label: 'Submissions', path: '/dashboard/wallet/submissions' },
     ],
   },
-  // {
-  //   label: 'History',
-  //   icon: RiHistoryFill ,
-  //     children: [
-  //     { label: 'Topup History', path: '/users' },
-  //     { label: 'Wallet History', path: '/users/add' }
-  //   ]
-  // },
 ];
 
 const sidebarRoutesGroup2: RouteItem[] = [
   {
     label: 'Setting',
-    path: '/dashboard',
+    path: '/dashboard/settings',
     icon: IoSettingsOutline,
   },
 
   {
     label: 'Manage Accounts',
-    path: '/dashboard',
+    path: '/dashboard/manage-account',
     icon: MdManageAccounts,
   },
   {
     label: 'Main Home',
-    path: '/dashboard',
+    path: '/',
     icon: IoHomeOutline,
   },
 ];
 function CustomerDashboardSidebar() {
-  const router = useRouter();
-  const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const toggleMenu = (label: string) => {
     setOpenMenus(prev => ({ ...prev, [label]: !prev[label] }));
   };
 
+  const { settings } = useAppSettings();
+  const { sidebarCollapse } = useCustomerDashboardLayoutContext();
   return (
-    <div className="w-full h-full dark:bg-[#0d1120] bg-black  py-5 px-3 ">
-      <Stack direction={'column'} className="h-full" justifyContent={'space-between'}>
+    <div className="w-full h-full dark:bg-[#0d1120] bg-black py-5 px-3">
+      <Stack direction="column" className="h-full" justifyContent="space-between">
         <div>
           <Typography
             variant="h4"
             color="primary"
             align="center"
             fontWeight={600}
-            fontFamily={'jost'}
+            fontFamily="jost"
+            mb={2}
           >
-            GameTop
+            {settings?.name}
           </Typography>
+
           <List>
-            {sidebarRoutesGroup1.map(route => {
-              const hasChildren = !!route.children?.length;
-              const isOpen = openMenus[route.label];
-
-              return (
-                <div key={route.label}>
-                  <ListItem
-                    className="p-2  text-white hover:text-secondary hover:scale-105 duration-75 hover:cursor-pointer"
-                    onClick={() => {
-                      if (hasChildren) {
-                        toggleMenu(route.label);
-                      } else if (route.path) {
-                        router.push(route.path);
-                      }
-                    }}
-                  >
-                    {route.icon && (
-                      <ListItemIcon>
-                        <route.icon size={32} color="white" />
-                      </ListItemIcon>
-                    )}
-                    <ListItemText
-                      disableTypography
-                      className=" font-primary   font-semibold text-lg"
-                    >
-                      {route.label}
-                    </ListItemText>
-
-                    {hasChildren && (isOpen ? <ExpandLess /> : <ExpandMore />)}
-                  </ListItem>
-
-                  {hasChildren && (
-                    <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding sx={{ pl: 4 }}>
-                        {route.children?.map(child => (
-                          <ListItem key={child.label} onClick={() => router.push(child.path!)}>
-                            <ListItemText className="text-white " primary={child.label} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Collapse>
-                  )}
-                </div>
-              );
-            })}
+            {sidebarRoutesGroup1.map(route => (
+              <SidebarItem
+                key={route.label}
+                route={route}
+                isOpen={openMenus[route.label]}
+                toggleMenu={toggleMenu}
+              />
+            ))}
           </List>
         </div>
+
         <List>
-          {sidebarRoutesGroup2.map(route => {
-            const hasChildren = !!route.children?.length;
-            const isOpen = openMenus[route.label];
-
-            return (
-              <div key={route.label}>
-                <ListItem
-                  className="p-2  text-white hover:text-secondary hover:scale-105 duration-75 hover:cursor-pointer"
-                  onClick={() => {
-                    if (hasChildren) {
-                      toggleMenu(route.label);
-                    } else if (route.path) {
-                      router.push(route.path);
-                    }
-                  }}
-                >
-                  {route.icon && (
-                    <ListItemIcon color="primary">
-                      <route.icon size={32} color="white" />
-                    </ListItemIcon>
-                  )}
-                  <ListItemText disableTypography className=" font-primary  font-semibold text-lg">
-                    {route.label}
-                  </ListItemText>
-
-                  {hasChildren && (isOpen ? <ExpandLess /> : <ExpandMore />)}
-                </ListItem>
-
-                {hasChildren && (
-                  <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding sx={{ pl: 4 }}>
-                      {route.children?.map(child => (
-                        <ListItem key={child.label} onClick={() => router.push(child.path!)}>
-                          <ListItemText className="text-txt-primary" primary={child.label} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Collapse>
-                )}
-              </div>
-            );
-          })}
+          {sidebarRoutesGroup2.map(route => (
+            <SidebarItem
+              key={route.label}
+              route={route}
+              isOpen={openMenus[route.label]}
+              toggleMenu={toggleMenu}
+            />
+          ))}
+          <ListItem>
+            <ListItemIcon>
+              <CiLogout size={22} color="white" />
+            </ListItemIcon>
+            <ListItemText className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer ">
+              Logout
+            </ListItemText>
+          </ListItem>
         </List>
       </Stack>
     </div>

@@ -9,6 +9,7 @@ import { IconType } from 'react-icons';
 import { FaUsersCog } from 'react-icons/fa';
 import { TiUserDelete } from 'react-icons/ti';
 import { IoLockClosed } from 'react-icons/io5';
+import SidebarItem from '../ui/SidebarItem';
 
 interface RouteItem {
   label: string;
@@ -22,7 +23,6 @@ interface Props {
 }
 
 function ManageAccountSidebar(props: Props) {
-  const router = useRouter();
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const toggleMenu = (label: string) => {
@@ -57,47 +57,13 @@ function ManageAccountSidebar(props: Props) {
       <Stack direction={'column'} className="h-full" justifyContent={'space-between'}>
         <List>
           {sidebarRoutesGroup1.map(route => {
-            const hasChildren = !!route.children?.length;
-            const isOpen = openMenus[route.label];
-
             return (
-              <div key={route.label}>
-                <ListItem
-                  className="p-2  text-white hover:text-secondary hover:scale-105 duration-75 hover:cursor-pointer"
-                  onClick={() => {
-                    if (hasChildren) {
-                      toggleMenu(route.label);
-                    } else if (route.path) {
-                      router.push(route.path);
-                    }
-                  }}
-                >
-                  {route.icon && (
-                    <ListItemIcon color="primary">
-                      <route.icon size={32} color="white" />
-                    </ListItemIcon>
-                  )}
-                  <ListItemText disableTypography className=" font-primary  font-semibold text-lg">
-                    {route.label}
-                  </ListItemText>
-
-                  <ListItemIcon className="ml-2">
-                    {hasChildren && (isOpen ? <ExpandLess /> : <ExpandMore />)}
-                  </ListItemIcon>
-                </ListItem>
-
-                {hasChildren && (
-                  <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding sx={{ pl: 4 }}>
-                      {route.children?.map(child => (
-                        <ListItem key={child.label} onClick={() => router.push(child.path!)}>
-                          <ListItemText className="text-white" primary={child.label} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Collapse>
-                )}
-              </div>
+              <SidebarItem
+                key={route.label}
+                route={route}
+                isOpen={openMenus[route.label]}
+                toggleMenu={toggleMenu}
+              />
             );
           })}
         </List>

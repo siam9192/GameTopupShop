@@ -33,3 +33,9 @@ export enum NotificationCategory {
   WALLET_SUBMISSION = 'Wallet_Submission',
   PROMOTION = 'Promotion', // Discounts, offers, campaigns
 }
+
+
+
+export interface  NotificationSetAsReadPayload {
+  ids:string[]
+}

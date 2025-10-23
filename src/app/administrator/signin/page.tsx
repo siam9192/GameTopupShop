@@ -72,7 +72,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     setOpen(true);
   };
 
-  
   const { mutate } = administratorSigninMutation();
   const router = useRouter();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -103,7 +102,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       } as SigninPayload,
       {
         onSuccess: data => {
-          queryClient.invalidateQueries({queryKey:['getCurrentUser']})
+          queryClient.invalidateQueries({ queryKey: ['getCurrentUser'] });
           toast.success('Login successful');
           router.push('/control-dashboard');
         },

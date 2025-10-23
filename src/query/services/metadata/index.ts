@@ -1,5 +1,7 @@
 import {
   getAdminDashboardMetadata,
+  getCustomerDashboardMetadata,
+  getCustomerWalletMetadata,
   getProductsMetadata,
   getUsersMetadata,
 } from '@/api-services/metadata';
@@ -10,6 +12,8 @@ import { Administrator, UpdateAdministratorProfilePayload } from '@/types/admini
 import { Customer, UpdateCustomerProfilePayload } from '@/types/customer.type';
 import {
   AdminDashboardMetaData,
+  CustomerDashboardMetaData,
+  CustomerWalletMetaData,
   ModeratorDashboardMetaData,
   ProductsMetadata,
   SuperAdminDashboardMetaData,
@@ -43,6 +47,20 @@ export function getModeratorDashboardMetadataQuery() {
   return useFetch<IResponse<ModeratorDashboardMetaData>>(
     ['getModeratorDashboardMetadata'],
     getModeratorDashboardMetadataQuery,
+  );
+}
+
+export function getCustomerDashboardMetadataQuery() {
+  return useFetch<IResponse<CustomerDashboardMetaData>>(
+    ['getCustomerDashboardMetadata'],
+    getCustomerDashboardMetadata,
+  );
+}
+
+export function getCustomerWalletMetadataQuery() {
+  return useFetch<IResponse<CustomerWalletMetaData>>(
+    ['getCustomerWalletMetadata'],
+    getCustomerWalletMetadata,
   );
 }
 

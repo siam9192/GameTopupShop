@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ManualPayment from '@/components/sections/customer-dashboard/ManualPayment';
-import DirectPayment from '@/components/sections/customer-dashboard/DirectPayment';
 import DashboardPageHeading from '@/components/ui/DashboardPageHeading';
+import LivePayment from '@/components/sections/customer-dashboard/LivePayment';
 
 function CustomTabPanel(props: any) {
   const { children, value, index, ...other } = props;
@@ -51,7 +51,7 @@ function page() {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="Manual Payment" {...a11yProps(0)} />
-            <Tab label="Direct Payment" {...a11yProps(1)} />
+            <Tab label="Live Payment" {...a11yProps(1)} />
             <Tab label="Payment Policies" {...a11yProps(2)} />
           </Tabs>
         </Box>
@@ -59,7 +59,7 @@ function page() {
           <ManualPayment />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <DirectPayment />
+          <LivePayment />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
           Item Three

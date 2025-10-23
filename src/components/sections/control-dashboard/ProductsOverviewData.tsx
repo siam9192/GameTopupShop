@@ -4,37 +4,32 @@ import { getProductsMetadataQuery } from '@/query/services/metadata';
 import React from 'react';
 import { MdInventory, MdFlashOn, MdLocalOffer, MdNewReleases } from 'react-icons/md';
 
-
 function ProductsOverviewData() {
   const { data, isLoading } = getProductsMetadataQuery();
   const mapping = [
     {
-     key: 'products',
+      key: 'products',
       icon: MdInventory,
-      label:'Products'
-    
+      label: 'Products',
     },
     {
-     key: 'topups',
+      key: 'topups',
       icon: MdFlashOn,
-      label:'Topups'
-    
+      label: 'Topups',
     },
     {
-     key: 'offers',
+      key: 'offers',
       icon: MdLocalOffer,
-      label:'Offers'
+      label: 'Offers',
     },
     {
-     key: 'recentProducts',
+      key: 'recentProducts',
       icon: MdNewReleases,
-      label:'Recent Products'
+      label: 'Recent Products',
     },
   ];
 
-  return (
-   <DashboardOverviewData data={data?.data} mapping={mapping} isLoading={isLoading} />
-  );
+  return <DashboardOverviewData data={data?.data} mapping={mapping} isLoading={isLoading} />;
 }
 
 export default ProductsOverviewData;

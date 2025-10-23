@@ -63,15 +63,14 @@ export type OffersFilterPayload = Partial<
   }
 >;
 
-
-export  type  PopularOffer =  {
-  _id:string
-  rank:number,
-  name:string,
-  coverPhoto:string
+export type PopularOffer = {
+  _id: string;
+  rank: number;
+  name: string;
+  coverPhoto: string;
   platformName: string;
-  revenue:number,
-  ordersSuccess:number
-  ordersCount:number,
+  revenue: number;
+  ordersSuccess: number;
+  ordersCount: number;
   status: OfferStatus;
-}
+};

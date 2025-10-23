@@ -3,6 +3,8 @@ import {
   deleteManualPaymentMethod,
   getManualPaymentMethodById,
   getManualPaymentMethods,
+  getPublicManualPaymentMethodById,
+  getPublicManualPaymentMethods,
   updateManualPaymentMethod,
   updateManualPaymentMethodStatus,
 } from '@/api-services/manual-payment-method';
@@ -23,9 +25,20 @@ export function getManualPaymentMethodsQuery(params: Param[]) {
   );
 }
 
+export function getPublicManualPaymentMethodsQuery(params: Param[]) {
+  return useFetch<IResponse<ManualPaymentMethod[]>>(['getPublicManualPaymentMethods'], () =>
+    getPublicManualPaymentMethods(params),
+  );
+}
 export function getManualPaymentMethodByIdQuery(id: string) {
   return useFetch<IResponse<ManualPaymentMethod>>(['getManualPaymentMethodById', id], () =>
     getManualPaymentMethodById(id),
+  );
+}
+
+export function getPublicManualPaymentMethodByIdQuery(id: string) {
+  return useFetch<IResponse<ManualPaymentMethod>>(['getPublicManualPaymentMethodById', id], () =>
+    getPublicManualPaymentMethodById(id),
   );
 }
 

@@ -1,29 +1,53 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { WalletHistory, WalletHistoryType } from '@/types/wallet-history.type';
+import { Stack, Typography } from '@mui/material';
 import React from 'react';
-
-function WalletHistoryCard() {
+import { PiArrowDownBold, PiArrowUpBold } from 'react-icons/pi';
+interface Props {
+  history: WalletHistory;
+}
+function WalletHistoryCard({ history }: Props) {
+  const isCredit = history.type === WalletHistoryType.CREDIT;
   return (
-    <div className=" p-2 md:p-3 relative">
-      <Stack spacing={0.5}>
-        <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} gap={1}>
-          <Typography fontWeight={500} fontSize={20} color="text.primary">
-            Game Topup
-          </Typography>
+    <div className="relative  p-3 md:p-4  transition-all duration-300">
+      <Stack spacing={1}>
+        {/* Header: Transaction Type + Amount */}
+        <Stack direction="row" alignItems="center" justifyContent="space-between" gap={1}>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            {isCredit ? (
+              <PiArrowDownBold className="text-green-600 text-xl" />
+            ) : (
+              <PiArrowUpBold className="text-red-500 text-xl" />
+            )}
+            <Typography
+              fontWeight={600}
+              fontSize={18}
+              color={isCredit ? 'success.main' : 'error.main'}
+            >
+              {isCredit ? 'Credit' : 'Debit'}
+            </Typography>
+          </Stack>
+
           <Typography
-            variant="h5"
-            fontSize={{
-              xs: 20,
-              md: 24,
-              lg: 26,
-            }}
-            fontWeight={500}
-            color="red"
+            fontSize={{ xs: 20, md: 24 }}
+            fontWeight={600}
+            color={isCredit ? 'success.main' : 'error.main'}
           >
-            -$23
+            {isCredit ? '+' : '-'}${history.amount.toFixed(2)}
           </Typography>
         </Stack>
-        <Typography fontSize={16} fontWeight={500} color="secondary">
-          {new Date().toDateString()} {new Date().toLocaleTimeString()}
+
+        {/* Balance Info */}
+        <Typography fontSize={14} color="text.secondary">
+          Previous Balance: ${history.prevBalance.toFixed(2)}
+        </Typography>
+
+        {/* Date & Time */}
+        <Typography fontSize={14} color="text.secondary">
+          {new Date(history.createdAt).toLocaleDateString()} &bull;{' '}
+          {new Date(history.createdAt).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
         </Typography>
       </Stack>
     </div>

@@ -20,9 +20,9 @@ export interface Customer {
 }
 
 export interface UpdateCustomerProfilePayload {
-  name: Name;
-  profilePicture: string;
-  phone: string;
+  name?: Name;
+  profilePicture?: string;
+  phone?: string | null;
 }
 
 export interface TopCustomer {

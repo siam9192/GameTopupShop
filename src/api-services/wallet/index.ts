@@ -3,7 +3,6 @@
 import axiosInstance from '@/axios/axiosInstance';
 import { Param } from '@/types/metadata.type';
 import { UpdateWalletBalancePayload } from '@/types/wallet.type';
-
 import { paramsToString } from '@/utils/helper';
 import { AxiosError } from 'axios';
 

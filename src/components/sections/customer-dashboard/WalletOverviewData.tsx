@@ -1,79 +1,43 @@
-import { Grid, Stack, Typography } from '@mui/material';
+'use client';
+import DashboardOverviewData from '@/components/ui/DashboardOverviewData';
+import { getCustomerWalletMetadataQuery } from '@/query/services/metadata';
 import React from 'react';
+
 import { HiOutlineWallet } from 'react-icons/hi2';
-import { IoBagCheck } from 'react-icons/io5';
-import { PiCurrencyDollarSimpleBold } from 'react-icons/pi';
-import { TbRecharging } from 'react-icons/tb';
+import { TbArrowBigDownLines, TbCalendarTime } from 'react-icons/tb';
+import { IoHourglassOutline } from 'react-icons/io5';
 
 function WalletOverviewData() {
-  const data = [
+  const { data, isLoading } = getCustomerWalletMetadataQuery();
+
+  const mapping = [
     {
-      name: 'Available Balance',
+      key: 'balance',
+      label: 'Available Balance',
       icon: HiOutlineWallet,
-      value: 7523,
+      isCurrency: true,
     },
     {
-      name: 'Total Spend',
-      icon: TbRecharging,
-      value: 233,
+      key: 'totalSpend',
+      label: 'Total Spend',
+      icon: TbArrowBigDownLines,
+      isCurrency: true,
     },
     {
-      name: 'Last 30 days Spend',
-      icon: IoBagCheck,
-      value: 2398,
+      key: 'last30daysSpend',
+      label: 'Last 30 Days Spend',
+      icon: TbCalendarTime,
+      isCurrency: true,
+    },
+    {
+      key: 'pendingAmount',
+      label: 'Amount Pending',
+      icon: IoHourglassOutline,
+      isCurrency: true,
     },
   ];
 
-  return (
-    <div>
-      <Grid
-        container
-        spacing={2}
-        columns={{
-          xs: 1,
-          sm: 1,
-          md: 3,
-          lg: 3,
-        }}
-      >
-        {data.map((_, index) => (
-          <Grid size={1} key={index}>
-            <div className=" glass shadow_1  p-3 md:p-5 rounded-lg min-h-52">
-              <Typography fontWeight={600} fontSize={20} variant="caption" color="text.primary">
-                {_.name}
-              </Typography>
-              <Stack
-                marginTop={5}
-                direction={'row'}
-                gap={2}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
-                <span>
-                  <_.icon className="text-txt-primary  text-4xl md:text-6xl" />
-                </span>
-                <Typography
-                  fontWeight={600}
-                  align="center"
-                  component={'h1'}
-                  variant="h3"
-                  fontSize={{
-                    xs: 28,
-                    sm: 30,
-                    md: 40,
-                  }}
-                  color="secondary"
-                  fontFamily={'jost'}
-                >
-                  {_.value.toLocaleString()}
-                </Typography>
-              </Stack>
-            </div>
-          </Grid>
-        ))}
-      </Grid>
-    </div>
-  );
+  return <DashboardOverviewData data={data?.data} isLoading={isLoading} mapping={mapping} />;
 }
 
 export default WalletOverviewData;

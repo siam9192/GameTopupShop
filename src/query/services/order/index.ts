@@ -1,6 +1,8 @@
 import { updateOffer } from '@/api-services/offer';
 import {
   createOrder,
+  getMyOrders,
+  getMyRecentOrders,
   getOrderById,
   getOrders,
   getRecentOrders,
@@ -17,6 +19,10 @@ export function getOrdersQuery(params: Param[]) {
   return useFetch<IResponse<Order[]>>(['getOrders'], () => getOrders(params));
 }
 
+export function getMyOrdersQuery(params: Param[]) {
+  return useFetch<IResponse<Order[]>>(['getMyOrders'], () => getMyOrders(params));
+}
+
 export function getOrderByIdQuery(id: string) {
   return useFetch<IResponse<Order>>(['getOrderById', id], () => getOrderById(id));
 }
@@ -24,6 +30,12 @@ export function getOrderByIdQuery(id: string) {
 export function getRecentOrdersQuery(recentDate: string, params?: Param[]) {
   return useFetch<IResponse<Order[]>>(['getRecentOrders'], () =>
     getRecentOrders(recentDate, params),
+  );
+}
+
+export function getMyRecentOrdersQuery(recentDate: string, params?: Param[]) {
+  return useFetch<IResponse<Order[]>>(['getMyRecentOrders'], () =>
+    getMyRecentOrders(recentDate, params),
   );
 }
 

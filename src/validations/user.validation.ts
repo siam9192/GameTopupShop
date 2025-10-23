@@ -7,7 +7,7 @@ const updateCustomerProfileValidation = z
       last: z.string().nonempty().max(25),
     }),
     profilePicture: z.instanceof(File, { message: 'Profile picture is required' }),
-    phone: z.string().nonempty().max(40),
+    phone: z.string().nonempty().max(40).nullable(),
   })
   .partial();
 
@@ -24,7 +24,7 @@ const updateAdministratorProfileValidation = z
 export type UpdateAdministratorProfileValidation = z.infer<
   typeof updateAdministratorProfileValidation
 >;
-export type UpdateCustomerProfileValidation = z.infer<typeof updateAdministratorProfileValidation>;
+export type UpdateCustomerProfileValidation = z.infer<typeof updateCustomerProfileValidation>;
 
 const userValidations = {
   updateCustomerProfileValidation,

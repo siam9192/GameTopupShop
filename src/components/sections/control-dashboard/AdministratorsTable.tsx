@@ -22,7 +22,7 @@ import {
 import { useAdministratorsPageContext } from '@/app/control-dashboard/users/administrators/page';
 import { Param } from '@/types/metadata.type';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
-import { AccountStatus } from '@/types/user.type';
+import { AccountStatus, AdministratorLevel } from '@/types/user.type';
 import AdministratorDetailsDialog from '@/components/ui/AdministratorDetailsDialog';
 import UpdateAdministratorLevelDialog from '@/components/ui/UpdateAdministratorLevelDialog';
 import { toast } from 'react-toastify';
@@ -189,6 +189,7 @@ function AdministratorsTable() {
 
                       <Tooltip title="Edit administrator">
                         <button
+                          disabled={administrator.level === AdministratorLevel.SUPER_ADMIN}
                           onClick={e => handleOpenMenu(e, administrator._id)}
                           className="text-2xl hover:text-secondary mr-2 hover:cursor-pointer"
                         >
@@ -255,6 +256,7 @@ function AdministratorsTable() {
                   ),
 
                   <MenuItem
+                    disabled={administrator.level === AdministratorLevel.SUPER_ADMIN}
                     key={`delete-${administrator._id}`}
                     onClick={() => handleDelete(administrator._id)}
                   >
@@ -262,6 +264,7 @@ function AdministratorsTable() {
                   </MenuItem>,
 
                   <MenuItem
+                    disabled={administrator.level === AdministratorLevel.SUPER_ADMIN}
                     key={`update-${administrator._id}`}
                     onClick={() => setEditId(administrator._id)}
                   >

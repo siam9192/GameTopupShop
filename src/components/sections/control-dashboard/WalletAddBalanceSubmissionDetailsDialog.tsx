@@ -80,7 +80,7 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
                   <Typography
                     component="span"
                     dangerouslySetInnerHTML={{
-                      __html: `  Lorem ipsum dolor, sit amet consectetur \n adipisicing elit. Similique, soluta reiciendis nihil corrupti aspernatur expedita porro iste perferendis tempora molestiae.`,
+                      __html: submission.note,
                     }}
                     fontWeight={500}
                   ></Typography>
