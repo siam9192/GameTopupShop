@@ -1,6 +1,6 @@
 'use server';
 import axiosInstance from '@/axios/axiosInstance';
-import { ChangePasswordPayload } from '@/server/utils/auth.type';
+import { AuthTokens, ChangePasswordPayload } from '@/server/utils/auth.type';
 import { IResponse } from '@/types/response.type';
 import { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
@@ -37,12 +37,12 @@ export async function customerSignup(payload: CustomerSignupPayload) {
 
 export async function customerSignin(payload: SigninPayload) {
   try {
-    const res = await axiosInstance.post<IResponse<{ accessToken: string; refreshToken: string }>>(
+    const res = await axiosInstance.post<IResponse<AuthTokens>>(
       '/auth/signin',
       payload,
     );
     const data = res.data;
-    await setAuthTokens(data.data.accessToken, data.data.refreshToken);
+    await setAuthTokens(data.data);
     return data; // return only the useful data
   } catch (err) {
     const error = err as AxiosError<{ message?: string }>;
@@ -62,7 +62,7 @@ export async function administratorSignin(payload: SigninPayload) {
       payload,
     );
     const data = res.data;
-    await setAuthTokens(data.data.accessToken, data.data.refreshToken);
+     await setAuthTokens(data.data);
     return data; // return only the useful data
   } catch (err) {
     const error = err as AxiosError<{ message?: string }>;
@@ -91,22 +91,29 @@ export async function changePassword(payload: ChangePasswordPayload) {
   }
 }
 
-export async function setAuthTokens(accessToken: string, refreshToken: string) {
+export async function setAuthTokens(tokens:AuthTokens) {
+  
+  const {accessToken,refreshToken} =  tokens
+
+  
   const cookieStore = await cookies();
-  cookieStore.set({
-    name: 'accessToken',
-    value: accessToken,
+
+  cookieStore.set('accessToken', accessToken, {
+    httpOnly: true,
+    path: '/',
+    maxAge: 10 * 365 * 24 * 60 * 60, // 10 years
+    secure: false,
+    sameSite: 'lax',
+  });
+
+  cookieStore.set('refreshToken', refreshToken, {
     httpOnly: true,
     path: '/',
     maxAge: 10 * 365 * 24 * 60 * 60,
+    secure:false,
+    sameSite: 'lax',
   });
-  cookieStore.set({
-    name: 'refreshToken',
-    value: refreshToken,
-    httpOnly: true,
-    path: '/',
-    maxAge: 10 * 365 * 24 * 60 * 60,
-  });
+
 }
 
 export async function logout() {

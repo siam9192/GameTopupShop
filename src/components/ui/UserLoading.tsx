@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode;
 }
 function UserLoading({ children }: Props) {
-  const { isLoading } = useCurrentUser();
+  const { user, isLoading } = useCurrentUser();
   if (isLoading) {
     return (
       <div className="h-screen w-full flex justify-center items-center ">
@@ -18,9 +18,11 @@ function UserLoading({ children }: Props) {
         </div>
       </div>
     );
-  } else {
+  } else if (user) {
     return children;
   }
+
+  return null;
 }
 
 export default UserLoading;

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import Link from '@mui/material/Link';
@@ -103,11 +102,11 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       {
         onSuccess: data => {
           queryClient.invalidateQueries({ queryKey: ['getCurrentUser'] });
-          toast.success('Login successful');
-          router.push('/control-dashboard');
+          // toast.success('Login successful');
+          // router.push('/control-dashboard');
         },
         onError: error => {
-          console.log(error);
+        
           setErrorMessage(error.message);
           toast.error(error.message);
         },

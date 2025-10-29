@@ -3,6 +3,7 @@ import {
   getCustomerDashboardMetadata,
   getCustomerWalletMetadata,
   getProductsMetadata,
+  getSuperAdminDashboardMetadata,
   getUsersMetadata,
 } from '@/api-services/metadata';
 import { updateUserProfile } from '@/api-services/user';
@@ -32,7 +33,7 @@ export function getProductsMetadataQuery() {
 export function getSuperAdminDashboardMetadataQuery() {
   return useFetch<IResponse<SuperAdminDashboardMetaData>>(
     ['getSuperAdminDashboardMetadata'],
-    getSuperAdminDashboardMetadataQuery,
+    getSuperAdminDashboardMetadata,
   );
 }
 

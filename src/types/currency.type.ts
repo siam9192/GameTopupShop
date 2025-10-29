@@ -1,12 +1,11 @@
-import { Document } from 'mongoose';
 
-export interface Currency extends Document {
+
+export interface Currency {
   name: string; // Full currency name (e.g., "Bangladeshi Taka")
   code: string; // ISO code (e.g., "BDT", "USD")
   symbol: string; // Symbol (e.g., "৳", "$")
   status: CurrencyStatus; // Availability status
-  createdAt?: Date;
-  updatedAt?: Date;
+ 
 }
 
 export enum CurrencyStatus {

@@ -3,11 +3,22 @@ import React from 'react';
 import { HiOutlineHome } from 'react-icons/hi2';
 import { IoGameControllerOutline, IoSettingsOutline } from 'react-icons/io5';
 import { FaHeadset } from 'react-icons/fa6';
-import { Avatar, List, ListItem, ListItemIcon, ListItemText, Stack } from '@mui/material';
+import {
+  Avatar,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { BiSolidOffer } from 'react-icons/bi';
-import useCommonLayoutContext from '@/context/useCommonLayoutContext';
 import Link from 'next/link';
-
+import { CiLogout } from 'react-icons/ci';
+import { useCurrentUser } from '@/provider/CurrentUserProvider';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
+import { logout } from '@/api-services/auth';
+import { queryClient } from '@/provider/Provider';
 function Sidebar() {
   const routes1 = [
     {
@@ -16,9 +27,9 @@ function Sidebar() {
       path: '/',
     },
     {
-      title: 'Shop',
+      title: 'Top-ups',
       icon: IoGameControllerOutline,
-      path: '/games',
+      path: '/topups',
     },
     {
       title: 'Offers',
@@ -30,35 +41,36 @@ function Sidebar() {
     {
       title: 'Support',
       icon: FaHeadset,
-      path: '',
+      path: '/support',
     },
-    {
-      title: 'Settings',
-      icon: IoSettingsOutline,
-      path: '',
-    },
+    // {
+    //   title: 'Dashboard',
+    //   icon: RxDashboard,
+    //   path: '/dashboard',
+    // },
   ];
-  const { sidebarCollapse } = useCommonLayoutContext();
 
-  const collapse = sidebarCollapse;
+  const { user } = useCurrentUser();
+  const { settings } = useAppSettings();
+
+  async function handelLogout() {
+    await logout();
+     queryClient.invalidateQueries({ queryKey: ['getCurrentUser'] });
+  }
 
   return (
-    <div
-      className={` w-full rounded-lg h-full ${collapse ? 'py-8 px-5' : 'py-5 px-10'}     dark:bg-[#0F0F0F] bg-black relative `}
-    >
-      {collapse === false ? (
-        <h1 className="text-3xl font-medium  text-white">
-          <span className="text-4xl text-primary font-semibold">Game</span>TopUp
-        </h1>
-      ) : null}
+    <div className={` w-full h-full py-5 px-10    dark:bg-[#0F0F0F] bg-black relative `}>
+      <Typography
+        variant="h4"
+        color="primary"
+        align="center"
+        fontWeight={600}
+        fontFamily="jost"
+        mb={2}
+      >
+        {settings?.name}
+      </Typography>
 
-      {collapse === false ? (
-        <img
-          className="w-[60%] hidden"
-          src="https://jubaly.com/wp-content/uploads/2022/01/Untitled-13-TB-for-Website-Use.png"
-          alt=""
-        />
-      ) : null}
       <Stack direction={'column'} justifyContent={'space-between'} height={'90%'}>
         <Stack direction={'column'} spacing={4} fontFamily={'Open Sans'} color={'primary'}>
           <List>
@@ -91,16 +103,33 @@ function Sidebar() {
               </ListItemText>
             </ListItem>
           ))}
-          <ListItem>
-            <Avatar
-              alt="Remy Sharp"
-              variant="rounded"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyW2MAFrFnfa_bT1jSttLbmvfotJcqQyCCGg&s"
-            />
-            <ListItemText className="text-white font-primary  font-semibold text-lg ml-4">
-              MRS. Jasmine
+          {user ? (
+           <>
+            <Link href="/dashboard">
+              <ListItem>
+                <Avatar alt="" variant="rounded" src={user.profilePicture} />
+                <ListItemText className="text-white font-primary  font-semibold text-lg ml-4">
+                  {user.fullName}
+                </ListItemText>
+              </ListItem>
+            </Link>
+       <ListItem>
+            <ListItemIcon>
+              <CiLogout size={22} color="white" />
+            </ListItemIcon>
+    
+             <ListItemText
+              onClick={handelLogout}
+              className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer "
+            >
+              Logout
             </ListItemText>
+            
+    
           </ListItem>
+           </>
+          ) : null}
+   
         </List>
       </Stack>
     </div>

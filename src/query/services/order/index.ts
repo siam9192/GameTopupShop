@@ -1,6 +1,7 @@
-import { updateOffer } from '@/api-services/offer';
+import { getEndingSoonOffers, updateOffer } from '@/api-services/offer';
 import {
   createOrder,
+  getLatestOrders,
   getMyOrders,
   getMyRecentOrders,
   getOrderById,
@@ -11,7 +12,7 @@ import {
 import useFetch from '@/query/client/useFetch';
 import useMutate from '@/query/client/useMutation';
 import { Param } from '@/types/metadata.type';
-import { UpdateOfferPayload } from '@/types/offer.type';
+import { Offer, UpdateOfferPayload } from '@/types/offer.type';
 import { CreateOrderPayload, Order, UpdateOrderStatusPayload } from '@/types/order.type';
 import { IResponse } from '@/types/response.type';
 
@@ -23,8 +24,16 @@ export function getMyOrdersQuery(params: Param[]) {
   return useFetch<IResponse<Order[]>>(['getMyOrders'], () => getMyOrders(params));
 }
 
+export function getLatestOrdersQuery() {
+  return useFetch<IResponse<Order[]>>(['getLatestOrders'], getLatestOrders);
+}
+
 export function getOrderByIdQuery(id: string) {
   return useFetch<IResponse<Order>>(['getOrderById', id], () => getOrderById(id));
+}
+
+export function getEndingSoonOffersQuery(params: Param[]) {
+  return useFetch<IResponse<Offer[]>>(['getEndingSoonOffers'], () => getEndingSoonOffers(params));
 }
 
 export function getRecentOrdersQuery(recentDate: string, params?: Param[]) {

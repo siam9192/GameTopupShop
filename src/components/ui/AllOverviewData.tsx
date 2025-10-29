@@ -15,6 +15,8 @@ function AllOverviewData() {
   if (user && 'level' in user && typeof user.level === 'string') {
     role = user.level as any as UserRole;
   }
+
+  
   switch (role) {
     case UserRole.CUSTOMER:
       return <CustomerDashboardAllOverviewData />;

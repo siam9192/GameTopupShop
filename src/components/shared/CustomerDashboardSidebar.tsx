@@ -55,7 +55,7 @@ const sidebarRoutesGroup1: RouteItem[] = [
 
 const sidebarRoutesGroup2: RouteItem[] = [
   {
-    label: 'Setting',
+    label: 'Settings',
     path: '/dashboard/settings',
     icon: IoSettingsOutline,
   },
@@ -79,7 +79,7 @@ function CustomerDashboardSidebar() {
   };
 
   const { settings } = useAppSettings();
-  const { sidebarCollapse } = useCustomerDashboardLayoutContext();
+
   return (
     <div className="w-full h-full dark:bg-[#0d1120] bg-black py-5 px-3">
       <Stack direction="column" className="h-full" justifyContent="space-between">

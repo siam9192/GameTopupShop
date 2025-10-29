@@ -33,3 +33,8 @@ export const CURRENCIES = [
     status: 'Active',
   },
 ];
+const defaultImages = [
+  'https://i.ytimg.com/vi/WzwHXvjHTag/maxresdefault.jpg',
+  'https://cdn-www.bluestacks.com/bs-images/Top-Free-Fire-Characters-of-2025-A-Comprehensive-Guide.png',
+  'https://staticg.sportskeeda.com/editor/2021/12/606e9-16392154686721-1920.jpg?w=640',
+];

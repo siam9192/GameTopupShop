@@ -21,3 +21,10 @@ export interface RouteItem {
   roles?: AdministratorLevel[];
   children?: RouteItem[];
 }
+
+export interface SearchProduct {
+  _id: string;
+  name: string;
+  coverPhoto: string;
+  type: 'Topup' | 'Order';
+}

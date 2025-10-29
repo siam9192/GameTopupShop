@@ -34,8 +34,6 @@ export enum NotificationCategory {
   PROMOTION = 'Promotion', // Discounts, offers, campaigns
 }
 
-
-
-export interface  NotificationSetAsReadPayload {
-  ids:string[]
+export interface NotificationSetAsReadPayload {
+  ids: string[];
 }

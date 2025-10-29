@@ -29,6 +29,79 @@ export async function getTopups(params: Param[]) {
   }
 }
 
+export async function getPublicTopups(params: Param[]) {
+  try {
+    const res = await axiosInstance.get(`/topups/public${paramsToString(params)}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
+export async function getPopularTopups(params: Param[]) {
+  try {
+    const res = await axiosInstance.get(`/topups/popular${paramsToString(params)}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
+export async function getFeaturedTopups(params: Param[]) {
+  try {
+    const res = await axiosInstance.get(`/topups/featured${paramsToString(params)}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
+
+export async function getPublicTopupById(id:string) {
+  try {
+    const res = await axiosInstance.get(`/topups/public/${id}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
 export async function getTopupById(id: string) {
   try {
     const res = await axiosInstance.get(`/topups/${id}`);

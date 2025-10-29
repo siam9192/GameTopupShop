@@ -1,4 +1,5 @@
 'use client';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 import { getWalletSubmissionByIdQuery } from '@/query/services/wallet-submission';
 import {
   Avatar,
@@ -23,8 +24,7 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
   const { data, isLoading } = getWalletSubmissionByIdQuery(id);
   const submission = data?.data;
   const customer = submission?.customer;
-  const method = submission?.method;
-
+ const {currency} = useAppSettings()
   return (
     <Dialog open={true} fullWidth onClose={onClose}>
       <DialogTitle>Submission Details</DialogTitle>
@@ -49,7 +49,7 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
                 <Typography fontSize={15} color="text.secondary">
                   Amount:{' '}
                   <Typography component="span" color="success.main" fontWeight={600}>
-                    {submission.amount.toLocaleString()} BDT
+                   {currency.symbol}{submission.amount.toLocaleString()}
                   </Typography>
                 </Typography>
                 <Typography fontSize={15} color="text.secondary">
@@ -90,7 +90,7 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
               {/* METHOD DETAILS */}
               {submission.method && (
                 <Box mt={2}>
-                  <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                  <Typography variant="h6" fontWeight={600} gutterBottom>
                     Payment Method Info
                   </Typography>
                   <Stack direction="row" spacing={2} alignItems="center">
@@ -101,9 +101,7 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
                     />
                     <Box>
                       <Typography fontWeight={600}>{submission.method.name}</Typography>
-                      <Typography fontSize={14} color="text.secondary">
-                        {submission.method.description}
-                      </Typography>
+                    
                     </Box>
                   </Stack>
                   <Typography fontSize={14} mt={1}>

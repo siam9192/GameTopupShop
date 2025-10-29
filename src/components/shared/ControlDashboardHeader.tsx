@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
-import { Avatar, Badge, Box, IconButton, Stack, Typography, useTheme, Paper } from '@mui/material';
-import { LuMessageSquareText } from 'react-icons/lu';
+import { Avatar, Box, IconButton, Stack, Typography, useTheme, Paper } from '@mui/material';
 import { RiMenuUnfoldLine } from 'react-icons/ri';
 import ToggleThemeMode from '../ui/ToggleThemeMode';
 import NotificationBar from '../ui/NotificationBar';
@@ -13,23 +12,25 @@ function ControlDashboardHeader() {
   const user = data.user as Administrator;
 
   return (
-    <Paper
-      elevation={1}
+    <Box
+     
       sx={{
         px: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6, xxl: 8 },
         py: { xs: 1.5, sm: 2, md: 2.5 },
-
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backdropFilter: 'blur(8px)',
-        backgroundColor:
-          theme.palette.mode === 'dark' ? 'rgba(30,30,30,0.8)' : 'rgba(255,255,255,0.7)',
+        background:'transparent'
+       
       }}
     >
       {/* Left Section */}
       <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 2, md: 3 }}>
-        <IconButton color="secondary">
+        <IconButton  sx={{
+              display: {
+                lg: 'none',
+              },
+            }} color="secondary">
           <RiMenuUnfoldLine size={24} />
         </IconButton>
 
@@ -95,7 +96,7 @@ function ControlDashboardHeader() {
         <NotificationBar />
         <ToggleThemeMode />
       </Stack>
-    </Paper>
+    </Box>
   );
 }
 

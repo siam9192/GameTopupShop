@@ -70,6 +70,6 @@ export interface MakeWalletAddBalanceLivePaymentPayload {
   methodId: string;
 }
 
-export interface MakeWalletPaymentPayload {
+export interface MakeOrderWalletPaymentPayload {
   orderId: string;
 }

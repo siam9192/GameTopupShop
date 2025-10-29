@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 
 export async function getSuperAdminDashboardMetadata() {
   try {
-    const res = await axiosInstance.get('/metadata/role/super-admin');
+    const res = await axiosInstance.get('/metadata/role/super_admin');
 
     return res.data;
   } catch (err: unknown) {

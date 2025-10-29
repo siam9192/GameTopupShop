@@ -3,6 +3,7 @@ import {
   deleteBanner,
   getBannerById,
   getBanners,
+  getPublicBanners,
   updateBanner,
 } from '@/api-services/banner';
 import useFetch from '@/query/client/useFetch';
@@ -17,6 +18,10 @@ export function createBannerMutation() {
 
 export function getBannersQuery(params: Param[]) {
   return useFetch<IResponse<Banner[]>>(['getBanners'], () => getBanners(params));
+}
+
+export function getPublicBannersQuery(params: Param[]) {
+  return useFetch<IResponse<Banner[]>>(['getPublicBanners'], () => getPublicBanners(params));
 }
 
 export function getBannerByIdQuery(id: string) {

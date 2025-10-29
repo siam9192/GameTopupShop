@@ -29,6 +29,45 @@ export async function getOffers(params: Param[]) {
   }
 }
 
+
+
+export async function getPublicOffers(params: Param[]) {
+  try {
+    const res = await axiosInstance.get(`/offers${paramsToString(params)}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
+
+export async function getEndingSoonOffers(params: Param[]) {
+  try {
+    const res = await axiosInstance.get(`/offers/ending-soon${paramsToString(params)}`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
 export async function getOfferById(id: string) {
   try {
     const res = await axiosInstance.get(`/offers/${id}`);

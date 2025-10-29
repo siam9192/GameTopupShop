@@ -24,6 +24,7 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
   const { data, isLoading, isFetching, isError, refetch } = getCurrentUserQuery();
 
   const user = data?.data || null;
+  
 
   return (
     <CurrentUserContext.Provider

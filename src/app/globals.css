@@ -66,3 +66,7 @@ button:hover {
 button:disabled {
   cursor: default;
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

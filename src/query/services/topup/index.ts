@@ -1,6 +1,10 @@
 import {
   createTopup,
   deleteTopup,
+  getFeaturedTopups,
+  getPopularTopups,
+  getPublicTopupById,
+  getPublicTopups,
   getTopupById,
   getTopups,
   updateTopup,
@@ -21,8 +25,24 @@ export function getTopupsQuery(params: Param[]) {
   return useFetch<IResponse<Topup[]>>(['getTopups'], () => getTopups(params));
 }
 
+export function getPublicTopupsQuery(params: Param[]) {
+  return useFetch<IResponse<Topup[]>>(['getPublicTopups'], () => getPublicTopups(params));
+}
+
+export function getPublicTopupByIdQuery(id: string) {
+  return useFetch<IResponse<Topup>>(['getPublicTopupById', id], () => getPublicTopupById(id));
+}
+
 export function getTopupByIdQuery(id: string) {
   return useFetch<IResponse<Topup>>(['getTopupById', id], () => getTopupById(id));
+}
+
+export function getPopularTopupsQuery(params: Param[]) {
+  return useFetch<IResponse<Topup[]>>(['getPopularTopups'], () => getPopularTopups(params));
+}
+
+export function getFeaturedTopupsQuery(params: Param[]) {
+  return useFetch<IResponse<Topup[]>>(['getFeaturedTopups'], () => getFeaturedTopups(params));
 }
 
 export function updateTopupStatusMutation() {

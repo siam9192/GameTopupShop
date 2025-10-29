@@ -24,19 +24,26 @@ function layout({
 
   return (
     <>
-      <div className="max-w-[2500px] mx-auto ">
+      <div className="max-w-[2500px] mx-auto overflow-hidden">
         <CommonLayoutContext.Provider value={value}>
-          <Stack direction={'row'}>
+          <div className={`flex h-screen ${sidebarCollapse ? 'w-[2000px]' : ''}  `}>
+            {/* Sidebar */}
             <div
-              className={`h-screen  max-h-[1700px] lg:block hidden  sticky top-0 p-2  ${sidebarCollapse === false ? 'w-[300px]' : 'w-[100px] '}  duration-200 ease-in overflow-hidden`}
+              className={`
+            sticky top-0 h-screen border-r bg-white dark:bg-gray-900
+            transition-all duration-200
+            ${sidebarCollapse ? 'w-[300px]' : 'w-0 lg:w-[300px]'}
+           overflow-hidden`}
             >
               <Sidebar />
             </div>
-            <div className=" grow lg:min-w-[1000px] max-w-[1600px] lg:px-2  ">
+
+            {/* Main Content */}
+            <div className="flex-1 flex flex-col transition-all duration-200 overflow-y-auto">
               <Header />
-              <div className="p-2">{children}</div>
+              <div className="p-5">{children}</div>
             </div>
-          </Stack>
+          </div>
         </CommonLayoutContext.Provider>
       </div>
     </>

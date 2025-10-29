@@ -42,6 +42,24 @@ export async function getWalletById(id: string) {
   }
 }
 
+export async function getMyWallet() {
+  try {
+    const res = await axiosInstance.get(`/wallets/my`);
+
+    return res.data;
+  } catch (err: unknown) {
+    let message = 'Something went wrong';
+
+    if (err instanceof AxiosError) {
+      message = err.response?.data?.message || err.message || message;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
+
+    throw new Error(message);
+  }
+}
+
 export async function updateWalletBalance(payload: UpdateWalletBalancePayload) {
   try {
     const res = await axiosInstance.patch(`/wallets/balance`, payload);

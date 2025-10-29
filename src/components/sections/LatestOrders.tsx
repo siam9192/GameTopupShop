@@ -1,44 +1,42 @@
-import { Box, Stack, Typography } from '@mui/material';
+'use client';
+
 import React from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import SectionHeading from '../ui/SectionHeading';
+import { getLatestOrdersQuery } from '@/query/services/order';
+import LatestOrderCard from '../cards/LatestOrderCard';
 
 function LatestOrders() {
+  const { data, isLoading } = getLatestOrdersQuery();
+  const orders = data?.data ?? [];
+
+  const isEmpty = !orders.length && !isLoading;
+
   return (
-    <Box component={'section'} className="">
-      <div className="text-center">
+    <Box component="section" className="py-8">
+      <div className="text-center mb-6">
         <SectionHeading title="Latest Orders" />
       </div>
-      <Box marginTop={5} className="lg:w-[80%] mx-auto space-y-5">
-        {Array.from({
-          length: 10,
-        }).map((_, index) => (
-          <Box
-            key={index}
-            display={'flex'}
-            flexDirection={'row'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            className="p-5 glass "
-          >
-            <Stack direction={'row'} spacing={2}>
-              <img
-                src="https://images.pexels.com/photos/14653174/pexels-photo-14653174.jpeg"
-                alt=""
-                className="size-14 rounded-full object-center"
-              />
-              <Box>
-                <Typography color="text.secondary" fontSize={20}>
-                  Abu Rayhan
-                </Typography>
-                <Typography component={'p'} fontSize={12} color="text.secondary">
-                  20 Diamond - 772$
-                </Typography>
-              </Box>
-            </Stack>
-            <p className="p-2 bg-secondary  text-white rounded-full text-sm">Processing</p>
-          </Box>
-        ))}
-      </Box>
+
+      {isLoading && (
+        <Box className="h-[300px] flex justify-center items-center">
+          <CircularProgress />
+        </Box>
+      )}
+
+      {isEmpty && (
+        <Typography variant="h6" color="text.secondary" textAlign="center">
+          No latest orders found
+        </Typography>
+      )}
+
+      {!isLoading && !!orders.length && (
+        <Box mt={5} className="lg:w-[80%] mx-auto space-y-5">
+          {orders.map((order, index) => (
+            <LatestOrderCard key={index} order={order} />
+          ))}
+        </Box>
+      )}
     </Box>
   );
 }

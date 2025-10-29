@@ -7,13 +7,17 @@ import {
 import useFetch from '@/query/client/useFetch';
 import useMutate from '@/query/client/useMutation';
 import { Param } from '@/types/metadata.type';
-import { CurrentUserNotificationCounts, Notification, NotificationSetAsReadPayload } from '@/types/notification.type';
+import {
+  CurrentUserNotificationCounts,
+  Notification,
+  NotificationSetAsReadPayload,
+} from '@/types/notification.type';
 import { IResponse } from '@/types/response.type';
 
-export function getCurrentUserNotificationsQuery() {
+export function getCurrentUserNotificationsQuery(params:Param[]) {
   return useFetch<IResponse<Notification[]>>(
     ['getCurrentUserNotifications'],
-    getCurrentUserNotifications,
+    ()=>getCurrentUserNotifications(params),
   );
 }
 
@@ -29,8 +33,6 @@ export function getMyUnreadNotificationQuery(params: Param[]) {
     getMyUnreadNotifications(params),
   );
 }
-
-
 
 export function notificationSetAsReadMutation() {
   return useMutate<IResponse<null>, NotificationSetAsReadPayload>(notificationSetAsRead);

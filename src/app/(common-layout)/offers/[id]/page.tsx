@@ -1,179 +1,82 @@
-import { Button, Grid, List, ListItem, Stack, TextField, Typography } from '@mui/material';
-import Image from 'next/image';
-import React from 'react';
+'use client';
 
-const paymentOptions = [
-  {
-    name: 'GameTop Wallet',
-    logo: 'https://brandlogos.net/wp-content/uploads/2025/05/samsung_wallet-logo_brandlogos.net_lurfi.png',
-  },
-  {
-    name: 'Paypal',
-    logo: 'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/250_Paypal_logo-512.png',
-  },
-];
+import PurchaseForm from '@/components/forms/PurchaseForm';
+import PreviewEditorValue from '@/components/ui/PreviewEditorValue';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
+import { getOfferByIdQuery } from '@/query/services/offer';
+import { ProductCategory } from '@/types/order.type';
+import { CircularProgress, Stack, Typography, Divider } from '@mui/material';
+import { useParams } from 'next/navigation';
 
-function page() {
-  const data = [
-    {
-      label: 'Full Name',
-      placeholder: 'Enter your name',
-      type: 'text',
-      select: false,
-      options: [],
-      required: true,
-      minLength: true,
-      maxLength: 50,
-    },
-    {
-      label: 'Age',
-      placeholder: 'Enter your age',
-      type: 'number',
-      select: false,
-      options: [],
-      required: true,
-      minLength: false,
-      maxLength: 3,
-    },
-    {
-      label: 'Gender',
-      placeholder: 'Select gender',
-      type: 'radio-select',
-      select: true,
-      options: [
-        { display: 'Male', value: 'male' },
-        { display: 'Female', value: 'female' },
-        { display: 'Other', value: 'other' },
-      ],
-      required: true,
-      minLength: false,
-      maxLength: 0,
-    },
-    {
-      label: 'Hobbies',
-      placeholder: 'Choose your hobbies',
-      type: 'multiselect',
-      select: true,
-      options: [
-        { display: 'Reading', value: 'reading' },
-        { display: 'Gaming', value: 'gaming' },
-        { display: 'Traveling', value: 'traveling' },
-      ],
-      required: false,
-      minLength: false,
-      maxLength: 5,
-    },
-  ];
+function Page() {
+  const { id } = useParams();
+  const { data, isLoading, isPending, error } = getOfferByIdQuery(id as string);
+    const {currency} = useAppSettings()
+  if (isLoading || isPending)
+    return (
+      <div className="h-[600px] flex justify-center items-center">
+        <CircularProgress />
+      </div>
+    );
+
+  if (error) return <Typography color="error">Something went wrong</Typography>;
+
+  const offer = data?.data!;
 
   return (
-    <div className="w-full">
-      <Typography
-        variant="h4"
-        fontSize={{
-          xs: 24,
-          lg: 28,
-        }}
-        color="text.primary"
-        fontWeight={600}
-      >
-        Free fire 1000 Diamonds + Weekly Membership
-      </Typography>
-      <Image
-        src={
-          'https://dl.dir.freefiremobile.com/common/web_event/hash/54f31449f5f91cf0cc223cc635cd5952jpg'
-        }
-        alt=""
-        width={1000}
-        height={600}
-        className="mx-auto mt-5 rounded-lg"
-      />
-      <div className=" lg:w-10/12 lg:mx-auto">
-        <div className="mt-5">
-          <Typography color="text.primary" fontWeight={600} variant="h5">
-            Fill The Form:
-          </Typography>
-          <Grid container marginTop={3} columns={2} spacing={2}>
-            {data.map((_, index) => (
-              <Grid size={1} key={index}>
-                <TextField fullWidth id="outlined-search" label={_.label} type="text" />
-              </Grid>
-            ))}
-          </Grid>
-        </div>
-        <div className="mt-5">
-          <Typography color="text.primary" fontWeight={600} variant="h5">
-            Chose payment option :
-          </Typography>
-          <Stack direction={'row'} gap={2} marginTop={3} marginX={'auto'} width={'fit-content'}>
-            {paymentOptions.map((option, index) => (
-              <div
-                key={index}
-                className="border-gray-700 border-2 p-5 size-fit rounded-lg max-w-sm space-y-2 text-center"
-              >
-                <img src={option.logo} alt="" className="size-32" />
-                <Typography color="primary" fontFamily={'jost'}>
-                  {option.name}
-                </Typography>
-              </div>
-            ))}
-          </Stack>
-        </div>
+    <div className="w-full max-w-6xl mx-auto px-4 py-10 space-y-10">
+      {/* Header Section */}
+      <div className="text-center space-y-3">
+        <Typography variant="h4" fontWeight={700} color="text.primary">
+          {offer.name}
+        </Typography>
 
-        <div className="mt-5 text-center">
-          <Button
-            variant="outlined"
-            size="large"
-            fullWidth
-            sx={{
-              width: {
-                sx: '100%',
-                md: '50%',
-              },
-            }}
-          >
-            Purchase now
-          </Button>
-        </div>
+        <Typography variant="h6" color="text.secondary">
+          Platform: <span className="font-medium text-primary">{offer.platformName}</span>
+        </Typography>
+        <Typography variant="h6" color="text.secondary">
+          Price: <span className="font-medium text-secondary">{currency.symbol}{offer.price}</span>
+        </Typography>
       </div>
 
-      <div className="mt-20 space-y-5">
-        <div>
-          <Typography variant="h5" fontWeight={500} color="text.primary">
-            Instructions:
-          </Typography>
-          <Typography marginTop={2} color="text.secondary">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, porro dignissimos! Ipsa
-            deleniti blanditiis soluta pariatur voluptatibus optio consectetur commodi qui
-            temporibus explicabo? Quis aut unde vitae blanditiis ad iusto! Odit ab nulla, nobis iure
-            cum ipsum magnam beatae accusantium similique ducimus alias. Quam tempore temporibus,
-            perspiciatis illo itaque, iure consequuntur quaerat quos, obcaecati quidem laudantium
-            perferendis! Accusamus cupiditate, expedita fugiat consectetur ex labore fugit
-            reiciendis ipsa perspiciatis veniam! Laboriosam rerum nulla sunt consectetur incidunt
-            tempora accusantium in reiciendis sit ad? Laborum veniam alias vitae illum eos
-            voluptates omnis repellendus cupiditate iste reprehenderit temporibus dignissimos
-            tenetur consequatur accusantium, ipsa maiores.
-          </Typography>
-        </div>
-        <div>
-          <Typography variant="h5" fontWeight={500} color="text.primary">
-            About Free Fire:
-          </Typography>
-          <Typography marginTop={2} color="text.secondary">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, porro dignissimos! Ipsa
-            deleniti blanditiis soluta pariatur voluptatibus optio consectetur commodi qui
-            temporibus explicabo? Quis aut unde vitae blanditiis ad iusto! Odit ab nulla, nobis iure
-            cum ipsum magnam beatae accusantium similique ducimus alias. Quam tempore temporibus,
-            perspiciatis illo itaque, iure consequuntur quaerat quos, obcaecati quidem laudantium
-            perferendis! Accusamus cupiditate, expedita fugiat consectetur ex labore fugit
-            reiciendis ipsa perspiciatis veniam! Laboriosam rerum nulla sunt consectetur incidunt
-            tempora accusantium in reiciendis sit ad? Laborum veniam alias vitae illum eos
-            voluptates omnis repellendus cupiditate iste reprehenderit temporibus dignissimos
-            tenetur consequatur accusantium, ipsa maiores.
-          </Typography>
-        </div>
+      {/* Cover Image */}
+      <div className="flex justify-center">
+        <img
+          src={offer.coverPhoto}
+          alt={offer.name}
+          className="w-full max-w-3xl rounded-2xl shadow-lg object-cover"
+        />
       </div>
+
+      {/* Purchase Form */}
+      <div className="bg-white dark:bg-gray-950 rounded-2xl p-6 shadow-md border border-gray-100 dark:border-gray-800">
+        <Typography variant="h5" fontWeight={600} gutterBottom color="text.primary">
+          Complete Your Purchase
+        </Typography>
+
+        <Divider sx={{ my: 2 }} />
+
+        <PurchaseForm
+          productType={ProductCategory.TOP_UP}
+          product={offer}
+          quantity={1}
+          infoFields={offer.infoFields as any}
+        />
+      </div>
+
+      {/* Description Section */}
+      {offer.description && (
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
+          <Typography variant="h5" fontWeight={600} gutterBottom color="text.primary">
+            Description
+          </Typography>
+          <div>
+            <PreviewEditorValue value={offer.description} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-export default page;
+export default Page;

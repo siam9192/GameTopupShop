@@ -1,7 +1,8 @@
+'use client';
+
 import React, { UIEvent, useEffect, useRef, useState } from 'react';
 import { GoDotFill } from 'react-icons/go';
 import { PiBell, PiBellSimpleRinging } from 'react-icons/pi';
-
 import { usePathname, useRouter } from 'next/navigation';
 import {
   getCurrentUserNotificationCountsQuery,
@@ -12,167 +13,187 @@ import { getTimeAgo } from '@/utils/helper';
 
 const NotificationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [page, setPage] = useState(1);
   const [allNotifications, setAllNotifications] = useState<Notification[]>([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   const router = useRouter();
+  const pathname = usePathname();
   const barRef = useRef<HTMLDivElement>(null);
 
-  const pathname = usePathname();
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const bar = barRef.current;
-
-    if (!bar) return;
-
-    const handler2 = (event: MouseEvent) => {
-      const target = event.target;
-      if (!bar.contains(target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    // bar.addEventListener("scroll", handler);
-    document.addEventListener('mousedown', handler2);
-
-    return () => {
-      // bar.removeEventListener("scroll", handler);
-      document.removeEventListener('mousedown', handler2);
-    };
-  }, [isOpen, barRef.current?.onscroll]);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
+  // Query for notifications
   const {
     data: notificationData,
     isLoading: notificationsIsLoading,
     isFetching: notificationsIsRefetching,
     refetch,
-  } = getCurrentUserNotificationsQuery();
+  } = getCurrentUserNotificationsQuery([{ name: 'page', value: page }]);
 
-  const notifications = notificationData?.data;
+  const { data: countsData } = getCurrentUserNotificationCountsQuery();
+  const totalUnread = countsData?.data.unread || 0;
+
+  const notifications = notificationData?.data || [];
   const meta = notificationData?.meta;
+  const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 1;
 
-  const [page, setPage] = useState(meta?.page || 1);
+  /** Close on outside click */
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      const bar = barRef.current;
+      if (bar && !bar.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [isOpen]);
 
-  const totalPage = meta ? Math.ceil(meta?.totalResult / meta?.limit) : 1;
+  /** Close when route changes */
+  useEffect(() => setIsOpen(false), [pathname]);
 
-  const handleOnScroll = (event: UIEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement; // Cast to HTMLDivElement
+  /** Merge notifications on new data */
+  useEffect(() => {
+    if (!notificationsIsLoading && !notificationsIsRefetching && notifications.length) {
+      setAllNotifications(prev => {
+        // Avoid duplicates when refetching the same page
+        const existingIds = new Set(prev.map(n => n._id));
+        const newOnes = notifications.filter(n => !existingIds.has(n._id));
+        return [...prev, ...newOnes];
+      });
+    }
+  }, [notifications, notificationsIsLoading, notificationsIsRefetching]);
 
+  /** Infinite scroll handler */
+  const handleScroll = (event: UIEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLDivElement;
     if (
       target.scrollTop + target.clientHeight + 10 >= target.scrollHeight &&
-      meta &&
-      page < totalPage
+      !notificationsIsLoading &&
+      !notificationsIsRefetching &&
+      page < totalPages
     ) {
-      setIsLoading(true);
+      setIsLoadingMore(true);
       setTimeout(() => {
-        setPage((p: number) => p + 1);
+        setPage(p => p + 1);
         refetch();
-        setIsLoading(false);
+        setIsLoadingMore(false);
       }, 600);
     }
   };
 
-  const { data } = getCurrentUserNotificationCountsQuery();
-
-  const totalUnread = data?.data.unread;
-
-  useEffect(() => {
-    if (
-      !notificationsIsLoading &&
-      !notificationsIsRefetching &&
-      notifications &&
-      notifications.length
-    ) {
-      setAllNotifications(p => [...p, ...notifications] as any);
-    }
-  }, [notificationsIsLoading, notificationsIsRefetching]);
-
-  const handelOnClick = (notification: Notification) => {
-    let path;
+  /** Handle click by category */
+  const handleOnClick = (notification: Notification) => {
+    let path = '/';
     switch (notification.category) {
       case NotificationCategory.ORDER:
-        path = '/cart';
+        path = '/orders';
         break;
-      case NotificationCategory.ORDER:
-        path = '/account/order-history';
+      case NotificationCategory.WALLET_SUBMISSION:
+        path = '/wallet';
         break;
       case NotificationCategory.CUSTOMER:
-        path = `/customers`;
+        path = '/customers';
         break;
       case NotificationCategory.PROMOTION:
-        path = '/wishlist';
+        path = '/offers';
+        break;
+      default:
+        path = '/';
         break;
     }
-
-    if (path) {
-      router.push(path);
-    }
+    setIsOpen(false);
+    router.push(path);
   };
 
-  useEffect(() => {
-    if (isOpen) {
-    }
-  }, [isOpen]);
   return (
     <div className="relative">
+      {/* Bell Button */}
       <button
-        onClick={() => {
-          setIsOpen(p => !p);
-        }}
-        className="text-3xl p-1   text-txt-primary  rounded-full relative"
+        onClick={() => setIsOpen(prev => !prev)}
+        className="text-3xl p-2 text-txt-primary rounded-full relative hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
       >
-        <PiBell />
-
-        <div className="size-5 flex justify-center items-center bg-red-500 rounded-full absolute  -top-1  right-0 text-[0.6rem] text-white">
-          {totalUnread || 0}
-        </div>
+        {totalUnread > 0 ? <PiBellSimpleRinging /> : <PiBell />}
+        {totalUnread > 0 && (
+          <div className="size-5 flex justify-center items-center bg-red-500 rounded-full absolute -top-1 right-0 text-[0.6rem] text-white font-semibold">
+            {totalUnread}
+          </div>
+        )}
       </button>
 
+      {/* Notification Panel */}
       {isOpen && (
         <div
-          id="notification-bar"
           ref={barRef}
-          onScroll={handleOnScroll}
-          className="absolute right-0 w-60 h-60 z-40 overflow-y-auto no-scrollbar p-3 bg-paper shadow-2xl  rounded-md "
+          onScroll={handleScroll}
+          className="absolute right-0 mt-2 w-72 h-80 z-50 overflow-y-auto no-scrollbar p-3 bg-white dark:bg-neutral-900 shadow-2xl rounded-xl border border-gray-200 dark:border-neutral-700 "
         >
-          <h3 className="text-xl font-semibold font-secondary text-txt-primary">Notifications</h3>
-          <div className=" mt-2">
-            {allNotifications.map((notification, index) => {
-              return (
+          <h3 className="text-lg font-semibold font-secondary text-txt-primary mb-2">
+            Notifications
+          </h3>
+
+          {/* Loading State */}
+          {notificationsIsLoading && (
+            <div className="space-y-2">
+              {Array.from({ length: 4 }).map((_, i) => (
                 <div
-                  key={index}
-                  onClick={() => handelOnClick(notification)}
-                  className="p-2 flex  gap-1 hover:bg-gray-50 hover:cursor-pointer z-50 "
+                  key={i}
+                  className="animate-pulse bg-gray-100 dark:bg-neutral-800 rounded-lg h-10"
+                ></div>
+              ))}
+            </div>
+          )}
+
+          {/* Notifications List */}
+          {!notificationsIsLoading && allNotifications.length > 0 && (
+            <div className="space-y-1">
+              {allNotifications.map(notification => (
+                <div
+                  key={notification._id}
+                  onClick={() => handleOnClick(notification)}
+                  className="p-2 flex gap-2 items-start hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
                 >
-                  <div className={`${!notification.isRead ? 'text-red-600' : 'text-green-600'}`}>
-                    <span>
-                      <GoDotFill />
-                    </span>
+                  <div
+                    className={`pt-1 ${
+                      !notification.isRead ? 'text-red-500' : 'text-green-500'
+                    }`}
+                  >
+                    <GoDotFill size={16} />
                   </div>
-                  <div>
-                    <p className="text-gray-600 text-[0.8rem]">
+                  <div className="flex-1">
+                    <p className="text-gray-500 dark:text-gray-400 text-xs">
                       {getTimeAgo(notification.createdAt)}
                     </p>
                     <h2
-                      className="text-[0.8rem] font-medium    font-secondary"
+                      className="text-sm font-medium text-txt-primary leading-tight"
                       dangerouslySetInnerHTML={{
                         __html: notification.title.replace(
                           /"([^"]+)"/,
-                          '<span class="font-semibold text-primary">$1</span>',
+                          '<span class="font-semibold text-primary">$1</span>'
                         ),
                       }}
-                    ></h2>
-                    <p className="text-xs font-secondary">{notification.message}</p>
+                    />
+                    {notification.message && (
+                      <p className="text-xs text-gray-600 dark:text-gray-300">
+                        {notification.message}
+                      </p>
+                    )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-          {isLoading && <p className="mt-1 text-gray-700 font-medium">Loading..</p>}
+              ))}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!notificationsIsLoading && allNotifications.length === 0 && (
+            <p className="text-center text-sm text-gray-500 mt-5">
+              No notifications yet 📭
+            </p>
+          )}
+
+          {/* Load More Spinner */}
+          {isLoadingMore && (
+            <p className="text-center text-gray-600 mt-2 text-sm">Loading more...</p>
+          )}
         </div>
       )}
     </div>

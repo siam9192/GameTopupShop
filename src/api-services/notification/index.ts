@@ -5,9 +5,9 @@ import { NotificationSetAsReadPayload } from '@/types/notification.type';
 import { paramsToString } from '@/utils/helper';
 import { AxiosError } from 'axios';
 
-export async function getCurrentUserNotifications() {
+export async function getCurrentUserNotifications(params:Param[]) {
   try {
-    const res = await axiosInstance.get('/notifications/my');
+    const res = await axiosInstance.get(`/notifications/my${paramsToString(params)}`);
 
     return res.data;
   } catch (err: unknown) {
@@ -59,10 +59,9 @@ export async function getMyUnreadNotifications(params: Param[]) {
   }
 }
 
-
-export async function notificationSetAsRead(payload:NotificationSetAsReadPayload) {
+export async function notificationSetAsRead(payload: NotificationSetAsReadPayload) {
   try {
-    const res = await axiosInstance.patch(`/notifications/set-read`,payload);
+    const res = await axiosInstance.patch(`/notifications/set-read`, payload);
 
     return res.data;
   } catch (err: unknown) {
@@ -77,4 +76,3 @@ export async function notificationSetAsRead(payload:NotificationSetAsReadPayload
     throw new Error(message);
   }
 }
-

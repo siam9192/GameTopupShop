@@ -1,8 +1,17 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   images: {
-    domains: ['images.unsplash.com','i.ytimg.com','staticg.sportskeeda.com','cdn-www.bluestacks.com','dl.dir.freefiremobile.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**', // allow all HTTPS domains
+      },
+      {
+        protocol: 'http',
+        hostname: '**', // (optional) allow all HTTP domains too
+      },
+    ],
   },
 };
 

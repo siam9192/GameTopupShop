@@ -39,6 +39,7 @@ const sidebarRoutesGroup1: RouteItem[] = [
   {
     label: 'Products',
     icon: TbRecharging,
+    path: '/control-dashboard/products', 
     roles: ALL_ADMINISTRATORS_LEVEL,
     children: [
       { label: 'Top Ups', path: '/control-dashboard/products/top-up' },

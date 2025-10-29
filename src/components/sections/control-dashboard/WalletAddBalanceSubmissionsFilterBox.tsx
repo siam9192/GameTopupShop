@@ -1,5 +1,5 @@
 'use client';
-import { useManualPaymentMethodsPageContext } from '@/app/control-dashboard/payment-methods/manual/page';
+import { useWalletAddBalanceSubmissionsPageContext } from '@/app/control-dashboard/wallets/submissions/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
 import { WalletSubmissionStatus } from '@/types/wallet-submission.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 function WalletAddBalanceSubmissionsFilterBox() {
   const [status, setStatus] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const { setFilters } = useManualPaymentMethodsPageContext();
+  const { setFilters } = useWalletAddBalanceSubmissionsPageContext();
 
   const handleSearch = () => {
     const filters: Record<string, string> = {};

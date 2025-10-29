@@ -3,6 +3,7 @@ import React from 'react';
 import { Grid, Stack, Typography, Box, Skeleton } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 interface OverviewItem {
   name: string;
@@ -28,6 +29,7 @@ const DashboardOverviewData: React.FC<DashboardOverviewDataProps> = ({
   isLoading,
   mapping,
 }) => {
+  const {currency} = useAppSettings()
   if (isLoading) {
     return (
       <Grid container spacing={2} columns={{ xs: 1, sm: 2, lg: 4 }}>
@@ -61,7 +63,7 @@ const DashboardOverviewData: React.FC<DashboardOverviewDataProps> = ({
           const Icon = isPositive ? ArrowUpwardIcon : ArrowDownwardIcon;
           const color = isPositive ? '#16C47F' : '#F93827';
           const formattedValue = item.isCurrency
-            ? `$${item.value.toLocaleString()}`
+            ? `${currency.symbol}${item.value.toLocaleString()}`
             : item.value.toLocaleString();
 
           return (

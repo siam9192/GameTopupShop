@@ -1,8 +1,8 @@
-import FeaturedGames from '@/components/sections/FeaturedGames';
+import FeaturedTopups from '@/components/sections/FeaturedTopUps';
 import HomeBanner from '@/components/sections/HomeBanner';
 import LatestOrders from '@/components/sections/LatestOrders';
 import OfferComesEnd from '@/components/sections/OfferComesEnd';
-import TopGames from '@/components/sections/TopGames';
+import TopTopups from '@/components/sections/TopTopups';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
@@ -26,9 +26,9 @@ function page() {
         </Box>
       </Typography>
       <HomeBanner />
-      <FeaturedGames />
+      <FeaturedTopups />
       <OfferComesEnd />
-      <TopGames />
+      <TopTopups />
       <LatestOrders />
     </div>
   );

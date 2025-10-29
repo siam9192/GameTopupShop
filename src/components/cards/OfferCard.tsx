@@ -1,32 +1,74 @@
-import { Card, CardContent, Chip, Stack, Typography, useTheme } from '@mui/material';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
+import { Offer } from '@/types/offer.type';
+import { ArrowRight } from '@mui/icons-material';
+import { Card, CardContent, Chip, Stack, Typography, Divider, Button } from '@mui/material';
+import Link from 'next/link';
 import React from 'react';
-function OfferCard() {
+
+interface Props {
+  offer: Offer;
+}
+
+function OfferCard({ offer }: Props) {
+   const {currency} = useAppSettings()
   return (
-    <div className="shadow_1 rounded-md">
-      <CardContent>
-        <Stack direction={'row'} gap={2}>
-          <div className="">
-            <img
-              src="https://cdn-www.bluestacks.com/bs-images/FreeFire_Guide_DiamondsGuide_EN2.jpg"
-              alt=""
-              className=" rounded-lg  w-[300px] h-[200px] "
+    <div
+      className="
+        overflow-hidden 
+        shadow-xl
+        rounded-xl 
+        transition-all 
+        duration-300 
+        glass
+      "
+    >
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} className="p-4">
+        {/* Cover Image */}
+        <div className="flex-shrink-0">
+          <img
+            src={offer.coverPhoto}
+            alt={offer.name}
+            className="
+              rounded-lg 
+              w-full 
+              md:w-[280px] 
+              h-[180px] 
+              object-cover 
+              shadow-sm
+            "
+          />
+        </div>
+
+        {/* Offer Details */}
+        <div className="flex flex-col justify-between flex-grow py-1">
+          <div className="space-y-2">
+            <Typography variant="h6" fontWeight={700} color="text.primary" className="line-clamp-1">
+              {offer.name}
+            </Typography>
+
+            {offer.description && (
+              <Typography variant="body2" color="text.secondary" className="line-clamp-2">
+                {offer.description}
+              </Typography>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between mt-4">
+            <Chip
+              label={` ${currency.symbol}${offer.price}`}
+              color="primary"
+              variant="filled"
+              className="font-semibold"
             />
-          </div>
-          <div className="flex flex-col py-2">
-            <div className="space-y-2 grow">
-              <Typography fontSize={24} color="text.primary">
-                20% discount on 600 diamond topup
-              </Typography>
 
-              <Typography fontSize={16} color="text.secondary">
-                delectus. Reiciendis pariatur, ipsam saepe in culpa asperiores sed nihil!
-              </Typography>
-            </div>
-
-            <Chip label="Price: $10" color="primary" className="w-1/2" />
+            <Link href={`/offers/${offer._id}`}>
+              <Button size="small" variant="outlined" color="primary" endIcon={<ArrowRight />}>
+                View Offer
+              </Button>
+            </Link>
           </div>
-        </Stack>
-      </CardContent>
+        </div>
+      </Stack>
     </div>
   );
 }

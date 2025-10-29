@@ -1,5 +1,6 @@
 'use client';
 import AlertDialog from '@/components/ui/AleartDialog';
+import PreviewEditorValue from '@/components/ui/PreviewEditorValue';
 import { queryClient } from '@/provider/Provider';
 import {
   deleteManualPaymentMethodMutation,
@@ -102,21 +103,7 @@ function page() {
           Description
         </Typography>
 
-        <div
-          className="
-            prose max-w-none
-            text-gray-800
-            dark:prose-invert
-            dark:text-gray-200
-            prose-headings:text-gray-900
-            dark:prose-headings:text-gray-100
-            prose-a:text-blue-600
-            dark:prose-a:text-blue-400
-            prose-strong:text-gray-900
-            dark:prose-strong:text-gray-100
-          "
-          dangerouslySetInnerHTML={{ __html: method.description }}
-        />
+        <PreviewEditorValue value={method.description}/>
       </Box>
 
       <Divider sx={{ my: 3 }} />

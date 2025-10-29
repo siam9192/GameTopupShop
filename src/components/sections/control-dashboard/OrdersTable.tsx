@@ -22,6 +22,7 @@ import { queryClient } from '@/provider/Provider';
 import { SortOrder } from '@/types/utils.type';
 import OrderDetailsDialog from './OrderDetailsDialog';
 import { SlOptionsVertical } from 'react-icons/sl';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 const heads = [
   {
@@ -79,10 +80,8 @@ function OrdersTable() {
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
 
-  const router = useRouter();
-  const navigate = (path: string) => {
-    router.push(path);
-  };
+  
+  const {currency} = useAppSettings()
 
   const handleOpenMenu = (e: MouseEvent<HTMLButtonElement>, id: string) => {
     setAnchorEl(e.currentTarget);
@@ -190,7 +189,7 @@ function OrdersTable() {
                     <TableCell>{order.product.category}</TableCell>
 
                     <TableCell>{order.product.quantity}</TableCell>
-                    <TableCell>{order.payment.amount}</TableCell>
+                    <TableCell>{currency.symbol}{order.payment.amount}</TableCell>
                     <TableCell>{order.payment.status}</TableCell>
 
                     <TableCell>{order.status}</TableCell>
@@ -206,8 +205,9 @@ function OrdersTable() {
                           <HiOutlineViewfinderCircle />
                         </button>
                       </Tooltip>
-                      <Tooltip title="Menu">
+                      <Tooltip  title="Menu">
                         <button
+                        disabled={isPending}
                           onClick={e => handleOpenMenu(e, order._id)}
                           className="text-xl hover:text-secondary mr-2 hover:cursor-pointer"
                         >
@@ -239,10 +239,11 @@ function OrdersTable() {
             {/* Shared Menu */}
             <Menu
               anchorEl={anchorEl}
-              open={Boolean(anchorEl) && Boolean(menuId)}
+              open={Boolean(anchorEl) && Boolean(menuId)&&!isPending}
               onClose={handleCloseMenu}
               anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
               transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          
             >
               {menuId &&
                 (() => {

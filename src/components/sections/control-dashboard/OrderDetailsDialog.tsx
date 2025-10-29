@@ -14,6 +14,7 @@ import {
   Avatar,
 } from '@mui/material';
 import { getOrderByIdQuery } from '@/query/services/order'; // adjust import path
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 interface Props {
   id: string;
@@ -28,7 +29,7 @@ function OrderDetailsDialog({ id, onClose }: Props) {
   const product = order?.product;
   const payment = order?.payment;
   const fieldsInfo = order?.fieldsInfo || [];
-
+ const {currency} = useAppSettings()
   return (
     <Dialog open fullWidth maxWidth="sm" onClose={onClose}>
       <DialogTitle>Order Details</DialogTitle>
@@ -99,7 +100,7 @@ function OrderDetailsDialog({ id, onClose }: Props) {
                 <Typography variant="body2">Category: {product?.category}</Typography>
                 <Typography variant="body2">Quantity: {product?.quantity}</Typography>
                 <Typography variant="body2">
-                  Price: {product?.price.toLocaleString()} BDT
+                  Price: {currency.symbol} {product?.price.toLocaleString()} 
                 </Typography>
               </Box>
             </Stack>

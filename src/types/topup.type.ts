@@ -18,7 +18,7 @@ export type TopupInfoField = {
   placeholder?: string;
   type: TopupInfoFieldType;
   minLength?: number;
-  maxLength: number;
+  maxLength?: number;
   min?: number;
   max?: number;
   optional: boolean;

@@ -37,6 +37,22 @@ export async function getBanners(params: Param[]) {
   }
 }
 
+export async function getPublicBanners(params: Param[]) {
+  try {
+    const res = await axiosInstance.get(`/banners/public${paramsToString(params)}`);
+
+    return res.data; // return only the useful data
+  } catch (err) {
+    const error = err as AxiosError<{ message?: string }>;
+
+    // Custom error message (backend message OR fallback)
+    const message = error.response?.data?.message || error.message || 'Something went wrong';
+
+    // Re-throw clean error
+    throw new Error(message);
+  }
+}
+
 export async function getBannerById(id: string) {
   try {
     const res = await axiosInstance.get(`/banners/${id}`);

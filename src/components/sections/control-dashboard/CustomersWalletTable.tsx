@@ -19,6 +19,7 @@ import { useCustomersWalletPageContext } from '@/app/control-dashboard/wallets/c
 import { SortOrder } from '@/types/utils.type';
 import WalletDetailsDialog from './WalletDetailsDialog';
 import UpdateWalletBalanceModal from './UpdateWalletBalanceModal';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 const heads = [
   {
@@ -44,7 +45,7 @@ function CustomersWalletTable() {
 
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
-
+ const {currency} = useAppSettings()
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
       <DashboardSectionHeading title="Customers Wallet Table" />
@@ -107,7 +108,7 @@ function CustomersWalletTable() {
                       </Stack>
                     </TableCell>
 
-                    <TableCell>{wallet.balance} $USD</TableCell>
+                    <TableCell>{currency.symbol}{wallet.balance} </TableCell>
 
                     <TableCell>
                       <Tooltip title="View Full Details">

@@ -1,11 +1,44 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+'use client';
+import { Box, Stack } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
+import ProductsSearchResultBox from './ProductsSearchResultBox';
+import { useDebounce } from 'react-use';
+import { usePathname } from 'next/navigation';
 
 function SearchInput() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const ref = useRef<HTMLDivElement>(null);
+  useDebounce(
+    () => {
+      setDebouncedSearchTerm(searchTerm);
+    },
+    500,
+    [searchTerm],
+  );
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const pathname = usePathname();
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   return (
-    <Box className="relative">
+    <Box ref={ref} className="relative">
       <Stack
         sx={{
           display: {
@@ -24,40 +57,15 @@ function SearchInput() {
           <FiSearch />
         </span>
         <input
-          onFocus={() => setIsOpen(true)}
-          onBlur={() => setIsOpen(false)}
+          onFocus={() => setOpen(true)}
           type="text"
+          onChange={e => setSearchTerm(e.target.value.trim())}
           className="grow bg-transparent border-none outline-none font-secondary  font-medium text-gray-950 dark:text-gray-100 placeholder:text-secondary"
           placeholder="Search games.."
         />
       </Stack>
-      {isOpen ? (
-        <Box className="w-full absolute left-0 top-14 min-h-60 p-2  z-40 rounded-xl dark:bg-black bg-white shadow_1">
-          <Typography color="text.primary" fontWeight={500}>
-            20 Search Results
-          </Typography>
-          <Box mt={2}>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <Box key={index} className="p-2  mb-2 hover:bg-paper rounded-md ">
-                <Stack direction={'row'} spacing={2}>
-                  <img
-                    src="https://play-lh.googleusercontent.com/Odw8BGugaJLdbaSbCeZWbTE3Qz1wTiQ0Tsn9nzpoQdnkzWb-gaI58zzTmYDvGpdYKg"
-                    alt=""
-                    className="size-12 rounded-lg"
-                  />
-                  <Box>
-                    <Typography color="text.primary" fontWeight={500}>
-                      Free Fire Uid top up
-                    </Typography>
-                    <Button size="small" color="secondary">
-                      Top Up Now
-                    </Button>
-                  </Box>
-                </Stack>
-              </Box>
-            ))}
-          </Box>
-        </Box>
+      {isOpen && debouncedSearchTerm ? (
+        <ProductsSearchResultBox searchTerm={debouncedSearchTerm} />
       ) : null}
     </Box>
   );

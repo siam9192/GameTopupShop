@@ -24,7 +24,7 @@ function RecentOrders() {
         >
           Recent Orders
         </Typography>
-        <Badge color="secondary" badgeContent={recentOrders?.length||0} variant="standard">
+        <Badge color="secondary" badgeContent={recentOrders?.length || 0} variant="standard">
           <TbRecharging className="text-txt-primary" size={28} />
         </Badge>
       </Stack>

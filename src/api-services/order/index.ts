@@ -119,9 +119,9 @@ export async function createOrder(payload: CreateOrderPayload) {
   }
 }
 
-export async function updateOffer({ id, payload }: { id: string; payload: UpdateOfferPayload }) {
+export async function updateOrderStatus(payload: UpdateOrderStatusPayload) {
   try {
-    const res = await axiosInstance.put(`/offers/${id}`, payload);
+    const res = await axiosInstance.patch(`/orders/status`, payload);
     return res.data;
   } catch (err: unknown) {
     let message = 'Something went wrong';
@@ -135,12 +135,14 @@ export async function updateOffer({ id, payload }: { id: string; payload: Update
   }
 }
 
-export async function updateOrderStatus(payload: UpdateOrderStatusPayload) {
+export async function getLatestOrders() {
   try {
-    const res = await axiosInstance.patch(`/orders/status`, payload);
+    const res = await axiosInstance.get(`/orders/latest`);
+
     return res.data;
   } catch (err: unknown) {
     let message = 'Something went wrong';
+
     if (err instanceof AxiosError) {
       message = err.response?.data?.message || err.message || message;
     } else if (err instanceof Error) {

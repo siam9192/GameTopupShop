@@ -8,8 +8,7 @@ function SectionHeading({ title }: IProps) {
   return (
     <Typography
       fontSize={{
-        xs: 24,
-        md: 28,
+        xs: 28,
         lg: 32,
       }}
       fontFamily={'jost'}

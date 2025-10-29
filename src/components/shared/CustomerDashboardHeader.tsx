@@ -27,19 +27,21 @@ function CustomerDashboardHeader() {
       {/* Left Section */}
       <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 2, md: 3 }}>
         <IconButton
+          sx={{
+            display: {
+              lg: 'none',
+            },
+          }}
           onClick={() => setSidebarCollapse(p => !p)}
           color={sidebarCollapse ? 'primary' : 'secondary'}
         >
           <RiMenuUnfoldLine size={24} />
         </IconButton>
 
-        <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5, md: 2 }}>
+        <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5, md: 1 }}>
           <Avatar
             alt={user?.name?.first}
-            src={
-              user?.profilePicture ||
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyW2MAFrFnfa_bT1jSttLbmvfotJcqQyCCGg&s'
-            }
+            src={user?.profilePicture}
             variant="rounded"
             sx={{
               width: { xs: 32, sm: 36, md: 44, lg: 48, xl: 52, xxl: 56 },
@@ -84,7 +86,7 @@ function CustomerDashboardHeader() {
                 },
               }}
             >
-              {user?.name?.first}
+              {user?.fullName}
             </Typography>
           </Box>
         </Stack>

@@ -1,4 +1,4 @@
-import { getWalletById, getWallets, updateWalletBalance } from '@/api-services/wallet';
+import { getMyWallet, getWalletById, getWallets, updateWalletBalance } from '@/api-services/wallet';
 import useFetch from '@/query/client/useFetch';
 import useMutate from '@/query/client/useMutation';
 import { Param } from '@/types/metadata.type';
@@ -11,6 +11,10 @@ export function getWalletsQuery(params: Param[]) {
 
 export function getWalletByIdQuery(id: string) {
   return useFetch<IResponse<Wallet>>(['getWalletById', id], () => getWalletById(id));
+}
+
+export function getMyWalletQuery() {
+  return useFetch<IResponse<Wallet>>(['getMyWallet'], getMyWallet);
 }
 
 export function updateWalletBalanceMutation() {

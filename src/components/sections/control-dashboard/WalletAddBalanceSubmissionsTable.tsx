@@ -6,7 +6,6 @@ import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import { useWalletAddBalanceSubmissionsPageContext } from '@/app/control-dashboard/wallets/submissions/page';
-import { useRouter } from 'next/navigation';
 import { SortOrder } from '@/types/utils.type';
 import WalletAddBalanceSubmissionDetailsDialog from './WalletAddBalanceSubmissionDetailsDialog';
 import { LuCheck } from 'react-icons/lu';
@@ -16,6 +15,7 @@ import { approveWalletSubmissionMutation } from '@/query/services/wallet-submiss
 import { toast } from 'react-toastify';
 import { queryClient } from '@/provider/Provider';
 import AlertDialog from '@/components/ui/AleartDialog';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 const heads = [
   {
@@ -59,11 +59,8 @@ function WalletAddBalanceSubmissionsTable() {
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
 
-  const router = useRouter();
-  const navigate = (path: string) => {
-    router.push(path);
-  };
-  const { mutate, isPending } = approveWalletSubmissionMutation();
+  const {currency} = useAppSettings()
+  const { mutate} = approveWalletSubmissionMutation();
 
   async function handleApprove(id: string) {
     mutate(id, {
@@ -133,7 +130,7 @@ function WalletAddBalanceSubmissionsTable() {
                         <Typography>{submission.customer.fullName}</Typography>
                       </Stack>
                     </TableCell>
-                    <TableCell>{submission.amount} USD</TableCell>
+                    <TableCell>{currency.symbol}{submission.amount}</TableCell>
                     <TableCell>{submission.methodName}</TableCell>
 
                     <TableCell>{submission.status}</TableCell>
