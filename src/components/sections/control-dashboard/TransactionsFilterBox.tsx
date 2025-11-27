@@ -1,7 +1,6 @@
 'use client';
-import { useTransactionsPageContext } from '@/app/control-dashboard/transactions/all/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
-import { OrderStatus } from '@/types/order.type';
+import { useTransactionsPageContext } from '@/provider/TransactionsPageProvider';
 import { TransactionStatus } from '@/types/transaction.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';

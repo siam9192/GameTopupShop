@@ -3,10 +3,10 @@ import {
   List,
   ListItemIcon,
   ListItemText,
-  Collapse,
   Typography,
   ListItem,
   Stack,
+  ListItemButton,
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -20,7 +20,7 @@ import { IconType } from 'react-icons';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
 import SidebarItem from '../ui/SidebarItem';
 import { CiLogout } from 'react-icons/ci';
-import { useCustomerDashboardLayoutContext } from '@/app/(customer-dashboard)/layout';
+import LogoutDialog from '../ui/LogoutDialog';
 
 interface RouteItem {
   label: string;
@@ -38,7 +38,7 @@ const sidebarRoutesGroup1: RouteItem[] = [
 
   {
     label: 'My Orders',
-    path: '/dashboard',
+    path: '/dashboard/orders',
     icon: TbRecharging,
   },
   {
@@ -72,6 +72,7 @@ const sidebarRoutesGroup2: RouteItem[] = [
   },
 ];
 function CustomerDashboardSidebar() {
+  const [isLogoutDialog, setIsLogoutDialog] = useState(false);
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const toggleMenu = (label: string) => {
@@ -116,15 +117,17 @@ function CustomerDashboardSidebar() {
               toggleMenu={toggleMenu}
             />
           ))}
-          <ListItem>
+          <ListItemButton onClick={() => setIsLogoutDialog(true)}>
             <ListItemIcon>
               <CiLogout size={22} color="white" />
             </ListItemIcon>
             <ListItemText className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer ">
               Logout
             </ListItemText>
-          </ListItem>
+          </ListItemButton>
         </List>
+
+        {isLogoutDialog ? <LogoutDialog onClose={() => setIsLogoutDialog(false)} /> : null}
       </Stack>
     </div>
   );

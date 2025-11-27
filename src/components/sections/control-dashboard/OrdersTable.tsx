@@ -11,10 +11,7 @@ import {
 } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
-import { MdOutlineEdit } from 'react-icons/md';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
-import { useOrdersPageContext } from '@/app/control-dashboard/orders/page';
-import { useRouter } from 'next/navigation';
 import { updateOrderStatusMutation } from '@/query/services/order';
 import { OrderStatus } from '@/types/order.type';
 import { toast } from 'react-toastify';
@@ -23,6 +20,7 @@ import { SortOrder } from '@/types/utils.type';
 import OrderDetailsDialog from './OrderDetailsDialog';
 import { SlOptionsVertical } from 'react-icons/sl';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
+import { useOrdersPageContext } from '@/provider/OrdersPageProvider';
 
 const heads = [
   {
@@ -80,8 +78,7 @@ function OrdersTable() {
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
 
-  
-  const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
 
   const handleOpenMenu = (e: MouseEvent<HTMLButtonElement>, id: string) => {
     setAnchorEl(e.currentTarget);
@@ -189,7 +186,10 @@ function OrdersTable() {
                     <TableCell>{order.product.category}</TableCell>
 
                     <TableCell>{order.product.quantity}</TableCell>
-                    <TableCell>{currency.symbol}{order.payment.amount}</TableCell>
+                    <TableCell>
+                      {currency.symbol}
+                      {order.payment.amount}
+                    </TableCell>
                     <TableCell>{order.payment.status}</TableCell>
 
                     <TableCell>{order.status}</TableCell>
@@ -205,9 +205,9 @@ function OrdersTable() {
                           <HiOutlineViewfinderCircle />
                         </button>
                       </Tooltip>
-                      <Tooltip  title="Menu">
+                      <Tooltip title="Menu">
                         <button
-                        disabled={isPending}
+                          disabled={isPending}
                           onClick={e => handleOpenMenu(e, order._id)}
                           className="text-xl hover:text-secondary mr-2 hover:cursor-pointer"
                         >
@@ -239,11 +239,10 @@ function OrdersTable() {
             {/* Shared Menu */}
             <Menu
               anchorEl={anchorEl}
-              open={Boolean(anchorEl) && Boolean(menuId)&&!isPending}
+              open={Boolean(anchorEl) && Boolean(menuId) && !isPending}
               onClose={handleCloseMenu}
               anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
               transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-          
             >
               {menuId &&
                 (() => {

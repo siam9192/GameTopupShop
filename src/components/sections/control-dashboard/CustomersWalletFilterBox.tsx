@@ -1,7 +1,7 @@
 'use client';
 
-import { useCustomersWalletPageContext } from '@/app/control-dashboard/wallets/customers/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useCustomersWalletPageContext } from '@/provider/CustomersWalletPageProvider';
 import { Box, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 

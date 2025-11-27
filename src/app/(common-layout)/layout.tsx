@@ -2,8 +2,8 @@
 
 import Header from '@/components/shared/Header';
 import Sidebar from '@/components/shared/Sidebar';
-import { Stack } from '@mui/material';
-import React, { createContext, Dispatch, SetStateAction, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import React, { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export type TCommonLayoutContextValue = {
   sidebarCollapse: boolean;
@@ -22,6 +22,11 @@ function layout({
     setSidebarCollapse,
   };
 
+  const pathname = usePathname();
+  useEffect(() => {
+    setSidebarCollapse(false);
+  }, [pathname]);
+
   return (
     <>
       <div className="max-w-[2500px] mx-auto overflow-hidden">
@@ -30,7 +35,7 @@ function layout({
             {/* Sidebar */}
             <div
               className={`
-            sticky top-0 h-screen border-r bg-white dark:bg-gray-900
+            sticky top-0 h-screen
             transition-all duration-200
             ${sidebarCollapse ? 'w-[300px]' : 'w-0 lg:w-[300px]'}
            overflow-hidden`}

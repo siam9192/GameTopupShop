@@ -3,6 +3,7 @@ import { Button, Stack, Typography, Divider, Paper } from '@mui/material';
 import { WalletSubmission } from '@/types/wallet-submission.type';
 import { getTimeAgo } from '@/utils/helper';
 import CustomerWalletAddBalanceSubmissionDetailsDialog from '../sections/customer-dashboard/CustomerWalletAddBalanceSubmissionDetailsDialog';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 interface Props {
   submission: WalletSubmission;
@@ -10,6 +11,8 @@ interface Props {
 
 function CustomerRecentAddBalanceSubmissionCard({ submission }: Props) {
   const [showDetails, setShowDetails] = useState(false);
+
+  const { currency } = useAppSettings();
 
   return (
     <div className=" p-2 relative">
@@ -22,7 +25,8 @@ function CustomerRecentAddBalanceSubmissionCard({ submission }: Props) {
       >
         <Stack spacing={0.5}>
           <Typography variant="h5" fontSize={20} fontWeight={500} color="secondary">
-            Amount: ${submission.amount}
+            Amount: {currency.symbol}
+            {submission.amount}
           </Typography>
 
           <Stack

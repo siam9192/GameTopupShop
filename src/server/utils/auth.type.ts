@@ -3,8 +3,7 @@ export interface ChangePasswordPayload {
   newPassword: string;
 }
 
-
-export interface AuthTokens  {
-  accessToken:string
-  refreshToken:string
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
 }

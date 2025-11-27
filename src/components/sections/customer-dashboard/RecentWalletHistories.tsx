@@ -23,9 +23,9 @@ function RecentWalletHistories() {
         </Stack>
 
         <Stack marginTop={2} spacing={2}>
-          {Array.from({ length: 6 }).map((_, index) => (
+          {/* {Array.from({ length: 6 }).map((_, index) => (
             <WalletHistoryCard key={index} />
-          ))}
+          ))} */}
         </Stack>
       </div>
       <Button variant="outlined" size="large">

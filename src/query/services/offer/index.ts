@@ -22,11 +22,9 @@ export function getOffersQuery(params: Param[]) {
   return useFetch<IResponse<Offer[]>>(['getOffers'], () => getOffers(params));
 }
 
-
 export function getPublicOffersQuery(params: Param[]) {
   return useFetch<IResponse<Offer[]>>(['getPublicOffers'], () => getPublicOffers(params));
 }
-
 
 export function getOfferByIdQuery(id: string) {
   return useFetch<IResponse<Offer>>(['getOfferById', id], () => getOfferById(id));

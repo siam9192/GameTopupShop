@@ -39,8 +39,6 @@ export enum AppStatus {
   OPEN = 'Open', // Application is live and accessible
   CLOSED = 'Closed', // Application is temporarily closed
   MAINTENANCE = 'Maintenance', // Application is under maintenance
-  SUSPENDED = 'Suspended', // Application access is suspended
-  COMING_SOON = 'Coming Soon', // Application is not launched yet
 }
 
 export interface UpdateAppSettingPayload extends Partial<AppSetting> {}

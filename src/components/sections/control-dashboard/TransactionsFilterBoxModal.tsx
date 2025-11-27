@@ -1,6 +1,6 @@
 'use client';
-import { useTransactionsPageContext } from '@/app/control-dashboard/transactions/all/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useTransactionsPageContext } from '@/provider/TransactionsPageProvider';
 import { TransactionStatus } from '@/types/transaction.type';
 import {
   Box,

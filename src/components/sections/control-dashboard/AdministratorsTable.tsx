@@ -19,7 +19,6 @@ import {
   getAdministratorsQuery,
   updateAdministratorStatusMutation,
 } from '@/query/services/administrator';
-import { useAdministratorsPageContext } from '@/app/control-dashboard/users/administrators/page';
 import { Param } from '@/types/metadata.type';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import { AccountStatus, AdministratorLevel } from '@/types/user.type';
@@ -27,6 +26,7 @@ import AdministratorDetailsDialog from '@/components/ui/AdministratorDetailsDial
 import UpdateAdministratorLevelDialog from '@/components/ui/UpdateAdministratorLevelDialog';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/provider/Provider';
+import { useAdministratorsPageContext } from '@/provider/AdministratorsPageProvider';
 
 const heads = [
   { name: 'ID', fieldName: '_id', sortable: true },

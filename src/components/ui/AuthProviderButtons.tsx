@@ -1,37 +1,43 @@
 'use client';
-import { Box, Button, Link, Typography } from '@mui/material';
+
+import { Box, Button } from '@mui/material';
 import { signIn } from 'next-auth/react';
-import React from 'react';
-import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import { FaFacebook, FaGoogle } from 'react-icons/fa6';
+
 function AuthProviderButtons() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
       <Button
         fullWidth
         variant="outlined"
         onClick={() => signIn('google')}
         startIcon={<FaGoogle />}
+        sx={{
+          py: 1,
+          borderRadius: '999px',
+          textTransform: 'none',
+          fontSize: '15px',
+          '&:hover': { backgroundColor: '#f5f5f5' },
+        }}
       >
-        Sign in with Google
+        Continue with Google
       </Button>
+
       <Button
         fullWidth
         variant="outlined"
         onClick={() => signIn('facebook')}
         startIcon={<FaFacebook />}
+        sx={{
+          py: 1,
+          borderRadius: '999px',
+          textTransform: 'none',
+          fontSize: '15px',
+          '&:hover': { backgroundColor: '#f5f5f5' },
+        }}
       >
-        Sign in with Facebook
+        Continue with Facebook
       </Button>
-      <Typography sx={{ textAlign: 'center' }}>
-        Don&apos;t have an account?{' '}
-        <Link
-          href="/material-ui/getting-started/templates/sign-in/"
-          variant="body2"
-          sx={{ alignSelf: 'center' }}
-        >
-          Sign up
-        </Link>
-      </Typography>
     </Box>
   );
 }

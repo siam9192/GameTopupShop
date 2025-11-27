@@ -1,6 +1,7 @@
 'use client';
-import { useAdministratorsPageContext } from '@/app/control-dashboard/users/administrators/page';
+
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useAdministratorsPageContext } from '@/provider/AdministratorsPageProvider';
 import {
   Box,
   Button,

@@ -19,7 +19,7 @@ const roleBaseNotAccessibleRoutes: Record<string, RegExp[]> = {
 };
 
 // ✅ Routes that don't require authentication
-const authRoutes = ['/login', '/signup', '/administrator-signin'];
+const authRoutes = ['/signin', '/signup', '/administrator-signin'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
   let userResponse;
   try {
     userResponse = await getCurrentUser();
-  } catch {
+  } catch (err) {
     // If the API call fails, treat as unauthenticated
     userResponse = null;
   }
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
     // Redirect to login page with redirect query
-    const redirectUrl = new URL('/login', request.url);
+    const redirectUrl = new URL('/signin', request.url);
     redirectUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(redirectUrl);
   }
@@ -60,8 +60,8 @@ export async function middleware(request: NextRequest) {
   const allowedRoutes = roleBaseRoutes[userRole] || [];
   const notAllowedRoutes = roleBaseNotAccessibleRoutes[userRole] || [];
 
-  const isAllowed = allowedRoutes.some((route) => route.test(pathname));
-  const isNotAllowed = notAllowedRoutes.some((route) => route.test(pathname));
+  const isAllowed = allowedRoutes.some(route => route.test(pathname));
+  const isNotAllowed = notAllowedRoutes.some(route => route.test(pathname));
 
   // ✅ If route is allowed and not restricted
   if (isAllowed && !isNotAllowed) {
@@ -79,5 +79,11 @@ export async function middleware(request: NextRequest) {
 
 // ✅ Apply middleware to restricted and auth routes
 export const config = {
-  matcher: ['/dashboard/:path*', '/control-dashboard/:path*'],
+  matcher: [
+    '/dashboard/:path*',
+    '/control-dashboard/:path*',
+    '/signin',
+    '/signup',
+    '/administrator-signin',
+  ],
 };

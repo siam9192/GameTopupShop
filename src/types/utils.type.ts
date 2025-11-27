@@ -1,5 +1,6 @@
 import { IconType } from 'react-icons';
 import { AdministratorLevel } from './user.type';
+import { ReactNode } from 'react';
 
 export type Filters = Record<string, string | number>;
 
@@ -27,4 +28,7 @@ export interface SearchProduct {
   name: string;
   coverPhoto: string;
   type: 'Topup' | 'Order';
+}
+export interface LayoutProps {
+  children: ReactNode;
 }

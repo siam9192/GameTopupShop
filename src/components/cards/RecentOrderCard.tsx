@@ -11,11 +11,10 @@ interface Props {
 }
 
 function RecentOrderCard({ order }: Props) {
-
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const { product } = order;
   const { payment } = order;
- const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
   return (
     <div className=" p-2 md:p-3 relative">
       <Stack
@@ -125,7 +124,8 @@ function RecentOrderCard({ order }: Props) {
         gap={1}
       >
         <Typography variant="h5" fontSize={25} fontWeight={500} color="secondary">
-          {currency.symbol}{payment.amount}
+          {currency.symbol}
+          {payment.amount}
         </Typography>
         <Stack direction={'row'} spacing={2}>
           <Button

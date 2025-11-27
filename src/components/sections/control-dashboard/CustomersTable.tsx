@@ -22,11 +22,11 @@ import { LiaUserEditSolid } from 'react-icons/lia';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import { deleteCustomerMutation, updateCustomerStatusMutation } from '@/query/services/customer';
 import CustomerDetailsDialog from '@/components/ui/CustomerDetailsDialog';
-import { useCustomersPageContext } from '@/app/control-dashboard/users/customers/page';
 import { AccountStatus } from '@/types/user.type';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/provider/Provider';
 import { SortOrder } from '@/types/utils.type';
+import { useCustomersPageContext } from '@/provider/CustomersPageProvider';
 
 const heads = [
   { name: 'ID', fieldName: '_id', sortable: true },

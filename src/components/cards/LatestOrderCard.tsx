@@ -10,7 +10,7 @@ interface Props {
 
 function LatestOrderCard({ order }: Props) {
   const { customer, product, payment, status } = order;
- const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
   // Map order status to MUI Chip color
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
@@ -50,11 +50,19 @@ function LatestOrderCard({ order }: Props) {
       <Typography variant="body2" color="text.secondary" mb={2}>
         {product.package ? (
           <>
-            Package: {product.package} × {product.quantity} — <strong>{currency.symbol}{payment.amount}</strong>
+            Package: {product.package} × {product.quantity} —{' '}
+            <strong>
+              {currency.symbol}
+              {payment.amount}
+            </strong>
           </>
         ) : (
           <>
-            Quantity: {product.quantity} — <strong>{currency.symbol}{payment.amount}</strong>
+            Quantity: {product.quantity} —{' '}
+            <strong>
+              {currency.symbol}
+              {payment.amount}
+            </strong>
           </>
         )}
       </Typography>
@@ -72,11 +80,6 @@ function LatestOrderCard({ order }: Props) {
           <Typography variant="subtitle1" color="text.primary" fontWeight={500}>
             {customer.fullName}
           </Typography>
-          {customer.email && (
-            <Typography variant="body2" color="text.secondary">
-              {customer.email}
-            </Typography>
-          )}
         </Box>
       </Stack>
     </Box>

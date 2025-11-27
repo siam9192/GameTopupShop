@@ -10,6 +10,9 @@ import { FaUsersCog } from 'react-icons/fa';
 import { TiUserDelete } from 'react-icons/ti';
 import { IoLockClosed } from 'react-icons/io5';
 import SidebarItem from '../ui/SidebarItem';
+import { useCurrentUser } from '@/provider/CurrentUserProvider';
+import { Customer } from '@/types/customer.type';
+import { Provider } from '@/types/user.type';
 
 interface RouteItem {
   label: string;
@@ -23,8 +26,10 @@ interface Props {
 }
 
 function ManageAccountSidebar(props: Props) {
-  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
+  const { user } = useCurrentUser();
+  const isCustomer = !Object.hasOwn(user as Object, 'level');
 
+  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
   const toggleMenu = (label: string) => {
     setOpenMenus(prev => ({ ...prev, [label]: !prev[label] }));
   };
@@ -36,15 +41,19 @@ function ManageAccountSidebar(props: Props) {
       icon: FaUsersCog,
     },
 
-    {
-      label: 'Password Setting',
+    ...(isCustomer && (user as Customer).provider === Provider.EMAIL_PASSWORD
+      ? [
+          {
+            label: 'Password Setting',
 
-      icon: IoLockClosed,
-      children: [
-        { label: 'Change Password', path: `${parentPath}/manage-account/change-password` },
-        { label: 'Forget Password', path: `${parentPath}/manage-account/forget-password` },
-      ],
-    },
+            icon: IoLockClosed,
+            children: [
+              { label: 'Change Password', path: `${parentPath}/manage-account/change-password` },
+              { label: 'Forget Password', path: `${parentPath}/manage-account/forget-password` },
+            ],
+          },
+        ]
+      : []),
     {
       label: 'Account Deletion',
       icon: TiUserDelete,

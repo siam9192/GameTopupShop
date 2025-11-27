@@ -14,10 +14,9 @@ import {
 } from '@/types/notification.type';
 import { IResponse } from '@/types/response.type';
 
-export function getCurrentUserNotificationsQuery(params:Param[]) {
-  return useFetch<IResponse<Notification[]>>(
-    ['getCurrentUserNotifications'],
-    ()=>getCurrentUserNotifications(params),
+export function getCurrentUserNotificationsQuery(params: Param[]) {
+  return useFetch<IResponse<Notification[]>>(['getCurrentUserNotifications'], () =>
+    getCurrentUserNotifications(params),
   );
 }
 

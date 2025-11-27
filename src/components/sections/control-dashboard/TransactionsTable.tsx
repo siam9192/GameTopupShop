@@ -4,11 +4,11 @@ import { Avatar, CircularProgress, Pagination, Stack, Tooltip, Typography } from
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
-import { LiaUserEditSolid } from 'react-icons/lia';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
-import { useTransactionsPageContext } from '@/app/control-dashboard/transactions/all/page';
+
 import { SortOrder } from '@/types/utils.type';
 import TransactionDetailsDialog from './TransactionDetailsDialog';
+import { useTransactionsPageContext } from '@/provider/TransactionsPageProvider';
 
 const heads = [
   {
@@ -114,7 +114,7 @@ function TransactionsTable() {
 
                     <TableCell>{transaction.amount}</TableCell>
                     <TableCell>{transaction.currency}</TableCell>
-                    <TableCell>{transaction.method}</TableCell>
+                    <TableCell>{transaction.method?.type || 'Unknown'}</TableCell>
                     <TableCell style={{ minWidth: '250px' }}>
                       <Stack direction={'row'} alignItems={'center'} spacing={2}>
                         <Avatar alt="Image" src={transaction.customer.profilePicture} />

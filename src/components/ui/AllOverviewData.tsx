@@ -16,7 +16,6 @@ function AllOverviewData() {
     role = user.level as any as UserRole;
   }
 
-  
   switch (role) {
     case UserRole.CUSTOMER:
       return <CustomerDashboardAllOverviewData />;

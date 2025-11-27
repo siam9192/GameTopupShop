@@ -5,8 +5,6 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
-import { useWalletAddBalanceSubmissionsPageContext } from '@/app/control-dashboard/wallets/submissions/page';
-import { SortOrder } from '@/types/utils.type';
 import WalletAddBalanceSubmissionDetailsDialog from './WalletAddBalanceSubmissionDetailsDialog';
 import { LuCheck } from 'react-icons/lu';
 import WalletAddBalanceSubmissionDeclineModal from './WalletAddBalanceSubmissionDeclineModal';
@@ -16,6 +14,8 @@ import { toast } from 'react-toastify';
 import { queryClient } from '@/provider/Provider';
 import AlertDialog from '@/components/ui/AleartDialog';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
+import { useWalletAddBalanceSubmissionsPageContext } from '@/provider/WalletSubmissionsPageProvider';
+import { SortOrder } from '@/types/utils.type';
 
 const heads = [
   {
@@ -59,8 +59,8 @@ function WalletAddBalanceSubmissionsTable() {
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
 
-  const {currency} = useAppSettings()
-  const { mutate} = approveWalletSubmissionMutation();
+  const { currency } = useAppSettings();
+  const { mutate } = approveWalletSubmissionMutation();
 
   async function handleApprove(id: string) {
     mutate(id, {
@@ -130,7 +130,10 @@ function WalletAddBalanceSubmissionsTable() {
                         <Typography>{submission.customer.fullName}</Typography>
                       </Stack>
                     </TableCell>
-                    <TableCell>{currency.symbol}{submission.amount}</TableCell>
+                    <TableCell>
+                      {currency.symbol}
+                      {submission.amount}
+                    </TableCell>
                     <TableCell>{submission.methodName}</TableCell>
 
                     <TableCell>{submission.status}</TableCell>

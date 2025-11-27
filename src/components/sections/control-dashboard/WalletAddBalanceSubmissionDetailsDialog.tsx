@@ -24,7 +24,7 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
   const { data, isLoading } = getWalletSubmissionByIdQuery(id);
   const submission = data?.data;
   const customer = submission?.customer;
- const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
   return (
     <Dialog open={true} fullWidth onClose={onClose}>
       <DialogTitle>Submission Details</DialogTitle>
@@ -49,7 +49,8 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
                 <Typography fontSize={15} color="text.secondary">
                   Amount:{' '}
                   <Typography component="span" color="success.main" fontWeight={600}>
-                   {currency.symbol}{submission.amount.toLocaleString()}
+                    {currency.symbol}
+                    {submission.amount.toLocaleString()}
                   </Typography>
                 </Typography>
                 <Typography fontSize={15} color="text.secondary">
@@ -101,7 +102,6 @@ function WalletAddBalanceSubmissionDetailsDialog({ id, onClose }: Props) {
                     />
                     <Box>
                       <Typography fontWeight={600}>{submission.method.name}</Typography>
-                    
                     </Box>
                   </Stack>
                   <Typography fontSize={14} mt={1}>

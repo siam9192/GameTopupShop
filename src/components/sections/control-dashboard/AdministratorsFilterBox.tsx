@@ -1,5 +1,6 @@
-import { useAdministratorsPageContext } from '@/app/control-dashboard/users/administrators/page';
+'use client';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useAdministratorsPageContext } from '@/provider/AdministratorsPageProvider';
 import { AdministratorLevel } from '@/types/user.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';

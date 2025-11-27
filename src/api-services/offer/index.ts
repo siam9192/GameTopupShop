@@ -29,8 +29,6 @@ export async function getOffers(params: Param[]) {
   }
 }
 
-
-
 export async function getPublicOffers(params: Param[]) {
   try {
     const res = await axiosInstance.get(`/offers${paramsToString(params)}`);
@@ -48,7 +46,6 @@ export async function getPublicOffers(params: Param[]) {
     throw new Error(message);
   }
 }
-
 
 export async function getEndingSoonOffers(params: Param[]) {
   try {

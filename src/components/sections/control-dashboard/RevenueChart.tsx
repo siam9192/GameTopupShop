@@ -155,8 +155,8 @@ const RevenueOrderChart: React.FC = () => {
         Revenue & Orders Analytics of Last 12 Months
       </Typography>
 
-      <div className="lg:h-[400px] @max-xs:w-[200px] max-w-[300px] md:max-w-full">
-        <Line ref={chartRef} height={'300px'} data={data} options={options} />
+      <div className=" h-[300px] ">
+        <Line ref={chartRef} data={data} options={options} />
       </div>
     </div>
   );

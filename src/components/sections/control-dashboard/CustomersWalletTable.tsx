@@ -15,11 +15,11 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
-import { useCustomersWalletPageContext } from '@/app/control-dashboard/wallets/customers/page';
 import { SortOrder } from '@/types/utils.type';
 import WalletDetailsDialog from './WalletDetailsDialog';
 import UpdateWalletBalanceModal from './UpdateWalletBalanceModal';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
+import { useCustomersWalletPageContext } from '@/provider/CustomersWalletPageProvider';
 
 const heads = [
   {
@@ -45,7 +45,7 @@ function CustomersWalletTable() {
 
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
- const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
   return (
     <div className="mt-10 p-2 lg:p-5 glass overflow-x-auto ">
       <DashboardSectionHeading title="Customers Wallet Table" />
@@ -108,7 +108,10 @@ function CustomersWalletTable() {
                       </Stack>
                     </TableCell>
 
-                    <TableCell>{currency.symbol}{wallet.balance} </TableCell>
+                    <TableCell>
+                      {currency.symbol}
+                      {wallet.balance}{' '}
+                    </TableCell>
 
                     <TableCell>
                       <Tooltip title="View Full Details">

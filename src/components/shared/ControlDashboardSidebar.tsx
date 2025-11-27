@@ -21,6 +21,7 @@ import { CiLogout } from 'react-icons/ci';
 import { logout } from '@/api-services/auth';
 import { useRouter } from 'next/navigation';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
+import LogoutDialog from '../ui/LogoutDialog';
 
 // ---------------------- Sidebar Data ----------------------
 const sidebarRoutesGroup1: RouteItem[] = [
@@ -39,7 +40,7 @@ const sidebarRoutesGroup1: RouteItem[] = [
   {
     label: 'Products',
     icon: TbRecharging,
-    path: '/control-dashboard/products', 
+    path: '/control-dashboard/products',
     roles: ALL_ADMINISTRATORS_LEVEL,
     children: [
       { label: 'Top Ups', path: '/control-dashboard/products/top-up' },
@@ -128,6 +129,8 @@ const sidebarRoutesGroup2: RouteItem[] = [
 // ---------------------- Sidebar Component ----------------------
 function ControlDashboardSidebar() {
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+  const [logoutDialog, setLogoutDialog] = useState(false);
+
   const { user } = useCurrentUser();
   const level = (user as Administrator)?.level;
   const toggleMenu = (label: string) => {
@@ -147,10 +150,6 @@ function ControlDashboardSidebar() {
 
   const router = useRouter();
 
-  async function handelLogout() {
-    await logout();
-    router.replace('/');
-  }
 
   const { settings } = useAppSettings();
 
@@ -195,7 +194,7 @@ function ControlDashboardSidebar() {
               <CiLogout size={22} color="white" />
             </ListItemIcon>
             <ListItemText
-              onClick={handelLogout}
+              onClick={()=>setLogoutDialog(true)}
               className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer "
             >
               Logout
@@ -203,6 +202,8 @@ function ControlDashboardSidebar() {
           </ListItem>
         </List>
       </Stack>
+
+         {logoutDialog ? <LogoutDialog /> : null}
     </div>
   );
 }

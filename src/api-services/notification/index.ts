@@ -5,7 +5,7 @@ import { NotificationSetAsReadPayload } from '@/types/notification.type';
 import { paramsToString } from '@/utils/helper';
 import { AxiosError } from 'axios';
 
-export async function getCurrentUserNotifications(params:Param[]) {
+export async function getCurrentUserNotifications(params: Param[]) {
   try {
     const res = await axiosInstance.get(`/notifications/my${paramsToString(params)}`);
 

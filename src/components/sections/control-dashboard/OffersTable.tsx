@@ -18,9 +18,9 @@ import { useRouter } from 'next/navigation';
 import { SlOptionsVertical } from 'react-icons/sl';
 import { queryClient } from '@/provider/Provider';
 import { toast } from 'react-toastify';
-import { useOffersPageContext } from '@/app/control-dashboard/products/offers/page';
 import { OfferStatus } from '@/types/offer.type';
 import { deleteOfferMutation, updateOfferStatusMutation } from '@/query/services/offer';
+import { useOffersPageContext } from '@/provider/ManageOffersPageProvider';
 
 const heads = [
   {
@@ -61,7 +61,7 @@ const heads = [
   },
 ];
 
-function OrdersTable() {
+function OffersTable() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuId, setMenuId] = useState<string | null>(null);
   const { queryResult, setPage, sort, setSort } = useOffersPageContext();
@@ -300,4 +300,4 @@ function OrdersTable() {
   );
 }
 
-export default OrdersTable;
+export default OffersTable;

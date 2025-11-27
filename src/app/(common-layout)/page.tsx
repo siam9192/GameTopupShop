@@ -1,11 +1,14 @@
-import FeaturedTopups from '@/components/sections/FeaturedTopUps';
-import HomeBanner from '@/components/sections/HomeBanner';
-import LatestOrders from '@/components/sections/LatestOrders';
-import OfferComesEnd from '@/components/sections/OfferComesEnd';
-import TopTopups from '@/components/sections/TopTopups';
+import FeaturedTopups from '@/components/sections/common/FeaturedTopUps';
+import HomeBanner from '@/components/sections/common/HomeBanner';
+import LatestOrders from '@/components/sections/common/LatestOrders';
+import OfferComesEnd from '@/components/sections/common/OfferComesEnd';
+import TopTopups from '@/components/sections/common/TopTopups';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
+export const metadata = {
+  title: 'Home',
+};
 function page() {
   return (
     <div>

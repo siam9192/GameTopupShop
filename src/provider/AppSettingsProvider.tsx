@@ -9,7 +9,7 @@ import { Currency } from '@/types/currency.type';
 export type AppSettingsProviderContextType = {
   queryResult: UseQueryResult<IResponse<AppSetting>, unknown>;
   settings?: AppSetting;
-  currency:Currency
+  currency: Currency;
 };
 
 const AppSettingsProviderContext = createContext<AppSettingsProviderContextType | undefined>(
@@ -26,12 +26,14 @@ export function useAppSettings() {
 
 function AppSettingsProvider({ children }: { children: ReactNode }) {
   const result = getAppSettingsQuery();
-  const settingCurrencyCode =  result.data?.data.currency
-  const  currency:Currency  =  (settingCurrencyCode ? CURRENCIES.find(cur=>cur.code ===  settingCurrencyCode) : CURRENCIES[0]) as Currency
-  
+  const settingCurrencyCode = result.data?.data.currency;
+  const currency: Currency = (
+    settingCurrencyCode ? CURRENCIES.find(cur => cur.code === settingCurrencyCode) : CURRENCIES[0]
+  ) as Currency;
+
   return (
     <AppSettingsProviderContext.Provider
-      value={{ queryResult: result, settings: result.data?.data,currency }}
+      value={{ queryResult: result, settings: result.data?.data, currency }}
     >
       {children}
     </AppSettingsProviderContext.Provider>

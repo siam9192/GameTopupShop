@@ -5,9 +5,11 @@ import { IResponse } from '@/types/response.type';
 import { SearchProduct } from '@/types/utils.type';
 
 export function getSearchProductsQuery(params: Param[]) {
-  return useFetch<IResponse<SearchProduct[]>>(['getSearchProducts'], () =>
-    getSearchProducts(params),{
-      enabled:false
-    }
+  return useFetch<IResponse<SearchProduct[]>>(
+    ['getSearchProducts'],
+    () => getSearchProducts(params),
+    {
+      enabled: false,
+    },
   );
 }

@@ -28,8 +28,7 @@ const handler = NextAuth({
 
           const data = res.data;
           if (data.success) {
-            const { accessToken, refreshToken } = data.data;
-            await setAuthTokens(accessToken, refreshToken);
+            await setAuthTokens(data.data);
           }
         } catch (error) {}
       }

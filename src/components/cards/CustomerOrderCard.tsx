@@ -2,6 +2,7 @@ import { Order } from '@/types/order.type';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import CustomerOrderDetailsDialog from '../sections/customer-dashboard/CustomerOrderDetailsDialog';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 interface Props {
   order: Order;
@@ -10,6 +11,9 @@ interface Props {
 function CustomerOrderCard({ order }: Props) {
   const { product } = order;
   const [showDetails, setShowDetails] = useState(false);
+
+  const { currency } = useAppSettings();
+
   return (
     <div className=" p-2 md:p-3  relative">
       <Stack
@@ -20,11 +24,7 @@ function CustomerOrderCard({ order }: Props) {
         spacing={2}
       >
         <Box>
-          <img
-            src="https://play-lh.googleusercontent.com/Odw8BGugaJLdbaSbCeZWbTE3Qz1wTiQ0Tsn9nzpoQdnkzWb-gaI58zzTmYDvGpdYKg"
-            alt=""
-            className=" size-20 md:size-24 lg:size-28 rounded-lg"
-          />
+          <img src={product.image} alt="" className=" size-20 md:size-24 lg:size-28 rounded-lg" />
         </Box>
 
         <Stack
@@ -100,7 +100,8 @@ function CustomerOrderCard({ order }: Props) {
         color="secondary"
         className=" top-1 right-0 absolute"
       >
-        ${order.payment.amount}
+        {currency.symbol}
+        {order.payment.amount}
       </Typography>
 
       {showDetails ? (

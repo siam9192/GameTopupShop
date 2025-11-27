@@ -1,6 +1,7 @@
 'use client';
-import { useCustomersPageContext } from '@/app/control-dashboard/users/customers/page';
+
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useCustomersPageContext } from '@/provider/CustomersPageProvider';
 import {
   Box,
   Button,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   CircularProgress,
@@ -20,8 +20,8 @@ import CustomerOrderCard from '@/components/cards/CustomerOrderCard';
 const sortOptions = [
   { label: 'Date (Newest → Oldest)', value: 'createdAt-desc' },
   { label: 'Date (Oldest → Newest)', value: 'createdAt-asc' },
-  { label: 'Amount (High → Low)', value: 'amount-desc' },
-  { label: 'Amount (Low → High)', value: 'amount-asc' },
+  { label: 'Amount (High → Low)', value: 'payment.amount-desc' },
+  { label: 'Amount (Low → High)', value: 'payment.amount-asc' },
 ];
 
 export default function Page() {
@@ -32,7 +32,7 @@ export default function Page() {
     setSort(event.target.value as string);
   };
 
-  const { data, isLoading } = getMyOrdersQuery([
+  const { data, isLoading, refetch } = getMyOrdersQuery([
     { name: 'page', value: String(page) },
     { name: 'sortBy', value: sort.split('-')[0] },
     { name: 'sortOrder', value: sort.split('-')[1] },
@@ -41,6 +41,11 @@ export default function Page() {
   const orders = data?.data || [];
   const meta = data?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 0;
+
+  useEffect(() => {
+    if (isLoading) return;
+    refetch();
+  }, [sort, page]);
 
   return (
     <Box>

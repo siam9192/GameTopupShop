@@ -6,6 +6,7 @@ import { cancelWalletSubmissionMutation } from '@/query/services/wallet-submissi
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import CustomerWalletAddBalanceSubmissionDetailsDialog from '../sections/customer-dashboard/CustomerWalletAddBalanceSubmissionDetailsDialog';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 interface Props {
   submission: WalletSubmission;
@@ -32,6 +33,8 @@ const CustomerWalletSubmissionCard: React.FC<Props> = ({ submission }) => {
     });
   };
 
+  const { currency } = useAppSettings();
+
   return (
     <div className="p-2">
       <Stack direction="row" spacing={2} alignItems="center">
@@ -43,7 +46,8 @@ const CustomerWalletSubmissionCard: React.FC<Props> = ({ submission }) => {
       </Stack>
 
       <Typography variant="body1" color="text.primary" mt={2}>
-        Amount: ${submission.amount}
+        Amount: {currency.symbol}
+        {submission.amount}
       </Typography>
       {submission.note && (
         <Typography variant="body2" color="text.secondary">

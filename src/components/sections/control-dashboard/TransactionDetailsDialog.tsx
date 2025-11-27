@@ -79,7 +79,7 @@ export default function TransactionDetailsDialog({ id, onClose }: Props) {
                 <Typography fontSize={15} color="text.secondary">
                   Method:{' '}
                   <Chip
-                    label={transaction.method}
+                    label={transaction.method?.name}
                     color="primary"
                     size="small"
                     sx={{ textTransform: 'capitalize' }}

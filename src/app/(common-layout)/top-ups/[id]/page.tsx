@@ -1,19 +1,21 @@
 'use client';
 
 import PurchaseForm from '@/components/forms/PurchaseForm';
-import PreviewEditorValue from '@/components/ui/PreviewEditorValue';
+import ProductDescription from '@/components/sections/common/ProductDescription';
+import TopupPageHeader from '@/components/sections/common/TopupPageHeader';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
 import { getPublicTopupByIdQuery, getTopupByIdQuery } from '@/query/services/topup';
 import { ProductCategory } from '@/types/order.type';
 import { CircularProgress, Stack, Typography, Divider } from '@mui/material';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 
 function Page() {
   const { id } = useParams();
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
-  const { data, isLoading, isPending, error } = getPublicTopupByIdQuery(id as string)
-  const {currency} =  useAppSettings()
+  const { data, isLoading, isPending, error } = getPublicTopupByIdQuery(id as string);
+  const { currency } = useAppSettings();
 
   if (isLoading || isPending)
     return (
@@ -30,19 +32,13 @@ function Page() {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-10 space-y-10">
       {/* Header Section */}
-      <div className="text-center space-y-3">
-        <Typography variant="h4" fontWeight={700} color="text.primary">
-          {topup.name}
-        </Typography>
-
-        <Typography variant="h6" color="text.secondary">
-          Platform: <span className="font-medium text-primary">{topup.platformName}</span>
-        </Typography>
-      </div>
+      <TopupPageHeader topup={topup} />
 
       {/* Cover Image */}
       <div className="flex justify-center">
-        <img
+        <Image
+          width={600}
+          height={400}
           src={topup.coverPhoto}
           alt={topup.name}
           className="w-full max-w-3xl rounded-2xl shadow-lg object-cover"
@@ -72,7 +68,8 @@ function Page() {
                   {pkg.name}
                 </Typography>
                 <Typography variant="body1" color="primary" fontWeight={600}>
-                  {currency.symbol}{pkg.price}
+                  {currency.symbol}
+                  {pkg.price}
                 </Typography>
               </div>
             ))}
@@ -83,7 +80,11 @@ function Page() {
               <Divider className="my-2" />
               <Typography variant="body1" mt={2} color="text.secondary">
                 Selected: <span className="font-medium text-primary">{selectedPackage.name}</span>{' '}
-                for <span className="font-semibold text-secondary">{currency.symbol}{selectedPackage.price}</span>
+                for{' '}
+                <span className="font-semibold text-secondary">
+                  {currency.symbol}
+                  {selectedPackage.price}
+                </span>
               </Typography>
             </div>
           )}
@@ -108,16 +109,7 @@ function Page() {
       </div>
 
       {/* Description Section */}
-      {topup.description && (
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-800">
-          <Typography variant="h5" fontWeight={600} gutterBottom color="text.primary">
-            Description
-          </Typography>
-          <div>
-            <PreviewEditorValue value={topup.description} />
-          </div>
-        </div>
-      )}
+      {topup.description && <ProductDescription description={topup.description} />}
     </div>
   );
 }

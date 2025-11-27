@@ -33,7 +33,7 @@ function OrderLivePaymentInitDialog({ data: productData, onClose }: Props) {
   const { data } = getPublicLivePaymentMethodsQuery([{ name: 'limit', value: 40 }]);
   const methods = data?.data;
   const [selectedMethodId, setSelectedMethodId] = useState<string | null>();
-   const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
   const { mutate: createOrderMutate, isPending: orderCreating } = createOrderMutation();
 
   const { mutate: createPaymentMutate, isPending: creatingPayment } =

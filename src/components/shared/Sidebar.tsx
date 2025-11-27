@@ -1,135 +1,212 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { HiOutlineHome } from 'react-icons/hi2';
-import { IoGameControllerOutline, IoSettingsOutline } from 'react-icons/io5';
+import { IoGameControllerOutline } from 'react-icons/io5';
 import { FaHeadset } from 'react-icons/fa6';
+import { GrUserAdmin } from 'react-icons/gr';
+import { LuLogIn } from 'react-icons/lu';
+import { BiSolidOffer } from 'react-icons/bi';
+import { CiLogout } from 'react-icons/ci';
+
+import Link from 'next/link';
 import {
-  Avatar,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Stack,
+  Skeleton,
+  Divider,
   Typography,
+  ListItemButton,
+  Avatar,
 } from '@mui/material';
-import { BiSolidOffer } from 'react-icons/bi';
-import Link from 'next/link';
-import { CiLogout } from 'react-icons/ci';
+
 import { useCurrentUser } from '@/provider/CurrentUserProvider';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
-import { logout } from '@/api-services/auth';
-import { queryClient } from '@/provider/Provider';
-function Sidebar() {
-  const routes1 = [
-    {
-      title: 'Home',
-      icon: HiOutlineHome,
-      path: '/',
-    },
-    {
-      title: 'Top-ups',
-      icon: IoGameControllerOutline,
-      path: '/topups',
-    },
-    {
-      title: 'Offers',
-      icon: BiSolidOffer,
-      path: '/offers',
-    },
-  ];
-  const routes2 = [
-    {
-      title: 'Support',
-      icon: FaHeadset,
-      path: '/support',
-    },
-    // {
-    //   title: 'Dashboard',
-    //   icon: RxDashboard,
-    //   path: '/dashboard',
-    // },
-  ];
 
-  const { user } = useCurrentUser();
-  const { settings } = useAppSettings();
+import { usePathname } from 'next/navigation';
+import LogoutDialog from '../ui/LogoutDialog';
 
-  async function handelLogout() {
-    await logout();
-     queryClient.invalidateQueries({ queryKey: ['getCurrentUser'] });
-  }
+const routesMain = [
+  { title: 'Home', icon: HiOutlineHome, path: '/' },
+  { title: 'Top-ups', icon: IoGameControllerOutline, path: '/top-ups' },
+  { title: 'Offers', icon: BiSolidOffer, path: '/offers' },
+];
+
+const routesSecondary = [{ title: 'Support', icon: FaHeadset, path: '/support' }];
+
+const skeletonSx = (theme: any) => ({
+  backgroundColor:
+    theme.palette.mode === 'light'
+      ? 'rgba(0,0,0,0.1)' // visible on white
+      : 'rgba(255,255,255,0.1)', // visible on dark
+});
+
+const SkeletonItem = () => (
+  <ListItem className="py-3">
+    <ListItemIcon>
+      <Skeleton variant="circular" width={30} height={30} sx={skeletonSx} />
+    </ListItemIcon>
+    <ListItemText>
+      <Skeleton width={90} height={26} sx={skeletonSx} />
+    </ListItemText>
+  </ListItem>
+);
+
+const RouteItem = ({
+  title,
+  Icon,
+  path,
+  active,
+}: {
+  title: string;
+  Icon: any;
+  path?: string;
+  active?: boolean;
+}) => {
+  const Wrapper = path ? Link : React.Fragment;
+
+  const WrapperProps = path ? { href: path } : {};
 
   return (
-    <div className={` w-full h-full py-5 px-10    dark:bg-[#0F0F0F] bg-black relative `}>
-      <Typography
-        variant="h4"
-        color="primary"
-        align="center"
-        fontWeight={600}
-        fontFamily="jost"
-        mb={2}
+    <Wrapper {...(WrapperProps as any)}>
+      <ListItem
+        className={`
+          group 
+          py-3 px-2 rounded-xl 
+          cursor-pointer 
+          flex items-center
+          transition-all duration-200
+          text-white 
+          ${active ? 'bg-neutral-800 text-secondary' : 'hover:bg-neutral-800/60'}
+        `}
       >
-        {settings?.name}
-      </Typography>
+        <div
+          className={`h-5 w-1 rounded-full mr-3 transition-all ${
+            active ? 'bg-secondary' : 'group-hover:bg-neutral-600'
+          }`}
+        ></div>
 
-      <Stack direction={'column'} justifyContent={'space-between'} height={'90%'}>
-        <Stack direction={'column'} spacing={4} fontFamily={'Open Sans'} color={'primary'}>
+        <ListItemIcon className="!min-w-[36px]">
+          <Icon size={26} color={active ? '#fb923c' : 'white'} />
+        </ListItemIcon>
+
+        <ListItemText
+          className={`text-lg font-medium ${
+            active ? 'text-secondary' : 'group-hover:text-secondary'
+          }`}
+        >
+          {title}
+        </ListItemText>
+      </ListItem>
+    </Wrapper>
+  );
+};
+
+const UserSection = ({ user }: { user: any }) => {
+  if (!user) return null;
+  const [logoutDialog, setLogoutDialog] = useState(false);
+
+  return (
+    <>
+      <Divider sx={{ my: 2, borderColor: '#333' }} />
+
+      <Link href="/dashboard">
+        <ListItem className="py-3 cursor-pointer rounded-xl hover:bg-neutral-800/60 transition-all duration-200">
+          <Avatar alt="" variant="rounded" src={user.profilePicture} />
+          <ListItemText className="text-white font-semibold text-lg ml-4">
+            {user.fullName}
+          </ListItemText>
+        </ListItem>
+      </Link>
+
+      <ListItemButton
+        onClick={() => setLogoutDialog(true)}
+        className="group 
+          py-3 px-2 rounded-xl 
+          cursor-pointer 
+          flex items-center
+          transition-all duration-200"
+      >
+        <ListItemIcon>
+          <CiLogout size={22} color="white" />
+        </ListItemIcon>
+        <ListItemText className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer ">
+          Logout
+        </ListItemText>
+      </ListItemButton>
+      {logoutDialog ? <LogoutDialog /> : null}
+    </>
+  );
+};
+
+function Sidebar() {
+  const { user, isLoading: userLoading } = useCurrentUser();
+  const { settings, queryResult } = useAppSettings();
+  const settingsLoading = queryResult.isLoading;
+  const pathname = usePathname();
+
+  return (
+    <div className="w-full h-full py-6 px-8 bg-[#0F0F0F] dark:bg-[#0F0F0F] flex flex-col relative">
+      {/* App Logo */}
+      <div className="flex justify-center mb-8">
+        {settingsLoading ? (
+          <Skeleton width={130} height={50} />
+        ) : (
+          <Typography color="primary" variant="h4" fontWeight={'600'}>
+            {settings?.name}
+          </Typography>
+        )}
+      </div>
+
+      {/* Main Content */}
+      <Stack direction="column" justifyContent="space-between" height="100%">
+        {/* Main Routes */}
+        <Stack direction="column" spacing={3}>
           <List>
-            {routes1.map(route => (
-              <Link href={route.path} key={route.title}>
-                <ListItem className="p-2  text-white hover:text-secondary hover:scale-105 duration-75 hover:cursor-pointer">
-                  <ListItemIcon>
-                    <route.icon color="white" size={28} />
-                  </ListItemIcon>
-                  <ListItemText disableTypography className=" font-primary  font-semibold text-lg">
-                    {route.title}
-                  </ListItemText>
-                </ListItem>
-              </Link>
-            ))}
+            {settingsLoading || userLoading
+              ? routesMain.map(r => <SkeletonItem key={r.title} />)
+              : routesMain.map(r => (
+                  <RouteItem
+                    key={r.title}
+                    title={r.title}
+                    Icon={r.icon}
+                    path={r.path}
+                    active={pathname === r.path}
+                  />
+                ))}
           </List>
         </Stack>
 
+        {/* Bottom Section */}
         <List>
-          {routes2.map(route => (
-            <ListItem
-              key={route.title}
-              className="p-2  text-white hover:text-secondary hover:scale-105 duration-75 hover:cursor-pointer"
-            >
-              <ListItemIcon>
-                <route.icon color="white" size={28} />
-              </ListItemIcon>
-              <ListItemText className="font-primary  font-semibold text-lg">
-                {route.title}
-              </ListItemText>
-            </ListItem>
-          ))}
-          {user ? (
-           <>
-            <Link href="/dashboard">
-              <ListItem>
-                <Avatar alt="" variant="rounded" src={user.profilePicture} />
-                <ListItemText className="text-white font-primary  font-semibold text-lg ml-4">
-                  {user.fullName}
-                </ListItemText>
-              </ListItem>
-            </Link>
-       <ListItem>
-            <ListItemIcon>
-              <CiLogout size={22} color="white" />
-            </ListItemIcon>
-    
-             <ListItemText
-              onClick={handelLogout}
-              className="text-sm text-gray-300 hover:text-red-600 hover:cursor-pointer "
-            >
-              Logout
-            </ListItemText>
-            
-    
-          </ListItem>
-           </>
-          ) : null}
-   
+          {/* Support */}
+          {settingsLoading || userLoading
+            ? routesSecondary.map(r => <SkeletonItem key={r.title} />)
+            : routesSecondary.map(r => (
+                <RouteItem key={r.title} title={r.title} Icon={r.icon} path={r.path} />
+              ))}
+
+          {/* User Section */}
+          {userLoading ? (
+            <>
+              <SkeletonItem />
+              <SkeletonItem />
+              <SkeletonItem />
+            </>
+          ) : user ? (
+            <UserSection user={user} />
+          ) : (
+            <>
+              <Link href="/signin">
+                <RouteItem title="Signin" Icon={LuLogIn} />
+              </Link>
+              <Link href="/administrator-signin">
+                <RouteItem title="Admin Signin" Icon={GrUserAdmin} />
+              </Link>
+            </>
+          )}
         </List>
       </Stack>
     </div>

@@ -1,18 +1,9 @@
 'use client';
-import { useCustomersWalletPageContext } from '@/app/control-dashboard/wallets/customers/page';
+
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
-import {
-  Box,
-  Button,
-  FormControl,
-  MenuItem,
-  Modal,
-  Select,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { useCustomersWalletPageContext } from '@/provider/CustomersWalletPageProvider';
+import { Box, Button, Modal, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
 
 function CustomersWalletFilterModal() {
   const [open, setOpen] = React.useState(false);

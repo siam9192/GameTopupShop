@@ -9,7 +9,6 @@ import { AxiosError } from 'axios';
 export async function getSearchProducts(params: Param[]) {
   try {
     const res = await axiosInstance.get(`/utils/search-products${paramsToString(params)}`);
-
     return res.data;
   } catch (err: unknown) {
     let message = 'Something went wrong';

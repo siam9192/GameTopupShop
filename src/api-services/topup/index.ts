@@ -83,8 +83,7 @@ export async function getFeaturedTopups(params: Param[]) {
   }
 }
 
-
-export async function getPublicTopupById(id:string) {
+export async function getPublicTopupById(id: string) {
   try {
     const res = await axiosInstance.get(`/topups/public/${id}`);
 

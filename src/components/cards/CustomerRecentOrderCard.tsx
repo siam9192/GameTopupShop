@@ -7,6 +7,7 @@ import CustomerOrderDetailsDialog from '../sections/customer-dashboard/CustomerO
 import { updateOrderMutation, updateOrderStatusMutation } from '@/query/services/order';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/provider/Provider';
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 interface Props {
   order: Order;
 }
@@ -33,6 +34,8 @@ function CustomerRecentOrderCard({ order }: Props) {
       },
     );
   }
+
+  const { currency } = useAppSettings();
 
   return (
     <div className="relative p-2 duration-300">
@@ -85,7 +88,8 @@ function CustomerRecentOrderCard({ order }: Props) {
 
         {/* Amount */}
         <Typography variant="h5" fontWeight={600} color="secondary" className="text-right">
-          ${order.payment.amount}
+          {currency.symbol}
+          {order.payment.amount}
         </Typography>
       </Stack>
 

@@ -14,6 +14,7 @@ import {
   Avatar,
 } from '@mui/material';
 import { getOrderByIdQuery } from '@/query/services/order'; // adjust import path
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 
 interface Props {
   id: string;
@@ -27,6 +28,8 @@ function CustomerOrderDetailsDialog({ id, onClose }: Props) {
   const product = order?.product;
   const payment = order?.payment;
   const fieldsInfo = order?.fieldsInfo || [];
+
+  const { currency } = useAppSettings();
 
   return (
     <Dialog open fullWidth maxWidth="sm" onClose={onClose}>
@@ -78,7 +81,8 @@ function CustomerOrderDetailsDialog({ id, onClose }: Props) {
                 <Typography variant="body2">Category: {product?.category}</Typography>
                 <Typography variant="body2">Quantity: {product?.quantity}</Typography>
                 <Typography variant="body2">
-                  Price: {product?.price.toLocaleString()} BDT
+                  Price: {currency.symbol}
+                  {product?.price.toLocaleString()}
                 </Typography>
               </Box>
             </Stack>
@@ -93,7 +97,10 @@ function CustomerOrderDetailsDialog({ id, onClose }: Props) {
             </Typography>
             <Stack spacing={1.2}>
               <InfoRow label="Transaction ID" value={payment?.transactionId || 'N/A'} />
-              <InfoRow label="Amount" value={`${payment?.amount?.toLocaleString()} BDT`} />
+              <InfoRow
+                label="Amount"
+                value={`${currency.symbol}${payment?.amount?.toLocaleString()}`}
+              />
               <InfoRow
                 label="Status"
                 value={payment?.status}

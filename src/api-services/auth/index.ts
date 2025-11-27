@@ -37,10 +37,7 @@ export async function customerSignup(payload: CustomerSignupPayload) {
 
 export async function customerSignin(payload: SigninPayload) {
   try {
-    const res = await axiosInstance.post<IResponse<AuthTokens>>(
-      '/auth/signin',
-      payload,
-    );
+    const res = await axiosInstance.post<IResponse<AuthTokens>>('/auth/signin', payload);
     const data = res.data;
     await setAuthTokens(data.data);
     return data; // return only the useful data
@@ -62,7 +59,7 @@ export async function administratorSignin(payload: SigninPayload) {
       payload,
     );
     const data = res.data;
-     await setAuthTokens(data.data);
+    await setAuthTokens(data.data);
     return data; // return only the useful data
   } catch (err) {
     const error = err as AxiosError<{ message?: string }>;
@@ -91,11 +88,9 @@ export async function changePassword(payload: ChangePasswordPayload) {
   }
 }
 
-export async function setAuthTokens(tokens:AuthTokens) {
-  
-  const {accessToken,refreshToken} =  tokens
+export async function setAuthTokens(tokens: AuthTokens) {
+  const { accessToken, refreshToken } = tokens;
 
-  
   const cookieStore = await cookies();
 
   cookieStore.set('accessToken', accessToken, {
@@ -110,10 +105,9 @@ export async function setAuthTokens(tokens:AuthTokens) {
     httpOnly: true,
     path: '/',
     maxAge: 10 * 365 * 24 * 60 * 60,
-    secure:false,
+    secure: false,
     sameSite: 'lax',
   });
-
 }
 
 export async function logout() {

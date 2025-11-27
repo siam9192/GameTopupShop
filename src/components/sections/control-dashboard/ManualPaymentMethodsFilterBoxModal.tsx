@@ -1,6 +1,6 @@
 'use client';
-import { useManualPaymentMethodsPageContext } from '@/app/control-dashboard/payment-methods/manual/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useManualPaymentMethodsPageContext } from '@/provider/ManualPaymentMethodsPageProvider';
 import { ManualPaymentMethodStatus } from '@/types/manual-payment-method.type';
 
 import {

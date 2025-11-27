@@ -1,5 +1,6 @@
-import { useCustomersPageContext } from '@/app/control-dashboard/users/customers/page';
+'use client';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useCustomersPageContext } from '@/provider/CustomersPageProvider';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 

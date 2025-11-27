@@ -1,5 +1,6 @@
 import { Customer } from './customer.type';
 export interface Transaction {
+  _id: string;
   customerId: string;
   customer: Customer;
   orderId?: string;

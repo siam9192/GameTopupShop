@@ -13,7 +13,6 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
 import { MdOutlineEdit } from 'react-icons/md';
 import { IoMdArrowDown, IoMdArrowUp } from 'react-icons/io';
-import { useTopupPageContext } from '@/app/control-dashboard/products/top-ups/page';
 import { SortOrder } from '@/types/utils.type';
 import { useRouter } from 'next/navigation';
 import { TopupStatus } from '@/types/topup.type';
@@ -21,6 +20,7 @@ import { SlOptionsVertical } from 'react-icons/sl';
 import { deleteTopupMutation, updateTopupStatusMutation } from '@/query/services/topup';
 import { queryClient } from '@/provider/Provider';
 import { toast } from 'react-toastify';
+import { useTopupPageContext } from '@/provider/ManageTopupsPageProvider';
 
 const heads = [
   {

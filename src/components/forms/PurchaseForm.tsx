@@ -8,8 +8,8 @@ import OrderWalletPaymentDialog from '../sections/customer-dashboard/OrderWallet
 import { Offer } from '@/types/offer.type';
 import { useCurrentUser } from '@/provider/CurrentUserProvider';
 import { Administrator } from '@/types/administrator.type';
-import { Customer } from '@/types/customer.type';
 import { UserRole } from '@/types/user.type';
+import Link from 'next/link';
 
 const paymentOptions = [
   {
@@ -101,9 +101,9 @@ const PurchaseForm: React.FC<Props> = ({
       setShowWalletPaymentDialog(true);
     }
   };
-  
-  const {user} =  useCurrentUser()
-  const role =  (user as Administrator)?.level || UserRole.CUSTOMER
+
+  const { user } = useCurrentUser();
+  const role = (user as Administrator)?.level || UserRole.CUSTOMER;
   return (
     <>
       <form
@@ -206,7 +206,12 @@ const PurchaseForm: React.FC<Props> = ({
         {/* --- Submit Button --- */}
         <div className="text-center">
           <Button
-            disabled={!!!selectedPayment||role !==  UserRole.CUSTOMER as any}
+            disabled={
+              !user ||
+              role !== (UserRole.CUSTOMER as any) ||
+              (productType === ProductCategory.TOP_UP && !selectedPackage) ||
+              !!!selectedPayment
+            }
             variant="contained"
             color="primary"
             size="large"
@@ -216,6 +221,19 @@ const PurchaseForm: React.FC<Props> = ({
             Purchase Now
           </Button>
         </div>
+        {productType === ProductCategory.TOP_UP && !selectedPackage ? (
+          <Typography color="info" mt={2}>
+            Chose a package first
+          </Typography>
+        ) : null}
+        {!user ? (
+          <Typography color="warning" mt={2}>
+            You have to login first{' '}
+            <Link href="/signin" className="font-medium">
+              login
+            </Link>
+          </Typography>
+        ) : null}
       </form>
       {showLivePaymentDialog ? (
         <OrderLivePaymentInitDialog
@@ -229,7 +247,7 @@ const PurchaseForm: React.FC<Props> = ({
               value: String(value),
             })),
           }}
-          onClose={() => setShowWalletPaymentDialog(false)}
+          onClose={() => setShowLivePaymentDialog(false)}
         />
       ) : null}
 

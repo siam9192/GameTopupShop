@@ -17,9 +17,8 @@ import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import { useRouter } from 'next/navigation';
 import { SortOrder } from '@/types/utils.type';
 import WalletAddBalanceSubmissionDetailsDialog from './WalletAddBalanceSubmissionDetailsDialog';
-import { useManualPaymentMethodsPageContext } from '@/app/control-dashboard/payment-methods/manual/page';
 import { SlOptionsVertical } from 'react-icons/sl';
-import { ManualPaymentMethod, ManualPaymentMethodStatus } from '@/types/manual-payment-method.type';
+import { ManualPaymentMethodStatus } from '@/types/manual-payment-method.type';
 import {
   deleteManualPaymentMethodMutation,
   updateManualPaymentMethodMutation,
@@ -27,6 +26,7 @@ import {
 } from '@/query/services/manual-payment-method';
 import { toast } from 'react-toastify';
 import { queryClient } from '@/provider/Provider';
+import { useManualPaymentMethodsPageContext } from '@/provider/ManualPaymentMethodsPageProvider';
 
 const heads = [
   {

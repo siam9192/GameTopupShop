@@ -1,38 +1,42 @@
 'use client';
 import React from 'react';
-import { Avatar, Box, IconButton, Stack, Typography, useTheme, Paper } from '@mui/material';
-import { RiMenuUnfoldLine } from 'react-icons/ri';
+import { Avatar, Box, IconButton, Stack, Typography, useTheme,  } from '@mui/material';
+import { RiMenuUnfold4Line } from 'react-icons/ri';
 import ToggleThemeMode from '../ui/ToggleThemeMode';
 import NotificationBar from '../ui/NotificationBar';
 import { useCurrentUser } from '@/provider/CurrentUserProvider';
 import { Administrator } from '@/types/administrator.type';
+import { useControlDashboardLayoutContext } from '@/app/(admin-dashboard)/control-dashboard/layout';
 function ControlDashboardHeader() {
   const theme = useTheme();
   const data = useCurrentUser();
   const user = data.user as Administrator;
-
+ const { setSidebarCollapse, sidebarCollapse } = useControlDashboardLayoutContext();
   return (
     <Box
-     
       sx={{
-        px: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6, xxl: 8 },
+        px: { xs: 2, sm: 3, md: 4, xxl: 8 },
         py: { xs: 1.5, sm: 2, md: 2.5 },
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background:'transparent'
-       
+        background: 'transparent',
       }}
     >
       {/* Left Section */}
       <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 2, md: 3 }}>
-        <IconButton  sx={{
-              display: {
-                lg: 'none',
-              },
-            }} color="secondary">
-          <RiMenuUnfoldLine size={24} />
-        </IconButton>
+        <IconButton
+               onClick={() => setSidebarCollapse(p => !p)}
+               className="transition-all duration-200 hover:bg-neutral-800/30"
+               sx={{ display: { lg: 'none' } }}
+             >
+               <RiMenuUnfold4Line
+                 size={28}
+                 className={`transition-all ${
+                   sidebarCollapse ? 'text-secondary' : 'text-txt-primary'
+                 }`}
+               />
+             </IconButton>
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 1, sm: 1.5, md: 2 }}>
           <Avatar

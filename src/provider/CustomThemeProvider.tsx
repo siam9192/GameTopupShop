@@ -79,6 +79,7 @@ function CustomThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const currentMode = localStorage.getItem('mode') || mode;
     setMode(currentMode as EThemeMode);
+    document.documentElement.setAttribute('data-theme', currentMode);
   }, []);
 
   const value = {

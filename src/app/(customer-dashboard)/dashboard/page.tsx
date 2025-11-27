@@ -13,7 +13,7 @@ function page() {
         container
         columns={{
           xs: 1,
-          lg: 2,
+          xl: 2,
         }}
         spacing={2}
       >

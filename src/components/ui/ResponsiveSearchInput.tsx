@@ -32,14 +32,14 @@ function ResponsiveProductsSearchInput() {
   useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
 
   // Query to fetch products
-  const { data, isLoading, isRefetching,refetch} = getSearchProductsQuery([
+  const { data, isLoading, isRefetching, refetch } = getSearchProductsQuery([
     { name: 'searchTerm', value: debouncedSearchTerm },
     { name: 'page', value: page },
   ]);
 
   const totalResults = data?.meta?.totalResults || 0;
-  
-// Append new data to products when fetched
+
+  // Append new data to products when fetched
   useEffect(() => {
     if (isLoading || isRefetching || !data?.data) return;
 
@@ -82,16 +82,10 @@ function ResponsiveProductsSearchInput() {
     return () => observer.disconnect();
   }, [handleObserver]);
 
-
-
   return (
     <Fragment>
       {/* Mobile Search Icon */}
-      <IconButton
-        color="secondary"
-        sx={{ display: { md: 'none' } }}
-        onClick={() => setOpen(true)}
-      >
+      <IconButton color="secondary" sx={{ display: { md: 'none' } }} onClick={() => setOpen(true)}>
         <FiSearch size={28} />
       </IconButton>
 
@@ -137,18 +131,12 @@ function ResponsiveProductsSearchInput() {
 
           {/* Search Results */}
           <Box className="relative w-full min-h-60 max-h-[70vh] overflow-y-auto hide-scrollbar">
-            <Typography
-              color="text.primary"
-              fontWeight={600}
-              className="text-lg mb-3"
-            >
-              {debouncedSearchTerm
-                ? `${totalResults} Search Results`
-                : 'Type to search...'}
+            <Typography color="text.primary" fontWeight={600} className="text-lg mb-3">
+              {debouncedSearchTerm ? `${totalResults} Search Results` : 'Type to search...'}
             </Typography>
 
             <Stack spacing={2}>
-              {products.map((item) => (
+              {products.map(item => (
                 <Box
                   key={item._id}
                   className="flex items-center gap-4 p-3 rounded-xl bg-gray-50 dark:bg-neutral-800 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-colors cursor-pointer relative"
@@ -177,9 +165,7 @@ function ResponsiveProductsSearchInput() {
                     </Typography>
                   </Box>
 
-                  <Link
-                    href={`/${item.type === 'Topup' ? 'top-ups' : 'offers'}/${item._id}`}
-                  >
+                  <Link href={`/${item.type === 'Topup' ? 'top-ups' : 'offers'}/${item._id}`}>
                     <Button
                       size="small"
                       color="secondary"
@@ -192,7 +178,7 @@ function ResponsiveProductsSearchInput() {
                 </Box>
               ))}
 
-              {((isLoading || isRefetching) && debouncedSearchTerm ) && (
+              {(isLoading || isRefetching) && debouncedSearchTerm && (
                 <Box className="flex justify-center py-3">
                   <CircularProgress size={28} />
                 </Box>
@@ -208,11 +194,7 @@ function ResponsiveProductsSearchInput() {
           <Button onClick={() => setOpen(false)} color="error">
             Close
           </Button>
-          <Button
-            onClick={() => setSearchTerm('')}
-            color="secondary"
-            variant="outlined"
-          >
+          <Button onClick={() => setSearchTerm('')} color="secondary" variant="outlined">
             Clear
           </Button>
         </DialogActions>

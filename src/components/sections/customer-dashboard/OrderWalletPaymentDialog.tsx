@@ -18,6 +18,7 @@ import {
   Typography,
   Divider,
 } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'react-toastify';
 
@@ -33,7 +34,7 @@ interface Props {
 }
 
 function OrderWalletPaymentDialog({ data, onClose }: Props) {
-   const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
   const { data: resData, isLoading } = getMyWalletQuery();
   const { product, selectedPackage, quantity, productType, fieldsInfo } = data;
   const wallet = resData?.data;
@@ -47,6 +48,8 @@ function OrderWalletPaymentDialog({ data, onClose }: Props) {
   const { mutate: createOrderMutate, isPending: orderCreating } = createOrderMutation();
   const { mutate: createPaymentMutate, isPending: creatingPayment } =
     makeOrderWalletPaymentMutation();
+
+  const router = useRouter();
 
   const handleConfirmPayment = () => {
     const payload: CreateOrderPayload = {
@@ -67,6 +70,7 @@ function OrderWalletPaymentDialog({ data, onClose }: Props) {
           {
             onSuccess(data) {
               toast.success('Order successful');
+              router.push('/dashboard/orders');
               onClose();
             },
             onError(data) {
@@ -93,21 +97,17 @@ function OrderWalletPaymentDialog({ data, onClose }: Props) {
         ) : (
           <Stack spacing={3} className="py-2">
             <div>
-              <Typography variant="h6" className="font-semibold">
-                Wallet Summary
-              </Typography>
-              <Divider className="mt-4" />
               <div className="mt-5">
                 <Stack direction="row" justifyContent="space-between">
                   <Typography variant="body1">Available Balance</Typography>
                   <Typography variant="body1" fontWeight={600}>
-                   {currency.symbol} {wallet?.balance?.toFixed(2)}
+                    {currency.symbol} {wallet?.balance?.toFixed(2)}
                   </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
                   <Typography variant="body1">Estimated Amount</Typography>
                   <Typography variant="body1" fontWeight={600}>
-                      {currency.symbol} {estimatedAmount.toFixed(2)} 
+                    {currency.symbol} {estimatedAmount.toFixed(2)}
                   </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">

@@ -2,6 +2,7 @@
 
 import PurchaseForm from '@/components/forms/PurchaseForm';
 import PreviewEditorValue from '@/components/ui/PreviewEditorValue';
+import { useCountdown } from '@/hooks/useCountdown';
 import { useAppSettings } from '@/provider/AppSettingsProvider';
 import { getOfferByIdQuery } from '@/query/services/offer';
 import { ProductCategory } from '@/types/order.type';
@@ -11,7 +12,11 @@ import { useParams } from 'next/navigation';
 function Page() {
   const { id } = useParams();
   const { data, isLoading, isPending, error } = getOfferByIdQuery(id as string);
-    const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
+  let offer = data?.data;
+  const { days, hours, minutes, seconds } = useCountdown(
+    offer ? new Date(offer.endDate).getTime() : new Date().getTime(),
+  );
   if (isLoading || isPending)
     return (
       <div className="h-[600px] flex justify-center items-center">
@@ -21,7 +26,7 @@ function Page() {
 
   if (error) return <Typography color="error">Something went wrong</Typography>;
 
-  const offer = data?.data!;
+  offer = data?.data!;
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-10 space-y-10">
@@ -35,7 +40,17 @@ function Page() {
           Platform: <span className="font-medium text-primary">{offer.platformName}</span>
         </Typography>
         <Typography variant="h6" color="text.secondary">
-          Price: <span className="font-medium text-secondary">{currency.symbol}{offer.price}</span>
+          Price:{' '}
+          <span className="font-medium text-secondary">
+            {currency.symbol}
+            {offer.price}
+          </span>
+        </Typography>
+        <Typography variant="body1" color="error" className="font-medium tracking-wide" mt={1}>
+          ⏳ Ends in:{' '}
+          <span className="text-black dark:text-white">
+            {days}d {hours}h {minutes}m {seconds}s
+          </span>
         </Typography>
       </div>
 
@@ -57,7 +72,7 @@ function Page() {
         <Divider sx={{ my: 2 }} />
 
         <PurchaseForm
-          productType={ProductCategory.TOP_UP}
+          productType={ProductCategory.OFFER}
           product={offer}
           quantity={1}
           infoFields={offer.infoFields as any}

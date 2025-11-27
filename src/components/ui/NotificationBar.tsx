@@ -7,9 +7,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   getCurrentUserNotificationCountsQuery,
   getCurrentUserNotificationsQuery,
+  notificationSetAsReadMutation,
 } from '@/query/services/notification';
 import { Notification, NotificationCategory } from '@/types/notification.type';
 import { getTimeAgo } from '@/utils/helper';
+import { queryClient } from '@/provider/Provider';
 
 const NotificationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +19,6 @@ const NotificationBar = () => {
   const [allNotifications, setAllNotifications] = useState<Notification[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const router = useRouter();
   const pathname = usePathname();
   const barRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +36,7 @@ const NotificationBar = () => {
   const notifications = notificationData?.data || [];
   const meta = notificationData?.meta;
   const totalPages = meta ? Math.ceil(meta.totalResults / meta.limit) : 1;
-
+  const { mutate: setAsReadMutate } = notificationSetAsReadMutation();
   /** Close on outside click */
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -58,7 +59,22 @@ const NotificationBar = () => {
         // Avoid duplicates when refetching the same page
         const existingIds = new Set(prev.map(n => n._id));
         const newOnes = notifications.filter(n => !existingIds.has(n._id));
-        return [...prev, ...newOnes];
+        const all = [...prev, ...newOnes];
+        const unreadIds = all.filter(_ => _.isRead === false).map(_ => _._id);
+
+        if (unreadIds.length) {
+          setAsReadMutate(
+            {
+              ids: unreadIds,
+            },
+            {
+              onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ['getCurrentUserNotificationCounts'] });
+              },
+            },
+          );
+        }
+        return all;
       });
     }
   }, [notifications, notificationsIsLoading, notificationsIsRefetching]);
@@ -81,30 +97,6 @@ const NotificationBar = () => {
     }
   };
 
-  /** Handle click by category */
-  const handleOnClick = (notification: Notification) => {
-    let path = '/';
-    switch (notification.category) {
-      case NotificationCategory.ORDER:
-        path = '/orders';
-        break;
-      case NotificationCategory.WALLET_SUBMISSION:
-        path = '/wallet';
-        break;
-      case NotificationCategory.CUSTOMER:
-        path = '/customers';
-        break;
-      case NotificationCategory.PROMOTION:
-        path = '/offers';
-        break;
-      default:
-        path = '/';
-        break;
-    }
-    setIsOpen(false);
-    router.push(path);
-  };
-
   return (
     <div className="relative">
       {/* Bell Button */}
@@ -125,7 +117,7 @@ const NotificationBar = () => {
         <div
           ref={barRef}
           onScroll={handleScroll}
-          className="absolute right-0 mt-2 w-72 h-80 z-50 overflow-y-auto no-scrollbar p-3 bg-white dark:bg-neutral-900 shadow-2xl rounded-xl border border-gray-200 dark:border-neutral-700 "
+          className="absolute right-0 mt-2 w-72 h-80 z-50 overflow-y-auto hide-scrollbar p-3 bg-white dark:bg-neutral-900 shadow-2xl rounded-xl border border-gray-200 dark:border-neutral-700 "
         >
           <h3 className="text-lg font-semibold font-secondary text-txt-primary mb-2">
             Notifications
@@ -149,13 +141,10 @@ const NotificationBar = () => {
               {allNotifications.map(notification => (
                 <div
                   key={notification._id}
-                  onClick={() => handleOnClick(notification)}
                   className="p-2 flex gap-2 items-start hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-lg cursor-pointer transition-colors"
                 >
                   <div
-                    className={`pt-1 ${
-                      !notification.isRead ? 'text-red-500' : 'text-green-500'
-                    }`}
+                    className={`pt-1 ${!notification.isRead ? 'text-red-500' : 'text-green-500'}`}
                   >
                     <GoDotFill size={16} />
                   </div>
@@ -168,7 +157,7 @@ const NotificationBar = () => {
                       dangerouslySetInnerHTML={{
                         __html: notification.title.replace(
                           /"([^"]+)"/,
-                          '<span class="font-semibold text-primary">$1</span>'
+                          '<span class="font-semibold text-primary">$1</span>',
                         ),
                       }}
                     />
@@ -185,9 +174,7 @@ const NotificationBar = () => {
 
           {/* Empty State */}
           {!notificationsIsLoading && allNotifications.length === 0 && (
-            <p className="text-center text-sm text-gray-500 mt-5">
-              No notifications yet 📭
-            </p>
+            <p className="text-center text-sm text-gray-500 mt-5">No notifications yet 📭</p>
           )}
 
           {/* Load More Spinner */}

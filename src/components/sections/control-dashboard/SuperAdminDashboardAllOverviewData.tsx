@@ -2,7 +2,7 @@ import { HiMiniUserGroup, HiOutlineWallet } from 'react-icons/hi2';
 import { TbRecharging } from 'react-icons/tb';
 import { getSuperAdminDashboardMetadataQuery } from '@/query/services/metadata';
 import DashboardOverviewData from '@/components/ui/DashboardOverviewData';
-import { GiCash } from "react-icons/gi";
+import { GiCash } from 'react-icons/gi';
 export default function SuperAdminDashboardAllOverviewData() {
   const { data, isLoading } = getSuperAdminDashboardMetadataQuery();
 

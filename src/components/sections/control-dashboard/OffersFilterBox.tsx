@@ -1,6 +1,6 @@
 'use client';
-import { useOffersPageContext } from '@/app/control-dashboard/products/offers/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useOffersPageContext } from '@/provider/ManageOffersPageProvider';
 import { OfferStatus } from '@/types/offer.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
@@ -64,7 +64,7 @@ function OffersFilterBox() {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {[OfferStatus.Running, OfferStatus.PAUSED].map(_ => (
+              {[OfferStatus.RUNNING, OfferStatus.PAUSED].map(_ => (
                 <MenuItem value={_}>{_}</MenuItem>
               ))}
             </Select>

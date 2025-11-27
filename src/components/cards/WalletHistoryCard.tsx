@@ -1,3 +1,4 @@
+import { useAppSettings } from '@/provider/AppSettingsProvider';
 import { WalletHistory, WalletHistoryType } from '@/types/wallet-history.type';
 import { Stack, Typography } from '@mui/material';
 import React from 'react';
@@ -7,6 +8,9 @@ interface Props {
 }
 function WalletHistoryCard({ history }: Props) {
   const isCredit = history.type === WalletHistoryType.CREDIT;
+
+  const { currency } = useAppSettings();
+
   return (
     <div className="relative  p-3 md:p-4  transition-all duration-300">
       <Stack spacing={1}>
@@ -38,7 +42,8 @@ function WalletHistoryCard({ history }: Props) {
 
         {/* Balance Info */}
         <Typography fontSize={14} color="text.secondary">
-          Previous Balance: ${history.prevBalance.toFixed(2)}
+          Previous Balance: {currency.symbol}
+          {history.prevBalance.toFixed(2)}
         </Typography>
 
         {/* Date & Time */}

@@ -1,6 +1,6 @@
 'use client';
-import { useWalletAddBalanceSubmissionsPageContext } from '@/app/control-dashboard/wallets/submissions/page';
 import DashboardSearchInput from '@/components/ui/DashboardSearchInput';
+import { useWalletAddBalanceSubmissionsPageContext } from '@/provider/WalletSubmissionsPageProvider';
 import { WalletSubmissionStatus } from '@/types/wallet-submission.type';
 import { Box, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';

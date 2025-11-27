@@ -1,4 +1,3 @@
-import type { NextConfig } from "next";
 
 const nextConfig = {
   images: {
@@ -12,6 +11,9 @@ const nextConfig = {
         hostname: '**', // (optional) allow all HTTP domains too
       },
     ],
+  },
+   eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

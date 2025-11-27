@@ -1,5 +1,3 @@
-import CustomJoditEditor from '@/components/editor/CustomJoditEditor';
-import CustomQuillEditor from '@/components/editor/CustomQuillEditor';
 import DashboardSectionHeading from '@/components/ui/DashboardSectionHeading';
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
@@ -52,9 +50,7 @@ function ManageLivePayment() {
 
       <Box marginTop={3}>
         <DashboardSectionHeading title="Write Live Payment Description Here.." />
-        <Box marginTop={1}>
-          <CustomJoditEditor />
-        </Box>
+        <Box marginTop={1}>{/* <CustomJoditEditor /> */}</Box>
       </Box>
     </Box>
   );

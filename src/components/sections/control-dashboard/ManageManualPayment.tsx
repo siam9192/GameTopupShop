@@ -61,9 +61,7 @@ function ManageManualPayment() {
       </Box>
       <Box marginTop={3}>
         <DashboardSectionHeading title="Write Live Payment Description Here.." />
-        <Box marginTop={1}>
-          <CustomJoditEditor />
-        </Box>
+        <Box marginTop={1}>{/* <CustomJoditEditor /> */}</Box>
       </Box>
     </Box>
   );

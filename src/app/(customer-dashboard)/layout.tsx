@@ -3,9 +3,9 @@
 import CustomerDashboardHeader from '@/components/shared/CustomerDashboardHeader';
 import CustomerDashboardSidebar from '@/components/shared/CustomerDashboardSidebar';
 import UserLoading from '@/components/ui/UserLoading';
-import { useMediaQuery, useTheme } from '@mui/material';
 
-import React, { createContext, Dispatch, SetStateAction, useContext, useState } from 'react';
+
+import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { useWindowSize } from 'react-use';
 export type TCustomerDashboardLayoutContextValue = {
   sidebarCollapse: boolean;
@@ -19,16 +19,16 @@ function layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { width } = useWindowSize();
+ 
   const [sidebarCollapse, setSidebarCollapse] = useState<boolean>(false);
   const value = {
     sidebarCollapse,
     setSidebarCollapse,
   };
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
-
-  const sidebarWidth = (100 / width) * 80;
+  
+    useEffect(() => {
+    document.title = "Customer Dashboard";
+  }, []);
 
   return (
     <>

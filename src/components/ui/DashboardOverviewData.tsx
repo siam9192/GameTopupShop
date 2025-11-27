@@ -29,10 +29,10 @@ const DashboardOverviewData: React.FC<DashboardOverviewDataProps> = ({
   isLoading,
   mapping,
 }) => {
-  const {currency} = useAppSettings()
+  const { currency } = useAppSettings();
   if (isLoading) {
     return (
-      <Grid container spacing={2} columns={{ xs: 1, sm: 2, lg: 4 }}>
+      <Grid container spacing={2} columns={{ xs: 1, sm: 2, xl:4 }}>
         {Array.from({ length: 4 }).map((_, idx) => (
           <Grid size={1} key={idx}>
             <Skeleton
@@ -57,7 +57,7 @@ const DashboardOverviewData: React.FC<DashboardOverviewDataProps> = ({
 
   return (
     <Box>
-      <Grid container spacing={3} columns={{ xs: 1, sm: 2, md: 4 }}>
+      <Grid container spacing={3} columns={{ xs: 1, sm: 2,xl:4 }}>
         {overviewData.map((item, index) => {
           const isPositive = (item.change ?? 0) >= 0;
           const Icon = isPositive ? ArrowUpwardIcon : ArrowDownwardIcon;
