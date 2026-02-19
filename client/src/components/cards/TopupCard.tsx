@@ -1,0 +1,39 @@
+import { useAppSettings } from '@/provider/AppSettingsProvider';
+import { Topup } from '@/types/topup.type';
+import { Button } from '@mui/material';
+import Link from 'next/link';
+import React from 'react';
+
+interface Props {
+  topup: Topup;
+}
+function TopupCard({ topup }: Props) {
+  const { currency } = useAppSettings();
+  return (
+    <div className="p-3  duration-75 hover:cursor-pointer dark:bg-black bg-white rounded-lg shadow_1 h-full flex flex-col">
+     <div className='grow'>
+       <div>
+        <img src={topup.coverPhoto} alt="" className=" h-40  rounded-lg" />
+      </div>
+      <div className="mt-3">
+        <p className=" text-[16px] sm:text-lg md:text-xl font-medium text-center text-txt-primary">
+          {topup.name}
+        </p>
+        <p className="mt-1 text-primary font-medium text-center text-xs">
+          Start's From {currency.symbol}
+          {topup.startFrom}
+        </p>
+      </div>
+     </div>
+      <div className="text-center mt-3">
+        <Link href={`/top-ups/${topup._id}`}>
+          <Button variant="outlined" color="secondary">
+            Topup Now
+          </Button>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export default TopupCard;
