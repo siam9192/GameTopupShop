@@ -1,0 +1,353 @@
+import { startSession, Types } from 'mongoose';
+import AppError from '../../Errors/AppError';
+import httpStatus from '../../shared/http-status';
+import { IAuthUser, IPaginationOptions } from '../../types';
+import ManualPaymentMethodModel from '../manual-payment-method/manual-payment-method.model';
+import {
+  CreateWalletSubmissionPayload,
+  DeclineWalletSubmissionPayload,
+  WalletSubmissionsFilterPayload,
+  WalletSubmissionStatus,
+} from './wallet-submission.interface';
+import WalletSubmissionModel from './wallet-submission.model';
+import WalletModel from '../wallet/wallet.model';
+import { calculatePagination } from '../../helpers/paginationHelper';
+import { objectId } from '../../helpers';
+import NotificationModel from '../notification/notification.model';
+import { NotificationCategory, NotificationType } from '../notification/notification.interface';
+import WalletHistoryModel from '../wallet-history/wallet-history.model';
+import { WalletHistoryType } from '../wallet-history/wallet-history.interface';
+
+class WalletSubmissionService {
+  async createWalletSubmissionIntoDB(authUser: IAuthUser, payload: CreateWalletSubmissionPayload) {
+    const existingMethod = await ManualPaymentMethodModel.findById(payload.methodId);
+
+    if (!existingMethod) throw new AppError(httpStatus.NOT_FOUND, 'Method not found');
+
+    const result = await WalletSubmissionModel.create({
+      ...payload,
+      customerId: objectId(authUser.userId),
+      methodName: existingMethod.name,
+    });
+
+    NotificationModel.create({
+      customerId: authUser.userId,
+      title: 'Thanks for wallet submission',
+      message: 'Your wallet submission has been received and is under review.',
+      type: NotificationType.SUCCESS,
+      category: NotificationCategory.WALLET_SUBMISSION,
+    });
+
+    NotificationModel.create({
+      customerId: authUser.userId,
+      title: 'New Wallet Submission',
+      message: `A new wallet submission of ${payload.amount} has been received and is awaiting your review.`,
+      type: NotificationType.SUCCESS,
+      category: NotificationCategory.WALLET_SUBMISSION,
+    });
+
+    return result;
+  }
+  async cancelWalletSubmissionIntoDB(id: string) {
+    const existingSubmission = await WalletSubmissionModel.findById(id);
+    if (!existingSubmission) throw new AppError(httpStatus.NOT_FOUND, 'Submission not found');
+    const existingWallet = await WalletModel.findOne({ customerId: existingSubmission.customerId });
+    if (!existingWallet) throw new AppError(httpStatus.NOT_FOUND, 'Wallet not found');
+
+    const session = await startSession();
+    session.startTransaction();
+    try {
+      const updateSubmissionStatus = await WalletSubmissionModel.updateOne(
+        { _id: existingSubmission._id },
+        { status: WalletSubmissionStatus.CANCELED },
+        { session }
+      );
+
+      if (!updateSubmissionStatus.modifiedCount) {
+        throw new Error('Update submission status  failed ');
+      }
+
+      NotificationModel.create({
+        customerId: existingSubmission.customerId,
+        title: 'Wallet Submission Canceled',
+        message: `Your submission of ${existingSubmission.amount} has been canceled.`,
+        visitId: id,
+        type: NotificationType.INFO,
+        category: NotificationCategory.WALLET_SUBMISSION,
+      });
+      await session.commitTransaction();
+      return await WalletSubmissionModel.findById(existingSubmission._id);
+    } catch (error: any) {
+      await session.abortTransaction();
+      throw new AppError(httpStatus.BAD_REQUEST, error.message);
+    } finally {
+      await session.endSession();
+    }
+  }
+  async approveWalletSubmissionIntoDB(id: string) {
+    const existingSubmission = await WalletSubmissionModel.findById(id);
+    if (!existingSubmission) throw new AppError(httpStatus.NOT_FOUND, 'Submission not found');
+    const existingWallet = await WalletModel.findOne({ customerId: existingSubmission.customerId });
+    if (!existingWallet) throw new AppError(httpStatus.NOT_FOUND, 'Wallet not found');
+
+    const session = await startSession();
+    session.startTransaction();
+    try {
+      const updateSubmissionStatus = await WalletSubmissionModel.updateOne(
+        { _id: existingSubmission._id },
+        { status: WalletSubmissionStatus.APPROVED },
+        { session }
+      );
+
+      if (!updateSubmissionStatus.modifiedCount) {
+        throw new Error('Update submission status  failed ');
+      }
+      const updateWalletBalance = await WalletModel.updateOne(
+        { _id: existingWallet._id },
+        {
+          $inc: {
+            balance: existingSubmission.amount,
+          },
+        },
+        { session }
+      );
+
+      if (!updateWalletBalance.modifiedCount) {
+        throw new Error('Update wallet balance failed ');
+      }
+
+      const createdWalletHistory = await WalletHistoryModel.create(
+        [
+          {
+            walletId: existingWallet._id,
+            prevBalance: existingWallet.balance,
+            amount: existingSubmission.amount,
+            type: WalletHistoryType.CREDIT,
+          },
+        ],
+        { session }
+      );
+
+      if (!createdWalletHistory) {
+        throw new Error('Create wallet history failed ');
+      }
+
+      NotificationModel.create({
+        customerId: existingSubmission.customerId,
+        title: 'Wallet Submission Approved',
+        message: `Your submission of ${existingSubmission.amount} has been approved and credited to your wallet balance.`,
+        visitId: id,
+        type: NotificationType.SUCCESS,
+        category: NotificationCategory.WALLET_SUBMISSION,
+      });
+      await session.commitTransaction();
+      return await WalletSubmissionModel.findById(existingSubmission._id);
+    } catch (error: any) {
+      await session.abortTransaction();
+      throw new AppError(httpStatus.BAD_REQUEST, error.message);
+    } finally {
+      await session.endSession();
+    }
+  }
+  async declineWalletSubmissionIntoDB(id: string, payload: DeclineWalletSubmissionPayload) {
+    const existingSubmission = await WalletSubmissionModel.findById(id);
+    if (!existingSubmission || existingSubmission.status !== WalletSubmissionStatus.PENDING)
+      throw new AppError(httpStatus.NOT_FOUND, 'Submission not found');
+
+    const result = await WalletSubmissionModel.findByIdAndUpdate(
+      existingSubmission._id,
+      { status: WalletSubmissionStatus.DECLINED, declineReason: payload.declineReason },
+      { new: true }
+    );
+
+    NotificationModel.create({
+      customerId: existingSubmission.customerId,
+      title: 'Wallet Submission Declined',
+      message: `Your submission of ${existingSubmission.amount} has been declined. Please check your submission details.`,
+      visitId: id,
+      type: NotificationType.SUCCESS,
+      category: NotificationCategory.WALLET_SUBMISSION,
+    });
+    return result;
+  }
+  async getMySubmissionsFromDB(
+    authUser: IAuthUser,
+    payload: WalletSubmissionsFilterPayload,
+    paginationOptions: IPaginationOptions
+  ) {
+    const { searchTerm, minAmount, maxAmount, ...other } = payload;
+    let whereConditions: any = {
+      customerId: objectId(authUser.userId),
+      ...other,
+    };
+    if (searchTerm) {
+      if (Types.ObjectId.isValid(searchTerm)) {
+        whereConditions.customerId = searchTerm;
+      }
+    }
+
+    if (
+      (minAmount !== undefined && !isNaN(Number(minAmount))) ||
+      (maxAmount !== undefined && !isNaN(Number(maxAmount)))
+    ) {
+      whereConditions.balance = {};
+
+      if (minAmount !== undefined && !isNaN(Number(minAmount))) {
+        whereConditions.balance.$gte = Number(minAmount);
+      }
+
+      if (maxAmount !== undefined && !isNaN(Number(maxAmount))) {
+        whereConditions.balance.$lte = Number(maxAmount);
+      }
+    }
+
+    const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions, {
+      limitOverride: 20,
+    });
+
+    const wallets = await WalletSubmissionModel.find(whereConditions)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .populate(['customerId', 'methodId'])
+      .lean();
+
+    const totalResults = await WalletSubmissionModel.countDocuments(whereConditions);
+
+    const total = await WalletSubmissionModel.countDocuments();
+    const data: any[] = wallets.map(({ customerId, methodId, ...rest }) => ({
+      ...rest,
+      customer: customerId,
+      customerId: customerId._id,
+      method: methodId,
+      methodId: methodId._id,
+    }));
+    return {
+      data,
+      meta: {
+        page,
+        limit,
+        totalResults,
+        total,
+      },
+    };
+  }
+  async getSubmissionsFromDB(
+    payload: WalletSubmissionsFilterPayload,
+    paginationOptions: IPaginationOptions
+  ) {
+    const { searchTerm, minAmount, maxAmount, ...other } = payload;
+    let whereConditions: any = {
+      ...other,
+    };
+    if (searchTerm) {
+      if (Types.ObjectId.isValid(searchTerm)) {
+        whereConditions.customerId = searchTerm;
+      }
+    }
+
+    if (
+      (minAmount !== undefined && !isNaN(Number(minAmount))) ||
+      (maxAmount !== undefined && !isNaN(Number(maxAmount)))
+    ) {
+      whereConditions.balance = {};
+
+      if (minAmount !== undefined && !isNaN(Number(minAmount))) {
+        whereConditions.balance.$gte = Number(minAmount);
+      }
+
+      if (maxAmount !== undefined && !isNaN(Number(maxAmount))) {
+        whereConditions.balance.$lte = Number(maxAmount);
+      }
+    }
+
+    const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+
+    const wallets = await WalletSubmissionModel.find(whereConditions)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .populate(['customerId', 'methodId'])
+      .lean();
+
+    const totalResults = await WalletSubmissionModel.countDocuments(whereConditions);
+
+    const total = await WalletSubmissionModel.countDocuments();
+    const data: any[] = wallets.map(({ customerId, methodId, ...rest }) => ({
+      ...rest,
+      customer: customerId,
+      method: methodId,
+    }));
+    return {
+      data,
+      meta: {
+        page,
+        limit,
+        totalResults,
+        total,
+      },
+    };
+  }
+  async getSubmissionByIdFromDB(authUser: IAuthUser, id: string) {
+    const existingSubmission = await WalletSubmissionModel.findById(id)
+      .populate(['customerId', 'methodId'])
+      .lean();
+
+    if (!existingSubmission) throw new AppError(httpStatus.NOT_FOUND, 'Submission not found');
+    // if (
+    //   authUser.role === UserRole.CUSTOMER &&
+    //   existingSubmission.customerId.toString() !== authUser.userId
+    // ) {
+    //   throw new AppError(httpStatus.NOT_FOUND, 'Submission not found');
+    // }
+
+    const { customerId, methodId, ...rest } = existingSubmission;
+    return {
+      ...rest,
+      customer: customerId,
+      method: methodId,
+    };
+  }
+  async getMyRecentSubmissionsFromDB(
+    { days }: { days?: string },
+    paginationOptions: IPaginationOptions
+  ) {
+    let recentDate = new Date();
+    recentDate.setHours(0, 0, 0, 0);
+
+    if (days && !isNaN(parseInt(days))) {
+      recentDate.setDate(recentDate.getDate() - parseInt(days));
+    }
+
+    const { page, skip, limit, sortBy, sortOrder } = calculatePagination(paginationOptions);
+
+    const whereConditions = {
+      createdAt: {
+        $gt: new Date(recentDate),
+      },
+    };
+
+    const submissions = await WalletSubmissionModel.find(whereConditions)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const totalResults = await WalletSubmissionModel.countDocuments(whereConditions);
+    const total = await WalletSubmissionModel.countDocuments();
+    const data = submissions;
+    const meta = {
+      page,
+      limit,
+      totalResults,
+      total,
+    };
+
+    return {
+      data,
+      meta,
+    };
+  }
+}
+
+export default new WalletSubmissionService();

@@ -1,0 +1,273 @@
+import { Types } from 'mongoose';
+import AppError from '../../Errors/AppError';
+import httpStatus from '../../shared/http-status';
+import { IAuthUser, IPaginationOptions } from '../../types';
+import {
+  CreateTopupPayload,
+  TopupsFilterPayload,
+  TopupStatus,
+  UpdateTopupPayload,
+  UpdateTopupStatusPayload,
+} from './topup.interface';
+import TopupModel from './topup.model';
+import { calculatePagination } from '../../helpers/paginationHelper';
+import { objectId } from '../../helpers';
+import { UserRole } from '../user/user.interface';
+import OrderModel from '../order/order.model';
+import { ProductCategory } from '../order/order.interface';
+
+class TopupService {
+  async createTopupIntoDB(payload: CreateTopupPayload) {
+    const startFrom = Math.min(...payload.packages.map((p) => p.price));
+    return await TopupModel.create({
+      ...payload,
+      startFrom,
+    });
+  }
+
+  async updateTopupIntoDB(id: string, payload: UpdateTopupPayload) {
+    const existingTopup = await TopupModel.findById(id);
+    if (!existingTopup) throw new AppError(httpStatus.NOT_FOUND, 'Topup not found');
+    const startFrom = payload.packages
+      ? Math.min(...payload.packages.map((p) => p.price))
+      : existingTopup.startFrom;
+    return await TopupModel.findByIdAndUpdate(
+      id,
+      {
+        ...payload,
+        startFrom,
+      },
+      { new: true }
+    );
+  }
+
+  async updateTopupStatusIntoDB(payload: UpdateTopupStatusPayload) {
+    const { id, status } = payload;
+    const existingTopup = await TopupModel.findById(id);
+    if (!existingTopup) throw new AppError(httpStatus.NOT_FOUND, 'Topup not found');
+
+    return await TopupModel.findByIdAndUpdate(
+      id,
+      {
+        status,
+      },
+      { new: true }
+    );
+  }
+
+  async topupSoftDeleteFormDB(id: string) {
+    const existingTopup = await TopupModel.findById(id);
+    if (!existingTopup) throw new AppError(httpStatus.NOT_FOUND, 'Topup not found');
+    await TopupModel.findByIdAndUpdate(id, { status: TopupStatus.DELETED }, { new: true });
+    return null;
+  }
+
+  async getTopupsFromDB(filterPayload: TopupsFilterPayload, paginationOptions: IPaginationOptions) {
+    const { searchTerm, ...otherFilterPayload } = filterPayload;
+    let whereConditions: any = {};
+    if (searchTerm) {
+      if (Types.ObjectId.isValid(searchTerm)) {
+        whereConditions._id = searchTerm;
+      } else {
+        whereConditions.$or = [
+          {
+            name: { $regex: searchTerm, $options: 'i' },
+          },
+          {
+            platform: { $regex: searchTerm, $options: 'i' },
+          },
+          {
+            description: { $regex: searchTerm, $options: 'i' },
+          },
+        ];
+      }
+    } else if (Object.keys(otherFilterPayload).length) {
+      whereConditions = otherFilterPayload;
+    }
+
+    if (!filterPayload.status) {
+      whereConditions['status'] = { $ne: TopupStatus.DELETED };
+    }
+
+    const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+
+    const topups = await TopupModel.find(whereConditions)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+
+    const totalResults = await TopupModel.countDocuments(whereConditions);
+
+    const total = await TopupModel.countDocuments();
+
+    return {
+      data: topups,
+      meta: {
+        page,
+        limit,
+        totalResults,
+        total,
+      },
+    };
+  }
+  async getPublicTopupsFromDB(
+    filterPayload: TopupsFilterPayload,
+    paginationOptions: IPaginationOptions
+  ) {
+    const { searchTerm, status, ...otherFilterPayload } = filterPayload;
+
+    let whereConditions: any = {};
+
+    // ✅ Handle search term
+    if (searchTerm) {
+      if (Types.ObjectId.isValid(searchTerm)) {
+        whereConditions._id = searchTerm;
+      } else {
+        whereConditions.$or = [
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { platform: { $regex: searchTerm, $options: 'i' } },
+          { description: { $regex: searchTerm, $options: 'i' } },
+        ];
+      }
+    }
+
+    // ✅ Merge other filters
+    if (Object.keys(otherFilterPayload).length) {
+      whereConditions = { ...whereConditions, ...otherFilterPayload };
+    }
+
+    // ✅ Handle status
+    if (status) {
+      whereConditions.status = status;
+    } else {
+      whereConditions.status = { $ne: TopupStatus.DELETED };
+    }
+
+    // ✅ Pagination
+    const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+
+    // ✅ Sorting fallback
+    const sortCondition: Record<string, 1 | -1> = {};
+    if (sortBy) {
+      sortCondition[sortBy] = sortOrder === 'desc' ? -1 : 1;
+    }
+
+    const topups = await TopupModel.find(whereConditions)
+      .sort(sortCondition)
+      .skip(skip)
+      .limit(limit);
+
+    const totalResults = await TopupModel.countDocuments(whereConditions);
+    const total = await TopupModel.countDocuments();
+
+    return {
+      data: topups,
+      meta: {
+        page,
+        limit,
+        totalResults,
+        total,
+      },
+    };
+  }
+
+  async getTopupByIdFromDB(authUser: IAuthUser | undefined, id: string) {
+    const existingTopup = await TopupModel.findOne({
+      _id: objectId(id),
+      status: { $ne: TopupStatus.DELETED },
+    });
+    if (!existingTopup) throw new AppError(httpStatus.NOT_FOUND, 'Topup not found');
+    if (
+      (!authUser || authUser?.role === UserRole.CUSTOMER) &&
+      existingTopup.status !== TopupStatus.ACTIVE
+    ) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Topup not found');
+    }
+
+    return existingTopup;
+  }
+
+  async getFeaturedTopupsFromDB(paginationOptions: IPaginationOptions) {
+    const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+    const topups = await TopupModel.find({
+      status: TopupStatus.ACTIVE,
+    })
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+    const totalResults = await TopupModel.countDocuments();
+    const total = await TopupModel.countDocuments();
+    return {
+      data: topups,
+      meta: {
+        page,
+        limit,
+        totalResults,
+        total,
+      },
+    };
+  }
+  async getTopTopupsFromDB(paginationOptions: IPaginationOptions) {
+    const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+    const topups = await TopupModel.find({
+      status: TopupStatus.ACTIVE,
+    })
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+    const totalResults = await TopupModel.countDocuments();
+    const total = await TopupModel.countDocuments();
+    return {
+      data: topups,
+      meta: {
+        page,
+        limit,
+        totalResults,
+        total,
+      },
+    };
+  }
+
+  async getPopularTopupsFromDB(paginationOptions: IPaginationOptions) {
+    const mostPopularGroup = await OrderModel.aggregate([
+      {
+        $match: {
+          'product.category': ProductCategory.TOP_UP,
+        },
+      },
+      {
+        $group: {
+          _id: '$product.productId',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { count: -1 }, // sort by popularity
+      },
+    ]);
+    const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+
+    const whereConditions = {
+      _id: {
+        $in: mostPopularGroup.map((_) => _._id),
+      },
+    };
+    const topups = await TopupModel.find(whereConditions)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+    const totalResults = await TopupModel.countDocuments(whereConditions);
+    const total = await TopupModel.countDocuments(whereConditions);
+    return {
+      data: topups,
+      meta: {
+        page,
+        limit,
+        totalResults,
+        total,
+      },
+    };
+  }
+}
+
+export default new TopupService();

@@ -1,0 +1,109 @@
+import { objectId } from '../../helpers';
+import { calculatePagination } from '../../helpers/paginationHelper';
+import { IAuthUser, IPaginationOptions } from '../../types';
+import { UserRole } from '../user/user.interface';
+import NotificationModel from './notification.model';
+
+class NotificationService {
+  async getMyNotificationsFromDB(authUser: IAuthUser, paginationOptions: IPaginationOptions) {
+    const whereConditions: Record<string, unknown> = {};
+    if (authUser.role === UserRole.CUSTOMER) {
+      whereConditions.customerId = objectId(authUser.userId);
+    } else {
+      whereConditions.administratorId = objectId(authUser.userId);
+    }
+
+    const { page, skip, limit } = calculatePagination(paginationOptions);
+
+    const notifications = await NotificationModel.find(whereConditions)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalResults = await NotificationModel.countDocuments(whereConditions);
+
+    return {
+      data: notifications,
+      meta: {
+        page,
+        limit,
+        totalResults,
+      },
+    };
+  }
+
+  async notificationsSetAsRead(authUser: IAuthUser, payload: { ids: string[] }) {
+    const { userId, role } = authUser;
+
+    const uId = role === UserRole.CUSTOMER ? { customerId: userId } : { administratorId: userId };
+    await NotificationModel.updateMany(
+      {
+        _id: { $in: payload.ids.map((_) => objectId(_)) },
+        ...uId,
+      },
+      {
+        isRead: true,
+      }
+    );
+
+    return await NotificationModel.find({ _id: { $in: payload.ids.map((_) => objectId(_)) } });
+  }
+  async getMyUnreadNotifications(authUser: IAuthUser, paginationOptions: IPaginationOptions) {
+    const whereConditions: Record<string, unknown> = {
+      isRead: false,
+    };
+    if (authUser.role === UserRole.CUSTOMER) {
+      whereConditions.customerId = authUser.userId;
+    } else {
+      whereConditions.administratorId = authUser.userId;
+    }
+
+    const { page, skip, limit, sortBy, sortOrder } = calculatePagination(paginationOptions);
+
+    const notifications = await NotificationModel.find(whereConditions)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalResults = await NotificationModel.countDocuments(whereConditions);
+
+    return {
+      data: notifications,
+      meta: {
+        page,
+        limit,
+        totalResults,
+      },
+    };
+  }
+
+  async getMyNotificationCounts(authUser: IAuthUser) {
+    const whereConditions: Record<string, unknown> = {};
+    if (authUser.role === UserRole.CUSTOMER) {
+      whereConditions.customerId = objectId(authUser.userId);
+    } else {
+      whereConditions.administratorId = objectId(authUser.userId);
+    }
+    const total = await NotificationModel.countDocuments({
+      ...whereConditions,
+    });
+
+    const read = await NotificationModel.countDocuments({
+      ...whereConditions,
+      isRead: true,
+    });
+
+    const unread = await NotificationModel.countDocuments({
+      ...whereConditions,
+      isRead: false,
+    });
+
+    return {
+      total,
+      read,
+      unread,
+    };
+  }
+}
+
+export default new NotificationService();

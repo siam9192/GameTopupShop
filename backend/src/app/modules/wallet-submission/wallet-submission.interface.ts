@@ -1,0 +1,35 @@
+import { Types } from 'mongoose';
+
+export interface WalletSubmission {
+  customerId: Types.ObjectId;
+  methodId: Types.ObjectId;
+  methodName: string;
+  amount: number;
+  note: string;
+  declineReason?: string;
+  status: WalletSubmissionStatus;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum WalletSubmissionStatus {
+  PENDING = 'Pending',
+  APPROVED = 'Approved',
+  DECLINED = 'Declined',
+  CANCELED = 'Canceled',
+}
+
+export type CreateWalletSubmissionPayload = Pick<WalletSubmission, 'methodId' | 'amount' | 'note'>;
+
+export type DeclineWalletSubmissionPayload = {
+  declineReason: string;
+};
+
+export type WalletSubmissionsFilterPayload = Partial<{
+  searchTerm: string;
+  customerId: string;
+  methodName: string;
+  minAmount: string | number;
+  maxAmount: string | number;
+  status: WalletSubmissionStatus;
+}>;
